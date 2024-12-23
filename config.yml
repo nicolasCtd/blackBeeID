@@ -1,0 +1,13 @@
+# in: "C:\\Users\\nicol\\Documents\\ABEILLES\\etudes\\ma_ruche\\INPUT\\"
+in: "C:\\Users\\nicol\\Documents\\ABEILLES\\etudes\\75\\INPUT\\"
+
+# out: "C:\\Users\\nicol\\Documents\\ABEILLES\\etudes\\ma_ruche\\OUTPUT\\"
+out: "C:\\Users\\nicol\\Documents\\ABEILLES\\etudes\\75\\OUTPUT\\"
+
+visu: "RUTTNER"
+
+RESTART: 1
+
+# reject: # reject: [62, 73]    # list of images that will be avoided
+# reject: [10, 14, 17, 19, 21, 29, 30, 34, 50, 52, 60, 61, 62, 66, 68, 73]    # comparaison Deepwings
+reject: []
