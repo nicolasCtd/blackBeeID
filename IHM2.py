@@ -13,27 +13,52 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QGridLayout,
     QSizePolicy,
-    QWidget
+    QTabWidget
 )
 from PyQt5.QtGui import QPixmap
 
 from PyQt5.QtGui import QPainter, QColor
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 
 class MainWindow(QMainWindow):
+    
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle("Analyse des ailes d'abeilles")
 
-        tab = QWidget()
-        self.tabWidget.addTab(tab, "tab")
+        self.tab_widget = Tab(self) 
+        self.setCentralWidget(self.tab_widget) 
 
+
+class Tab(QWidget): 
+    def __init__(self, parent): 
+        super(QWidget, self).__init__(parent) 
+        # self.layout = QVBoxLayout(self)
+        # self.layout = QGridLayout(self) 
+
+        self.layout = QVBoxLayout(self) 
+  
+        # Initialize tab screen 
+        self.tabs = QTabWidget() 
+        self.tab1 = QWidget() 
+        self.tab2 = QWidget() 
+        self.tab3 = QWidget() 
+        # self.tabs.resize(300, 200) 
+  
+        # Add tabs 
+        self.tabs.addTab(self.tab1, "1-5") 
+        self.tabs.addTab(self.tab2, "6-10") 
+        self.tabs.addTab(self.tab3, "11-15")
+        # self.tabs.addTab(self.tab4, "16-20") 
+        # self.tabs.addTab(self.tab5, "21-25") 
+        # self.tabs.addTab(self.tab6, "26-30")
+   
         self.width = 500
         self.height = 500
 
-        win = QWidget()
         self.grid = QGridLayout()
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
         self.label_right = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
@@ -78,9 +103,38 @@ class MainWindow(QMainWindow):
             self.grid.addWidget(btn1, i, 0)
             self.grid.addWidget(btn2, i, 2)
 		
-        widget = QWidget()
-        widget.setLayout(self.grid)
-        self.setCentralWidget(widget)
+
+        # Create first tab 
+        # self.tab1.layout = QVBoxLayout(self)
+        self.tab1.layout = self.grid
+        # self.l = QLabel()
+        # self.l.setText("This is the first tab")
+        # self.tab1.layout.addWidget(self.l)
+        self.tab1.setLayout(self.tab1.layout)
+
+        # self.tab1.layout.addWidget(self.grid)
+        # self.tab1.setLayout(self.tab1.layout)
+        # widget = QWidget()
+        # widget.setLayout(self.grid)
+        # self.setCentralWidget(widget)
+
+        # Add tabs to widget
+        # widget = QWidget()
+        # widget.setLayout(self.grid)
+        # self.layout.addWidget(self.tabs) 
+        # self.setLayout(self.tab1.layout)
+
+        # self.tab1.layout.addWidget(self.l)
+        # self.tab1.setLayout(self.tab1.layout)
+
+        # self.tab1.setLayout(self.tab1.layout)
+
+        # self.tab1.layout.addWidget(self.l)
+        # self.tab1.setLayout(self.tab1.layout)
+
+        self.layout.addWidget(self.tabs) 
+        self.setLayout(self.layout) 
+
 
 
     def browseFile0(self):
@@ -167,7 +221,9 @@ class MainWindow(QMainWindow):
 
     def getPos(self , event):
         x = event.pos().x()
-        y = event.pos().y() 
+        y = event.pos().y()
+
+
 
 
 app = QApplication(sys.argv)
