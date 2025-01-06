@@ -22,6 +22,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 
+class Second(QMainWindow):
+    def __init__(self, parent=None):
+        super(Second, self).__init__(parent)
+
+
 class MainWindow(QMainWindow):
     
     def __init__(self):
@@ -72,8 +77,6 @@ class Tab(QWidget):
 
         nb_tabs = 2
 
-        grids = list()
-
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -91,26 +94,26 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
+        
+        self.dialog = [Second(self), Second(self), Second(self), Second(self), Second(self),
+                        Second(self), Second(self), Second(self), Second(self), Second(self),
+                        Second(self), Second(self), Second(self), Second(self), Second(self)]
 
-        print(self.label_left)
-
-        connections = {1:self.browseFile1, 2:self.browseFile2, 3:self.browseFile3, 4:self.browseFile4, 5:self.browseFile5,
+        connections_load = {1:self.browseFile1, 2:self.browseFile2, 3:self.browseFile3, 4:self.browseFile4, 5:self.browseFile5,
                        6:self.browseFile6, 7:self.browseFile7, 8:self.browseFile8, 9:self.browseFile9, 10:self.browseFile10}
+        
+        # connections_edit = {1:self.editFile1, 2:self.editFile2, 3:self.editFile3, 4:self.editFile4, 5:self.editFile5,
+        #                6:self.editFile6, 7:self.editFile7, 8:self.editFile8, 9:self.editFile9, 10:self.editFile10}
 
         self.grids = list()
 
         for num_tab in range(1, nb_tabs+1):
 
-            # self.grid = QGridLayout()
             self.grids.append(QGridLayout())
 
             for i in range(5):
 
-                # self.label_left.append(QLabel(self))
-                # self.label_right.append(QLabel(self))
-
                 num_image = 5 * (num_tab - 1) + i + 1
-                print(num_image)
 
                 pixmap = QPixmap(f"im{num_image}.png")
                 label_left = self.label_left[num_image-1]
@@ -133,8 +136,10 @@ class Tab(QWidget):
                 self.grids[-1].addWidget(btn1, i, 0)
                 self.grids[-1].addWidget(btn2, i, 2)
 
-                btn1.clicked.connect(connections[num_image])
+                btn1.clicked.connect(connections_load[num_image])
+                # btn2.clicked.connect(connections_edit[num_image])
                 btn2.clicked.connect(self.editFile)
+                
 
         # Create first tab 
         self.tab1.layout = self.grids[0]
@@ -149,175 +154,172 @@ class Tab(QWidget):
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
         
+    def editFile(self):
+        self.dialog = Second()
+        self.dialog.show()
+        
+    def editFile2(self):
+        print("bbbbb")
+        self.dialog[1].show()
+    
+    def editFile3(self):
+        self.dialog[2].show()
+    
+    def editFile4(self):
+        self.dialog[3].show()
 
-
-    # def browseFile(self):
-    #     options = QFileDialog.Options()
-    #     options |= QFileDialog.DontUseNativeDialog
-    #     fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-    #     print(f"Selected file: {fileName}")
-    #     pixmap = QPixmap(fileName)
-    #     pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-    #     self.label_left[-1].setPixmap(pixmap)
-    #     self.grid.addWidget(self.label_left[-1], 0, 1)
-    #     self.label_left[-1].mousePressEvent = self.getPos
+    def editFile5(self):
+        self.dialog[4].show()
+    
+    def editFile6(self):
+        self.dialog[5].show()
+    
+    def editFile7(self):
+        self.dialog[6].show()
+    
+    def editFile8(self):
+        self.dialog[7].show()
+    
+    def editFile9(self):
+        self.dialog[8].show()
+    
+    def editFile10(self):
+        self.dialog[9].show()
         
     def browseFile1(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[0].setPixmap(pixmap)
-        self.grids[0].addWidget(self.label_left[0], 0, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[0].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[0], 0, 1)
+        else:
+            pass
         # self.label_left[0].mousePressEvent = self.getPos
 
     def browseFile2(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[1].setPixmap(pixmap)
-        self.grids[0].addWidget(self.label_left[1], 1, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[1].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[1], 1, 1)
+        else:
+            pass
         # self.label_left[2].mousePressEvent = self.getPos
 
     def browseFile3(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[2].setPixmap(pixmap)
-        self.grids[0].addWidget(self.label_left[2], 2, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[2].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[2], 2, 1)
+        else:
+            pass
         # self.label_left[2].mousePressEvent = self.getPos
 
     def browseFile4(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[3].setPixmap(pixmap)
-        self.grids[0].addWidget(self.label_left[3], 3, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[3].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[3], 3, 1)
+        else:
+            pass
         # self.label_left[-1].mousePressEvent = self.getPos
 
     def browseFile5(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[4].setPixmap(pixmap)
-        self.grids[0].addWidget(self.label_left[4], 4, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[4].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[4], 4, 1)
+        else:
+            pass
         # self.label_left[-1].mousePressEvent = self.getPos
 
     def browseFile6(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[5].setPixmap(pixmap)
-        self.grids[1].addWidget(self.label_left[5], 0, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[5].setPixmap(pixmap)
+            self.grids[1].addWidget(self.label_left[5], 0, 1)
+        else:
+            pass
         # self.label_left[-1].mousePressEvent = self.getPos
     
     def browseFile7(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[6].setPixmap(pixmap)
-        self.grids[1].addWidget(self.label_left[6], 1, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[6].setPixmap(pixmap)
+            self.grids[1].addWidget(self.label_left[6], 1, 1)
+        else:
+            pass
         # self.label_left[7].mousePressEvent = self.getPos
 
     def browseFile8(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[7].setPixmap(pixmap)
-        self.grids[1].addWidget(self.label_left[7], 2, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[7].setPixmap(pixmap)
+            self.grids[1].addWidget(self.label_left[7], 2, 1)
+        else:
+            pass
         # self.label_left[8].mousePressEvent = self.getPos
 
     def browseFile9(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[8].setPixmap(pixmap)
-        self.grids[1].addWidget(self.label_left[8], 3, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[8].setPixmap(pixmap)
+            self.grids[1].addWidget(self.label_left[8], 3, 1)
+        else:
+            pass
         # self.label_left[9].mousePressEvent = self.getPos
 
     def browseFile10(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        print(f"Selected file: {fileName}")
-        pixmap = QPixmap(fileName)
-        pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.label_left[9].setPixmap(pixmap)
-        self.grids[1].addWidget(self.label_left[9], 4, 1)
+        if fileName != "":
+            pixmap = QPixmap(fileName)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[9].setPixmap(pixmap)
+            self.grids[1].addWidget(self.label_left[9], 4, 1)
+        else:
+            pass
         # self.label_left[10].mousePressEvent = self.getPos
-
-
-    # def browseFile5(self):
-    #     options = QFileDialog.Options()
-    #     options |= QFileDialog.DontUseNativeDialog
-    #     fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-    #     print(f"Selected file: {fileName}")
-    #     pixmap = QPixmap(fileName)
-    #     pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-    #     self.label_left[5].setPixmap(pixmap)
-    #     self.grid.addWidget(self.label, 5, 1)
-    #     self.label_left[5].mousePressEvent = self.getPos
-
-
-    # def browseFile(self):
-    #     options = QFileDialog.Options()
-    #     options |= QFileDialog.DontUseNativeDialog
-    #     fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-    #     print(f"Selected file: {fileName}")
-    #     pixmap = QPixmap(fileName)
-    #     pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-    #     self.label_left[0].setPixmap(pixmap)
-    #     self.grid.addWidget(self.label_left[0], 0, 1)
-    #     self.label_left[0].mousePressEvent = self.getPos
-
-
-    def editFile(self):
-        return 0
-    
-    def editFile1(self):
-        return 0
-
-    def editFile2(self):
-        return 0
-    
-    def editFile3(self):
-        return 0
-
-    def editFile4(self):
-        return 0
 
 
     def getPos(self , event):
         x = event.pos().x()
         y = event.pos().y()
-
-
 
 
 app = QApplication(sys.argv)
@@ -326,73 +328,3 @@ window = MainWindow()
 window.show()
 
 app.exec()
-
-
-
-
-
-# def browseFile0(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[0].setPixmap(pixmap)
-#         self.grid.addWidget(self.label_left[0], 0, 1)
-#         self.label_left[0].mousePressEvent = self.getPos
-    
-#     def browseFile1(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[1].setPixmap(pixmap)
-#         self.grid.addWidget(self.label_left[1], 1, 1)
-#         self.label_left[1].mousePressEvent = self.getPos
-
-#     def browseFile2(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[2].setPixmap(pixmap)
-#         self.grid.addWidget(self.label_left[2], 2, 1)
-#         self.label_left[2].mousePressEvent = self.getPos
-
-#     def browseFile3(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[3].setPixmap(pixmap)
-#         self.grid.addWidget(self.label_left[3], 3, 1)
-#         self.label_left[3].mousePressEvent = self.getPos
-
-#     def browseFile4(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[4].setPixmap(pixmap)
-#         self.grid.addWidget(self.label_left[4], 4, 1)
-#         self.label_left[4].mousePressEvent = self.getPos
-    
-#     def browseFile5(self):
-#         options = QFileDialog.Options()
-#         options |= QFileDialog.DontUseNativeDialog
-#         fileName, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-#         print(f"Selected file: {fileName}")
-#         pixmap = QPixmap(fileName)
-#         pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-#         self.label_left[5].setPixmap(pixmap)
-#         self.grid.addWidget(self.label, 5, 1)
-#         self.label_left[5].mousePressEvent = self.getPos
