@@ -1,6 +1,6 @@
 import sys
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -13,7 +13,8 @@ from PyQt5.QtWidgets import (
     QFileDialog,
     QGridLayout,
     QSizePolicy,
-    QTabWidget
+    QTabWidget,
+    QDesktopWidget
 )
 from PyQt5.QtGui import QPixmap
 
@@ -26,20 +27,34 @@ class Second(QMainWindow):
     def __init__(self, parent=None):
         super(Second, self).__init__(parent)
         self.setWindowTitle("Fenêtre d'édition")
+        self.windowSize = QSize(int(640*2.8), int(480*2.8))
+        self.move(100, 100)
 
     def display(self, fileName):
         layout = QVBoxLayout(self)
         label = QLabel(self)
         pixmap = QPixmap(fileName)
-        label.setPixmap(pixmap)
+        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+
+        # label.setPixmap(pixmap)
+        label.setPixmap(scaled_pixmap)
+        label.mousePressEvent = self.getPos
         self.setCentralWidget(label) 
         self.setLayout(layout)
+        
+        
     
     def display_error_message(self):
         label = QLabel("Veuillez d'abord charger une image avant de l'éditer")
         layout = QVBoxLayout()
         self.setCentralWidget(label)
         self.setLayout(layout)
+
+    def getPos(self , event):
+        x = event.pos().x()
+        y = event.pos().y()
+        print(x, y)
+
         
 
 class MainWindow(QMainWindow):
@@ -51,6 +66,13 @@ class MainWindow(QMainWindow):
 
         self.tab_widget = Tab(self)
         self.setCentralWidget(self.tab_widget)
+    
+        self.showMaximized()
+
+        QTimer.singleShot(100, self.calculate)
+
+    def calculate(self):
+        print(self.frameGeometry().height())
 
 
 class Tab(QWidget): 
@@ -99,8 +121,8 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab9, "41-45")
         self.tabs.addTab(self.tab10, "46-50")
    
-        self.width = 500
-        self.height = 500
+        self.width = 400
+        self.height = 400
 
         nb_tabs = 2
 
@@ -399,11 +421,6 @@ class Tab(QWidget):
         else:
             pass
         # self.label_left[10].mousePressEvent = self.getPos
-
-
-    def getPos(self , event):
-        x = event.pos().x()
-        y = event.pos().y()
 
 
 app = QApplication(sys.argv)
