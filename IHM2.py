@@ -53,10 +53,27 @@ class Second(QMainWindow):
         
     
     def display_error_message(self):
-        label = QLabel("Veuillez d'abord charger une image avant de l'éditer")
         layout = QVBoxLayout()
-        self.setCentralWidget(label)
-        self.setLayout(layout)
+        
+        pixmap = QPixmap(f"coconfort.png")
+        label = QLabel()
+        label.setPixmap(pixmap)
+        layout.addWidget(label)
+
+        txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+        layout.addWidget(txt)
+        # self.setCentralWidget(label)
+
+        # self.setLayout(layout)
+
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+
+        self.setFixedWidth(300)
+        self.setFixedHeight(300)
+
+
 
     def getPos(self , event):
         x = event.pos().x()
