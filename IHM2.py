@@ -16,10 +16,11 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QDesktopWidget,
     QDockWidget,
+    QMessageBox
 )
 from PyQt5.QtGui import QPixmap
 
-from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter, QColor, QCloseEvent
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
@@ -42,19 +43,24 @@ class Second(QMainWindow):
         self.setCentralWidget(label)
         
         dock = QDockWidget("", self)
-        # dock.setFeatures(QDockWidget.DockWidgetFloatable | QDockWidget.DockWidgetMovable)
         dock.setFeatures(QDockWidget.DockWidgetMovable)
         btn = QPushButton("Add CI points")
         btn.resize(50, 150)
         btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn.clicked.connect(self.set_ci_points)
         dock.setWidget(btn)
 
         self.setLayout(layout)
+    
+    def set_ci_points(self):
+        # Set the cursor to a cross cursor
+        self.setCursor(Qt.CrossCursor)
         
     
     def display_error_message(self):
+
+        self.move(450, 200)
         layout = QVBoxLayout()
-        
         pixmap = QPixmap(f"coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
@@ -62,9 +68,6 @@ class Second(QMainWindow):
 
         txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
         layout.addWidget(txt)
-        # self.setCentralWidget(label)
-
-        # self.setLayout(layout)
 
         widget = QWidget()
         widget.setLayout(layout)
@@ -72,8 +75,6 @@ class Second(QMainWindow):
 
         self.setFixedWidth(300)
         self.setFixedHeight(300)
-
-
 
     def getPos(self , event):
         x = event.pos().x()
@@ -98,6 +99,23 @@ class MainWindow(QMainWindow):
 
     def calculate(self):
         print(self.frameGeometry().height())
+
+    def close_all_windows(self):
+        win_list = QApplication.allWindows()
+        for w in win_list:
+            w.close()
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        close = QMessageBox()
+        close.setText("Voulez vous vraiment quitter l'application ?")
+        close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        close = close.exec()
+
+        if close == QMessageBox.Yes:
+            event.accept()
+            self.close_all_windows()
+        else:
+            event.ignore()
 
 
 class Tab(QWidget): 
