@@ -14,7 +14,8 @@ from PyQt5.QtWidgets import (
     QGridLayout,
     QSizePolicy,
     QTabWidget,
-    QDesktopWidget
+    QDesktopWidget,
+    QDockWidget,
 )
 from PyQt5.QtGui import QPixmap
 
@@ -36,12 +37,19 @@ class Second(QMainWindow):
         pixmap = QPixmap(fileName)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
-        # label.setPixmap(pixmap)
         label.setPixmap(scaled_pixmap)
         label.mousePressEvent = self.getPos
-        self.setCentralWidget(label) 
-        self.setLayout(layout)
+        self.setCentralWidget(label)
         
+        dock = QDockWidget("", self)
+        # dock.setFeatures(QDockWidget.DockWidgetFloatable | QDockWidget.DockWidgetMovable)
+        dock.setFeatures(QDockWidget.DockWidgetMovable)
+        btn = QPushButton("Add CI points")
+        btn.resize(50, 150)
+        btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        dock.setWidget(btn)
+
+        self.setLayout(layout)
         
     
     def display_error_message(self):
@@ -187,7 +195,7 @@ class Tab(QWidget):
 
                 btn1 = QPushButton("Load")
                 btn1.resize(50, 150)
-                btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed) 
+                btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
                 
                 btn2 = QPushButton("Edit")
                 btn2.resize(50, 150)
