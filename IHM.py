@@ -1,4 +1,7 @@
+from images import *
+
 import sys
+import os
 
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtWidgets import (
@@ -51,17 +54,24 @@ class Second(QMainWindow):
         dock.setWidget(btn)
 
         self.setLayout(layout)
+        self.file = fileName
     
     def set_ci_points(self):
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
+
+        A = IMAGE()
+        A.load(self.name)
+
+        print(self.x, self.y)
+
         
     
     def display_error_message(self):
 
         self.move(450, 200)
         layout = QVBoxLayout()
-        pixmap = QPixmap(f"coconfort.png")
+        pixmap = QPixmap(f"images{os.sep}coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
@@ -77,9 +87,9 @@ class Second(QMainWindow):
         self.setFixedHeight(300)
 
     def getPos(self , event):
-        x = event.pos().x()
-        y = event.pos().y()
-        print(x, y)
+        self.x = event.pos().x()
+        self.y = event.pos().y()
+        print(self.x, self.y)
 
         
 
@@ -137,6 +147,11 @@ class Tab(QWidget):
         self.fileName13 = "im13.png"
         self.fileName14 = "im14.png"
         self.fileName15 = "im15.png"
+        self.fileName16 = "im16.png"
+        self.fileName17 = "im17.png"
+        self.fileName18 = "im18.png"
+        self.fileName19 = "im19.png"
+        self.fileName20 = "im20.png"
 
         self.layout = QVBoxLayout(self)
   
@@ -168,10 +183,10 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab9, "41-45")
         self.tabs.addTab(self.tab10, "46-50")
    
-        self.width = 400
-        self.height = 400
+        self.width = 413
+        self.height = 307
 
-        nb_tabs = 3
+        nb_tabs = 4
 
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -197,11 +212,13 @@ class Tab(QWidget):
 
         connections_load = {1:self.browseFile1, 2:self.browseFile2, 3:self.browseFile3, 4:self.browseFile4, 5:self.browseFile5,
                        6:self.browseFile6, 7:self.browseFile7, 8:self.browseFile8, 9:self.browseFile9, 10:self.browseFile10,
-                       11:self.browseFile11, 12:self.browseFile12, 13:self.browseFile13, 14:self.browseFile14, 15:self.browseFile15}
+                       11:self.browseFile11, 12:self.browseFile12, 13:self.browseFile13, 14:self.browseFile14, 15:self.browseFile15,
+                       16:self.browseFile16, 17:self.browseFile17, 18:self.browseFile18, 19:self.browseFile19, 20:self.browseFile20}
         
         connections_edit = {1:self.editFile1, 2:self.editFile2, 3:self.editFile3, 4:self.editFile4, 5:self.editFile5,
                        6:self.editFile6, 7:self.editFile7, 8:self.editFile8, 9:self.editFile9, 10:self.editFile10,
-                       11:self.editFile11, 12:self.editFile12, 13:self.editFile13, 14:self.editFile14, 15:self.editFile15}
+                       11:self.editFile11, 12:self.editFile12, 13:self.editFile13, 14:self.editFile14, 15:self.editFile15,
+                       16:self.editFile16, 17:self.editFile17, 18:self.editFile18, 19:self.editFile19, 20:self.editFile20}
 
         self.grids = list()
 
@@ -213,17 +230,17 @@ class Tab(QWidget):
 
                 num_image = 5 * (num_tab - 1) + i + 1
 
-                pixmap = QPixmap(f"dardagnan.png")
+                pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 label = QLabel()
                 label.setPixmap(pixmap)
                 self.grids[-1].addWidget(label, i, 0)
 
-                pixmap = QPixmap(f"im{num_image}.png")
+                pixmap = QPixmap(f"images{os.sep}im{num_image}.png")
                 label_left = self.label_left[num_image-1]
                 label_left.setPixmap(pixmap)
                 self.grids[-1].addWidget(label_left, i, 2, 1, 1)
 
-                pixmap = QPixmap(f"im{num_image}.png")
+                pixmap = QPixmap(f"images{os.sep}im{num_image}.png")
                 label_right = self.label_right[num_image-1]
                 label_right.setPixmap(pixmap)
                 self.grids[-1].addWidget(label_right, i, 4, 1, 1)
@@ -236,20 +253,21 @@ class Tab(QWidget):
                 btn2.resize(50, 150)
                 btn2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-                # self.grids[-1].addWidget(btn1, i, 1, alignment=QtCore.Qt.AlignRight)
+                # self.grids[-1].addWidget(btn1, i, 1, alignment=QtCore.Qt.AlignLeft)
+                # self.grids[-1].addWidget(btn2, i, 2, alignment=QtCore.Qt.AlignCenter)
                 self.grids[-1].addWidget(btn1, i, 1)
                 self.grids[-1].addWidget(btn2, i, 3)
-                # self.grids[-1].addWidget(btn2, i, 2, QtCore.Qt.AlignLeft)
+                
 
                 btn1.clicked.connect(connections_load[num_image])
                 btn2.clicked.connect(connections_edit[num_image])
 
-                pixmap = QPixmap(f"dardagnan.png")
+                pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 label = QLabel()
                 label.setPixmap(pixmap)
                 self.grids[-1].addWidget(label, i, 5)
 
-                pixmap = QPixmap(f"dardagnan.png")
+                pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 aaa = QLabel()
                 aaa.setPixmap(pixmap)
                 self.grids[-1].addWidget(aaa, i, 6)
@@ -267,6 +285,10 @@ class Tab(QWidget):
         # Create third tab 
         self.tab3.layout = self.grids[2]
         self.tab3.setLayout(self.tab3.layout)
+
+        # Create fourth tab 
+        self.tab4.layout = self.grids[3]
+        self.tab4.setLayout(self.tab4.layout)
 
         # Final step
         # #######
@@ -369,7 +391,7 @@ class Tab(QWidget):
             self.dialog.display_error_message()
         else:
             self.dialog = Second()
-            self.dialog.display(self.fileName10)
+            self.dialog.display(self.fileName11)
         self.dialog.show()
 
     def editFile12(self):
@@ -378,7 +400,7 @@ class Tab(QWidget):
             self.dialog.display_error_message()
         else:
             self.dialog = Second()
-            self.dialog.display(self.fileName10)
+            self.dialog.display(self.fileName12)
         self.dialog.show()
 
     def editFile13(self):
@@ -387,7 +409,7 @@ class Tab(QWidget):
             self.dialog.display_error_message()
         else:
             self.dialog = Second()
-            self.dialog.display(self.fileName10)
+            self.dialog.display(self.fileName13)
         self.dialog.show()
 
     def editFile14(self):
@@ -396,7 +418,7 @@ class Tab(QWidget):
             self.dialog.display_error_message()
         else:
             self.dialog = Second()
-            self.dialog.display(self.fileName10)
+            self.dialog.display(self.fileName14)
         self.dialog.show()
     
     def editFile15(self):
@@ -405,9 +427,53 @@ class Tab(QWidget):
             self.dialog.display_error_message()
         else:
             self.dialog = Second()
-            self.dialog.display(self.fileName10)
+            self.dialog.display(self.fileName15)
         self.dialog.show()
 
+    def editFile16(self):
+        if self.fileName16 == "im16.png":
+            self.dialog = Second()
+            self.dialog.display_error_message()
+        else:
+            self.dialog = Second()
+            self.dialog.display(self.fileName16)
+        self.dialog.show()
+
+    def editFile17(self):
+        if self.fileName17 == "im17.png":
+            self.dialog = Second()
+            self.dialog.display_error_message()
+        else:
+            self.dialog = Second()
+            self.dialog.display(self.fileName17)
+        self.dialog.show()
+    
+    def editFile18(self):
+        if self.fileName18 == "im18.png":
+            self.dialog = Second()
+            self.dialog.display_error_message()
+        else:
+            self.dialog = Second()
+            self.dialog.display(self.fileName18)
+        self.dialog.show()
+
+    def editFile19(self):
+        if self.fileName18 == "im19.png":
+            self.dialog = Second()
+            self.dialog.display_error_message()
+        else:
+            self.dialog = Second()
+            self.dialog.display(self.fileName19)
+        self.dialog.show()
+    
+    def editFile20(self):
+        if self.fileName18 == "im20.png":
+            self.dialog = Second()
+            self.dialog.display_error_message()
+        else:
+            self.dialog = Second()
+            self.dialog.display(self.fileName20)
+        self.dialog.show()
 
     def browseFile1(self):
         options = QFileDialog.Options()
@@ -417,7 +483,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName1)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[0].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[0], 0, 2, 1, 2)
+            self.grids[0].addWidget(self.label_left[0], 0, 2, 1, 1)
         else:
             pass
         
@@ -430,7 +496,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName2)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[1].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[1], 1, 2, 1, 2)
+            self.grids[0].addWidget(self.label_left[1], 1, 2, 1, 1)
         else:
             pass
 
@@ -442,7 +508,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName3)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[2].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[2], 2, 2, 1, 2)
+            self.grids[0].addWidget(self.label_left[2], 2, 2, 1, 1)
         else:
             pass
 
@@ -454,7 +520,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName4)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[3].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[3], 3, 2, 1, 2)
+            self.grids[0].addWidget(self.label_left[3], 3, 2, 1, 1)
         else:
             pass
 
@@ -466,7 +532,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName5)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[4].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[4], 4, 2, 1, 2)
+            self.grids[0].addWidget(self.label_left[4], 4, 2, 1, 1)
         else:
             pass
 
@@ -478,7 +544,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName6)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[5].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[5], 0, 2, 1, 2)
+            self.grids[1].addWidget(self.label_left[5], 0, 2, 1, 1)
         else:
             pass
     
@@ -490,7 +556,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName7)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[6].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[6], 1, 2, 1, 2)
+            self.grids[1].addWidget(self.label_left[6], 1, 2, 1, 1)
         else:
             pass
 
@@ -502,7 +568,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName8)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[7].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[7], 2, 2, 1, 2)
+            self.grids[1].addWidget(self.label_left[7], 2, 2, 1, 1)
         else:
             pass
 
@@ -515,7 +581,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName9)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[8].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[8], 3, 2, 1, 2)
+            self.grids[1].addWidget(self.label_left[8], 3, 2, 1, 1)
         else:
             pass
 
@@ -527,7 +593,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName10)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[9].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[9], 4, 2, 1, 2)
+            self.grids[1].addWidget(self.label_left[9], 4, 2, 1, 1)
         else:
             pass
 
@@ -539,7 +605,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName11)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[10].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[10], 0, 2, 1, 2)
+            self.grids[2].addWidget(self.label_left[10], 0, 2, 1, 1)
         else:
             pass
 
@@ -551,7 +617,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName12)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[11].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[11], 1, 2, 1, 2)
+            self.grids[2].addWidget(self.label_left[11], 1, 2, 1, 1)
         else:
             pass
 
@@ -563,7 +629,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName13)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[12].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[12], 2, 1, 2)
+            self.grids[2].addWidget(self.label_left[12], 2, 2, 1, 1)
         else:
             pass
 
@@ -575,7 +641,7 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName14)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[13].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[13], 3, 2, 1, 2)
+            self.grids[2].addWidget(self.label_left[13], 3, 2, 1, 1)
         else:
             pass
 
@@ -587,9 +653,69 @@ class Tab(QWidget):
             pixmap = QPixmap(self.fileName15)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[14].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[14], 4, 2, 1, 2)
+            self.grids[2].addWidget(self.label_left[14], 4, 2, 1, 1)
         else:
             pass
+
+    def browseFile16(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.fileName16, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        if self.fileName16 != "":
+            pixmap = QPixmap(self.fileName16)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[15].setPixmap(pixmap)
+            self.grids[3].addWidget(self.label_left[15], 0, 2, 1, 1)
+        else:
+            pass 
+
+    def browseFile17(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.fileName17, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        if self.fileName18 != "":
+            pixmap = QPixmap(self.fileName17)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[16].setPixmap(pixmap)
+            self.grids[3].addWidget(self.label_left[16], 1, 2, 1, 1)
+        else:
+            pass 
+
+    def browseFile18(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.fileName18, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        if self.fileName18 != "":
+            pixmap = QPixmap(self.fileName18)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[17].setPixmap(pixmap)
+            self.grids[3].addWidget(self.label_left[17], 2, 2, 1, 1)
+        else:
+            pass 
+
+    def browseFile19(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.fileName19, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        if self.fileName19 != "":
+            pixmap = QPixmap(self.fileName19)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[18].setPixmap(pixmap)
+            self.grids[3].addWidget(self.label_left[18], 3, 2, 1, 1)
+        else:
+            pass 
+
+    def browseFile20(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        self.fileName20, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        if self.fileName20 != "":
+            pixmap = QPixmap(self.fileName20)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[19].setPixmap(pixmap)
+            self.grids[3].addWidget(self.label_left[19], 4, 2, 1, 1)
+        else:
+            pass 
 
 app = QApplication(sys.argv)
 
