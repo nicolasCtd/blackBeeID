@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import (
     QDockWidget,
     QMessageBox
 )
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QCursor
 
 from PyQt5.QtGui import QPainter, QColor, QCloseEvent
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -36,7 +36,8 @@ class Second(QMainWindow):
         self.move(100, 100)
 
     def display(self, fileName):
-        layout = QVBoxLayout(self)
+        w = QWidget()
+        layout = QVBoxLayout(w)
         label = QLabel(self)
         pixmap = QPixmap(fileName)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
@@ -44,16 +45,27 @@ class Second(QMainWindow):
         label.setPixmap(scaled_pixmap)
         label.mousePressEvent = self.getPos
         self.setCentralWidget(label)
-        
+
         dock = QDockWidget("", self)
         dock.setFeatures(QDockWidget.DockWidgetMovable)
-        btn = QPushButton("Add CI points")
-        btn.resize(50, 150)
-        btn.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        btn.clicked.connect(self.set_ci_points)
-        dock.setWidget(btn)
+        
+        btn_zoom = QPushButton("  Zoom")
+        btn_zoom.resize(50, 150)
+        btn_zoom.setIcon(QtGui.QIcon(f"images/search.png"))
+        btn_zoom.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_zoom.clicked.connect(self.zoom)
 
-        self.setLayout(layout)
+        btn_ci_points = QPushButton("Add CI points")
+        btn_ci_points.resize(50, 150)
+        btn_ci_points.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_ci_points.clicked.connect(self.set_ci_points)
+
+        layout.addWidget(btn_zoom)
+        layout.addWidget(btn_ci_points)
+
+        dock.setWidget(w)
+
+        # self.setLayout(layout)
         self.file = fileName
     
     def set_ci_points(self):
@@ -61,12 +73,22 @@ class Second(QMainWindow):
         self.setCursor(Qt.CrossCursor)
 
         A = IMAGE()
-        A.load(self.name)
+        A.load(self.file)
 
         print(self.x, self.y)
+    
+    def zoom(self):
+        pixmap = QPixmap(f"images{os.sep}search.png")
+        pixmap = pixmap.scaled(32, 32)
+        cursor = QCursor(pixmap, 32, 32)
+        # QApplication.setOverrideCursor(cursor)
+        self.setCursor(cursor)
+        delta_x = 100
+        delta_y = 100
+        
+        return 0
 
         
-    
     def display_error_message(self):
 
         self.move(450, 200)
