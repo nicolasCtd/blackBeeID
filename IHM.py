@@ -1,4 +1,5 @@
 from images import *
+import matplotlib.pyplot as plt
 
 import sys
 import os
@@ -35,32 +36,34 @@ class Second(QMainWindow):
         self.windowSize = QSize(int(640*2.8), int(480*2.8))
         self.move(100, 100)
 
+        self.zoom_power = (280, 250)
+
     def display(self, fileName):
         w = QWidget()
         layout = QVBoxLayout(w)
-        label = QLabel(self)
+        self.label = QLabel(self)
         pixmap = QPixmap(fileName)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
-        label.setPixmap(scaled_pixmap)
-        label.mousePressEvent = self.getPos
-        self.setCentralWidget(label)
+        self.label.setPixmap(scaled_pixmap)
+        self.setCentralWidget(self.label)
 
         dock = QDockWidget("", self)
         dock.setFeatures(QDockWidget.DockWidgetMovable)
         
-        btn_zoom = QPushButton("  Zoom")
-        btn_zoom.resize(50, 150)
-        btn_zoom.setIcon(QtGui.QIcon(f"images/search.png"))
-        btn_zoom.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        btn_zoom.clicked.connect(self.zoom)
+        btn_zoom_1 = QPushButton("  Zoom")
+        btn_zoom_1.resize(50, 150)
+        btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
+        btn_zoom_1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_zoom_1.clicked.connect(self.zoom)
 
         btn_ci_points = QPushButton("Add CI points")
         btn_ci_points.resize(50, 150)
         btn_ci_points.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         btn_ci_points.clicked.connect(self.set_ci_points)
 
-        layout.addWidget(btn_zoom)
+        layout.addWidget(btn_zoom_1)
+        # layout.addWidget(btn_zoom_2)
         layout.addWidget(btn_ci_points)
 
         dock.setWidget(w)
@@ -74,8 +77,6 @@ class Second(QMainWindow):
 
         A = IMAGE()
         A.load(self.file)
-
-        print(self.x, self.y)
     
     def zoom(self):
         pixmap = QPixmap(f"images{os.sep}search.png")
@@ -83,11 +84,25 @@ class Second(QMainWindow):
         cursor = QCursor(pixmap, 32, 32)
         # QApplication.setOverrideCursor(cursor)
         self.setCursor(cursor)
-        delta_x = 100
-        delta_y = 100
+
+        pixmap = QPixmap(self.file)
+
+        self.label.mousePressEvent = self.getPos_and_zoom
         
         return 0
 
+    # def zoom_2(self):
+    #     pixmap = QPixmap(f"images{os.sep}search.png")
+    #     pixmap = pixmap.scaled(32, 32)
+    #     cursor = QCursor(pixmap, 32, 32)
+    #     # QApplication.setOverrideCursor(cursor)
+    #     self.setCursor(cursor)
+
+    #     pixmap = QPixmap(self.file)
+
+    #     self.label.mousePressEvent = self.getPos_and_zoom_2
+        
+    #     return 0
         
     def display_error_message(self):
 
@@ -108,11 +123,72 @@ class Second(QMainWindow):
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
-    def getPos(self , event):
-        self.x = event.pos().x()
-        self.y = event.pos().y()
-        print(self.x, self.y)
+    def getPos_and_zoom(self , event):
+        
+        delta_x = self.zoom_power[1]
+        delta_y = self.zoom_power[0]
 
+        x = event.pos().x()
+        y = event.pos().y()
+
+        A = IMAGE()
+        A.load(self.file)
+
+        i_max = min(y+delta_y, A.data.shape[0])
+        i_min = max(y-delta_y, 0)
+
+        j_max = min(x+delta_x, A.data.shape[1])
+        j_min = max(x-delta_x, 0)
+
+        image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
+
+        path_split = self.file.replace(os.sep, "/").split("/")
+        temp_name = "tmp_zoom_1" + path_split[-1]
+
+        plt.imsave(fname=f"tmp_zoom_1{os.sep}{temp_name}", arr=image_temp)
+
+        pixmap = QPixmap(f"tmp_zoom_1{os.sep}{temp_name}")
+        # scaled_pixmap = pixmap.scaled(QSize(delta_y*3, delta_x*3), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+
+        self.label.setPixmap(scaled_pixmap)
+        self.setCentralWidget(self.label)
+
+        cursor = QCursor(Qt.ArrowCursor)
+        self.setCursor(cursor)
+
+    # def getPos_and_zoom_2(self , event):
+        
+    #     delta_x = self.zoom_power[2][1]
+    #     delta_y = self.zoom_power[2][0]
+
+    #     x = event.pos().x()
+    #     y = event.pos().y()
+
+    #     A = IMAGE()
+    #     A.load(self.file)
+
+    #     i_max = min(y+delta_y, A.data.shape[0])
+    #     i_min = max(y-delta_y, 0)
+
+    #     j_max = min(x+delta_x, A.data.shape[1])
+    #     j_min = max(x-delta_x, 0)
+
+    #     image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
+
+    #     path_split = self.file.replace(os.sep, "/").split("/")
+    #     temp_name = "tmp_zoom_2" + path_split[-1]
+
+    #     plt.imsave(fname=f"tmp_zoom_2{os.sep}{temp_name}", arr=image_temp)
+
+    #     pixmap = QPixmap(f"tmp_zoom_2{os.sep}{temp_name}")
+    #     scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+
+    #     self.label.setPixmap(scaled_pixmap)
+    #     self.setCentralWidget(self.label)
+
+    #     cursor = QCursor(Qt.ArrowCursor)
+    #     self.setCursor(cursor)
         
 
 class MainWindow(QMainWindow):
@@ -130,7 +206,7 @@ class MainWindow(QMainWindow):
         QTimer.singleShot(100, self.calculate)
 
     def calculate(self):
-        print(self.frameGeometry().height())
+        return self.frameGeometry().height()
 
     def close_all_windows(self):
         win_list = QApplication.allWindows()
