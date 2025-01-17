@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import (
     QLabel,
     QMainWindow,
     QPushButton,
-    QStackedLayout,
     QVBoxLayout,
     QWidget,
     QFileDialog,
@@ -26,7 +25,7 @@ from PyQt5.QtWidgets import (
     QDockWidget,
     QMessageBox
 )
-from PyQt5.QtGui import QPixmap, QCursor
+from PyQt5.QtGui import QPixmap, QCursor, QFont
 
 from PyQt5.QtGui import QPainter, QColor, QCloseEvent
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -39,7 +38,8 @@ def insertnow(file):
 
 def get_file_name(path):
     path_split = path.replace(os.sep, "/").split("/")
-    return path_split[-1]
+    name = path_split[-1]
+    return name.split("_")[0]
 
 def get_path(path2file):
     path_split = path2file.replace(os.sep, "/").split("/")
@@ -54,12 +54,16 @@ class Second(QMainWindow):
 
         self.zoom_power = (270, 200)
 
+        self.w = QWidget()
+        self.layout = QVBoxLayout(self.w)
+
     def display(self, fileName):
 
         self.name = get_file_name(fileName).replace(".jpg", "").replace("png", "")
         self.extension = "." + fileName.split(".")[-1]
         self.path = get_path(fileName)
-        print("bb")
+
+        self.path2image = fileName
 
         self.out = "out" + os.sep + self.name + os.sep
 
@@ -68,10 +72,11 @@ class Second(QMainWindow):
         except:
             pass
 
-        shutil.copyfile(fileName, insertnow(self.path + self.out + self.name + self.extension))
+        try:
+            shutil.copyfile(fileName, insertnow(self.path + self.out + self.name + self.extension))
+        except:
+            pass
 
-        w = QWidget()
-        layout = QVBoxLayout(w)
         self.label = QLabel(self)
         pixmap = QPixmap(fileName)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
@@ -79,36 +84,33 @@ class Second(QMainWindow):
         self.label.setPixmap(scaled_pixmap)
         self.setCentralWidget(self.label)
 
-        dock = QDockWidget("", self)
-        dock.setFeatures(QDockWidget.DockWidgetMovable)
-        
+        self.set_dock()
+    
+    def set_dock(self):
         btn_zoom_1 = QPushButton("  ZOOM IN ")
-        btn_zoom_1.resize(100, 300)
+        # btn_zoom_1.resize(400, 400)
         btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
-        # btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}zoom_in.png"))
-        # btn_zoom_1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_zoom_1.setFont(QFont('Times', 14))
         btn_zoom_1.clicked.connect(self.zoom_in)
 
         btn_zoom_2 = QPushButton("  ZOOM OUT")
-        btn_zoom_2.resize(100, 300)
-        # btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}zoom_out.png"))
-        # btn_zoom_2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        # btn_zoom_2.resize(400, 400)
+        btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
+        btn_zoom_2.setFont(QFont('Times', 14))
         btn_zoom_2.clicked.connect(self.zoom_out)
 
         btn_ci_points = QPushButton("Add CI points")
-        btn_ci_points.resize(50, 150)
-        btn_ci_points.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_ci_points.setFont(QFont('Times', 14))
         btn_ci_points.clicked.connect(self.set_ci_points)
 
-        layout.addWidget(btn_zoom_1)
-        layout.addWidget(btn_zoom_2)
-        layout.addWidget(btn_ci_points)
+        self.layout.addWidget(btn_zoom_1)
+        self.layout.addWidget(btn_zoom_2)
+        self.layout.addWidget(btn_ci_points)
+        self.dock = QDockWidget(f"{self.name}{self.extension}", self)
+        self.dock.setFeatures(QDockWidget.DockWidgetMovable)
+        # self.dock.setStyleSheet("QDockWidget {background : }")
+        self.dock.setWidget(self.w)
 
-        dock.setWidget(w)
-
-        # self.setLayout(layout)
-        self.path2image = fileName
-    
     def set_ci_points(self):
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
@@ -152,14 +154,18 @@ class Second(QMainWindow):
                 else:
                     continue
 
-        print("---------------")
-        pixmap = QPixmap(self.path + self.out + os.sep + file_out)
+        
+        # self.display(self.path + self.out + file_out)
+        
+
+        pixmap = QPixmap(self.path + self.out + file_out)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
         self.label.setPixmap(scaled_pixmap)
         self.setCentralWidget(self.label)
-        
+        # self.set_dock()
         return 0
+    
         
     def display_error_message(self):
 
@@ -181,6 +187,8 @@ class Second(QMainWindow):
         self.setFixedHeight(300)
 
     def getPos_and_zoom(self , event):
+        
+        print("get_pos_and_zoom")
         
         delta_x = self.zoom_power[1]
         delta_y = self.zoom_power[0]
@@ -213,39 +221,6 @@ class Second(QMainWindow):
         cursor = QCursor(Qt.ArrowCursor)
         self.setCursor(cursor)
 
-    # def getPos_and_zoom_2(self , event):
-        
-    #     delta_x = self.zoom_power[2][1]
-    #     delta_y = self.zoom_power[2][0]
-
-    #     x = event.pos().x()
-    #     y = event.pos().y()
-
-    #     A = IMAGE()
-    #     A.load(self.file)
-
-    #     i_max = min(y+delta_y, A.data.shape[0])
-    #     i_min = max(y-delta_y, 0)
-
-    #     j_max = min(x+delta_x, A.data.shape[1])
-    #     j_min = max(x-delta_x, 0)
-
-    #     image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
-
-    #     path_split = self.file.replace(os.sep, "/").split("/")
-    #     temp_name = "tmp_zoom_2" + path_split[-1]
-
-    #     plt.imsave(fname=f"tmp_zoom_2{os.sep}{temp_name}", arr=image_temp)
-
-    #     pixmap = QPixmap(f"tmp_zoom_2{os.sep}{temp_name}")
-    #     scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-
-    #     self.label.setPixmap(scaled_pixmap)
-    #     self.setCentralWidget(self.label)
-
-    #     cursor = QCursor(Qt.ArrowCursor)
-    #     self.setCursor(cursor)
-        
 
 class MainWindow(QMainWindow):
     
