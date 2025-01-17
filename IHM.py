@@ -4,6 +4,10 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
+from datetime import datetime
+
+import shutil
+
 from PyQt5.QtCore import Qt, QSize, QTimer
 from PyQt5.QtWidgets import (
     QApplication,
@@ -27,7 +31,19 @@ from PyQt5.QtGui import QPixmap, QCursor
 from PyQt5.QtGui import QPainter, QColor, QCloseEvent
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+def insertnow(file):       
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace("/", "_").replace(" ", "___").replace(":", "_")
+    tmp = file.split(".")
+    return tmp[0] + "___" + dt_string + "." + tmp[-1]
 
+def get_file_name(path):
+    path_split = path.replace(os.sep, "/").split("/")
+    return path_split[-1]
+
+def get_path(path2file):
+    path_split = path2file.replace(os.sep, "/").split("/")
+    return os.sep.join(path_split[:-1]) + os.sep
 
 class Second(QMainWindow):
     def __init__(self, parent=None):
@@ -36,9 +52,24 @@ class Second(QMainWindow):
         self.windowSize = QSize(int(640*2.8), int(480*2.8))
         self.move(100, 100)
 
-        self.zoom_power = (280, 250)
+        self.zoom_power = (270, 200)
 
     def display(self, fileName):
+
+        self.name = get_file_name(fileName).replace(".jpg", "").replace("png", "")
+        self.extension = "." + fileName.split(".")[-1]
+        self.path = get_path(fileName)
+        print("bb")
+
+        self.out = "out" + os.sep + self.name + os.sep
+
+        try:
+            os.makedirs("out" + os.sep + self.name)
+        except:
+            pass
+
+        shutil.copyfile(fileName, insertnow(self.path + self.out + self.name + self.extension))
+
         w = QWidget()
         layout = QVBoxLayout(w)
         self.label = QLabel(self)
@@ -51,11 +82,18 @@ class Second(QMainWindow):
         dock = QDockWidget("", self)
         dock.setFeatures(QDockWidget.DockWidgetMovable)
         
-        btn_zoom_1 = QPushButton("  Zoom")
-        btn_zoom_1.resize(50, 150)
+        btn_zoom_1 = QPushButton("  ZOOM IN ")
+        btn_zoom_1.resize(100, 300)
         btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
-        btn_zoom_1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        btn_zoom_1.clicked.connect(self.zoom)
+        # btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}zoom_in.png"))
+        # btn_zoom_1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_zoom_1.clicked.connect(self.zoom_in)
+
+        btn_zoom_2 = QPushButton("  ZOOM OUT")
+        btn_zoom_2.resize(100, 300)
+        # btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}zoom_out.png"))
+        # btn_zoom_2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        btn_zoom_2.clicked.connect(self.zoom_out)
 
         btn_ci_points = QPushButton("Add CI points")
         btn_ci_points.resize(50, 150)
@@ -63,13 +101,13 @@ class Second(QMainWindow):
         btn_ci_points.clicked.connect(self.set_ci_points)
 
         layout.addWidget(btn_zoom_1)
-        # layout.addWidget(btn_zoom_2)
+        layout.addWidget(btn_zoom_2)
         layout.addWidget(btn_ci_points)
 
         dock.setWidget(w)
 
         # self.setLayout(layout)
-        self.file = fileName
+        self.path2image = fileName
     
     def set_ci_points(self):
         # Set the cursor to a cross cursor
@@ -78,37 +116,56 @@ class Second(QMainWindow):
         A = IMAGE()
         A.load(self.file)
     
-    def zoom(self):
+    def zoom_in(self):
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
         # QApplication.setOverrideCursor(cursor)
         self.setCursor(cursor)
 
-        pixmap = QPixmap(self.file)
+        pixmap = QPixmap(self.path2image)
 
         self.label.mousePressEvent = self.getPos_and_zoom
         
         return 0
 
-    # def zoom_2(self):
-    #     pixmap = QPixmap(f"images{os.sep}search.png")
-    #     pixmap = pixmap.scaled(32, 32)
-    #     cursor = QCursor(pixmap, 32, 32)
-    #     # QApplication.setOverrideCursor(cursor)
-    #     self.setCursor(cursor)
+    def zoom_out(self):
 
-    #     pixmap = QPixmap(self.file)
+        file_out =  os.listdir(self.out)[0].replace(self.extension, "")
+        tmp = file_out.split("___")
 
-    #     self.label.mousePressEvent = self.getPos_and_zoom_2
+        date0 = tmp[-2].replace("_", "/")
+        hour0 = tmp[-1].replace("_", ":")
+        time0 =  datetime.strptime("01/01/2000 00:00:00", "%d/%m/%Y %H:%M:%S")
+
+        for file in os.listdir(self.out):
+            if "zoom" in file:
+                continue
+            else:
+                tmp = file.replace(self.extension, "").split("___")
+                date0 = tmp[-2].replace("_", "/")
+                hour0 = tmp[-1].replace("_", ":")
+                time1 = datetime.strptime(date0 + " " + hour0, "%d/%m/%Y %H:%M:%S")
+                if time1 >= time0:
+                    time0 = time1
+                    file_out = file
+                else:
+                    continue
+
+        print("---------------")
+        pixmap = QPixmap(self.path + self.out + os.sep + file_out)
+        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+
+        self.label.setPixmap(scaled_pixmap)
+        self.setCentralWidget(self.label)
         
-    #     return 0
+        return 0
         
     def display_error_message(self):
 
         self.move(450, 200)
         layout = QVBoxLayout()
-        pixmap = QPixmap(f"images{os.sep}coconfort.png")
+        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
@@ -132,7 +189,7 @@ class Second(QMainWindow):
         y = event.pos().y()
 
         A = IMAGE()
-        A.load(self.file)
+        A.load(self.path2image)
 
         i_max = min(y+delta_y, A.data.shape[0])
         i_min = max(y-delta_y, 0)
@@ -142,12 +199,11 @@ class Second(QMainWindow):
 
         image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
 
-        path_split = self.file.replace(os.sep, "/").split("/")
-        temp_name = "tmp_zoom_1" + path_split[-1]
+        new_name = insertnow(self.name + "_" + "zoom" + self.extension)
 
-        plt.imsave(fname=f"tmp_zoom_1{os.sep}{temp_name}", arr=image_temp)
+        plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
 
-        pixmap = QPixmap(f"tmp_zoom_1{os.sep}{temp_name}")
+        pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
         # scaled_pixmap = pixmap.scaled(QSize(delta_y*3, delta_x*3), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
@@ -204,6 +260,11 @@ class MainWindow(QMainWindow):
         self.showMaximized()
 
         QTimer.singleShot(100, self.calculate)
+
+        try:
+            os.makedirs("out")
+        except:
+            pass
 
     def calculate(self):
         return self.frameGeometry().height()
