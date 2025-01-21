@@ -8,7 +8,7 @@ from datetime import datetime
 
 import shutil
 
-from PyQt5.QtCore import Qt, QSize, QTimer
+from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -30,6 +30,8 @@ from PyQt5.QtGui import QPixmap, QCursor, QFont
 from PyQt5.QtGui import QPainter, QColor, QCloseEvent
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from functools import partial
+
 def insertnow(file):       
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace("/", "_").replace(" ", "___").replace(":", "_")
@@ -45,6 +47,7 @@ def get_path(path2file):
     path_split = path2file.replace(os.sep, "/").split("/")
     return os.sep.join(path_split[:-1]) + os.sep
 
+
 class Second(QMainWindow):
     def __init__(self, parent=None):
         super(Second, self).__init__(parent)
@@ -52,10 +55,16 @@ class Second(QMainWindow):
         self.windowSize = QSize(int(640*2.8), int(480*2.8))
         self.move(100, 100)
 
-        self.zoom_power = (270, 200)
+        self.zoom_x = 400//2
+        self.zoom_y = 300//2
 
         self.w = QWidget()
         self.layout = QVBoxLayout(self.w)
+
+        self.switch_button_zoom_in = True
+        self.switch_button_zoom_out = False
+
+        self.ZOOM = False
 
     def display(self, fileName):
 
@@ -87,38 +96,49 @@ class Second(QMainWindow):
         self.set_dock()
     
     def set_dock(self):
-        btn_zoom_1 = QPushButton("  ZOOM IN ")
+        self.btn_zoom_1 = QPushButton("  ZOOM IN ")
         # btn_zoom_1.resize(400, 400)
-        btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
-        btn_zoom_1.setFont(QFont('Times', 14))
-        btn_zoom_1.clicked.connect(self.zoom_in)
+        self.btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
+        self.btn_zoom_1.setFont(QFont('Times', 14))
+        self.btn_zoom_1.clicked.connect(partial(self.zoom_in, True))
+        # self.button_is_clicked = False
 
-        btn_zoom_2 = QPushButton("  ZOOM OUT")
+        self.btn_zoom_2 = QPushButton("  ZOOM OUT")
         # btn_zoom_2.resize(400, 400)
-        btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
-        btn_zoom_2.setFont(QFont('Times', 14))
-        btn_zoom_2.clicked.connect(self.zoom_out)
+        self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
+        self.btn_zoom_2.setFont(QFont('Times', 14))
+        self.btn_zoom_2.clicked.connect(self.zoom_out)
+
+        self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
+        self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
 
         btn_ci_points = QPushButton("Add CI points")
         btn_ci_points.setFont(QFont('Times', 14))
         btn_ci_points.clicked.connect(self.set_ci_points)
 
-        self.layout.addWidget(btn_zoom_1)
-        self.layout.addWidget(btn_zoom_2)
+        self.layout.addWidget(self.btn_zoom_1)
+        self.layout.addWidget(self.btn_zoom_2)
         self.layout.addWidget(btn_ci_points)
         self.dock = QDockWidget(f"{self.name}{self.extension}", self)
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
         # self.dock.setStyleSheet("QDockWidget {background : }")
         self.dock.setWidget(self.w)
 
-    def set_ci_points(self):
+
+    def set_ci_points(self, event):
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
 
         A = IMAGE()
-        A.load(self.file)
+        A.load(self.path2image)
+
+        self.label.mousePressEvent = self.getPos_ci
+
     
-    def zoom_in(self):
+    def zoom_in(self, ZOOM=True):
+
+        self.ZOOM = ZOOM
+
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
@@ -152,18 +172,20 @@ class Second(QMainWindow):
                     time0 = time1
                     file_out = file
                 else:
-                    continue
-
-        
-        # self.display(self.path + self.out + file_out)
-        
+                    continue       
 
         pixmap = QPixmap(self.path + self.out + file_out)
         scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
         self.label.setPixmap(scaled_pixmap)
         self.setCentralWidget(self.label)
-        # self.set_dock()
+
+        self.switch_button_zoom_in = True
+        self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
+
+        self.switch_button_zoom_out = False
+        self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
+
         return 0
     
         
@@ -186,40 +208,69 @@ class Second(QMainWindow):
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
-    def getPos_and_zoom(self , event):
-        
-        print("get_pos_and_zoom")
-        
-        delta_x = self.zoom_power[1]
-        delta_y = self.zoom_power[0]
+    def getPos_ci(self, event):
 
         x = event.pos().x()
         y = event.pos().y()
 
-        A = IMAGE()
-        A.load(self.path2image)
+        print(x, y)
 
-        i_max = min(y+delta_y, A.data.shape[0])
-        i_min = max(y-delta_y, 0)
+    def getPos_and_zoom(self, event):
+        
+        print("get_pos_and_zoom")
 
-        j_max = min(x+delta_x, A.data.shape[1])
-        j_min = max(x-delta_x, 0)
+        x = event.pos().x()
+        y = event.pos().y()
 
-        image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
+        print(f"center on : x={x}, y={y}")
 
-        new_name = insertnow(self.name + "_" + "zoom" + self.extension)
+        self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
 
-        plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
+        if self.switch_button_zoom_in and self.ZOOM:
+        
+            A = IMAGE()
+            A.load(self.path2image)
 
-        pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
-        # scaled_pixmap = pixmap.scaled(QSize(delta_y*3, delta_x*3), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+            print("direction X")
+            j_min = max(x-self.zoom_x, 0)
+            j_max = min(x+self.zoom_x, A.data.shape[1])
 
-        self.label.setPixmap(scaled_pixmap)
-        self.setCentralWidget(self.label)
+            print("dirrection Y")
+            i_min = max(y-self.zoom_y, 0)
+            i_max = min(y+self.zoom_y, A.data.shape[0])
 
-        cursor = QCursor(Qt.ArrowCursor)
-        self.setCursor(cursor)
+            print(i_min, i_max)
+            print(j_min, j_max)
+            print(A.data.shape)
+
+            image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
+
+            new_name = insertnow(self.name + "_" + "zoom" + self.extension)
+
+            plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
+
+            pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
+            # scaled_pixmap = pixmap.scaled(QSize(delta_y*3, delta_x*3), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+            scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
+
+            self.label.setPixmap(scaled_pixmap)
+            self.setCentralWidget(self.label)
+        
+            cursor = QCursor(Qt.ArrowCursor)
+            self.setCursor(cursor)
+
+            self.switch_button_zoom_in = False
+            self.switch_button_zoom_out = True
+            self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
+            self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
+            self.ZOOM = False
+
+        else:
+            pass
+        
+        return
+
+
 
 
 class MainWindow(QMainWindow):
