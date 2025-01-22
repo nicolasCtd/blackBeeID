@@ -52,11 +52,8 @@ class Second(QMainWindow):
     def __init__(self, parent=None):
         super(Second, self).__init__(parent)
         self.setWindowTitle("Fenêtre d'édition")
-        self.windowSize = QSize(int(640*2.8), int(480*2.8))
-        self.move(100, 100)
 
-        self.zoom_x = 400//2
-        self.zoom_y = 300//2
+        self.move(50, 100)
 
         self.w = QWidget()
         self.layout = QVBoxLayout(self.w)
@@ -88,12 +85,20 @@ class Second(QMainWindow):
 
         self.label = QLabel(self)
         pixmap = QPixmap(fileName)
-        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
-        self.label.setPixmap(scaled_pixmap)
+        self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
 
+        self.pixmapWidth = pixmap.width()
+        self.pixmapHeight = pixmap.height()
+
+        coeff = 0.83
+        self.label.setFixedSize(int(self.pixmapWidth*coeff), int(self.pixmapHeight*coeff))
+
+        self.label.setScaledContents(True)
+
         self.set_dock()
+
     
     def set_dock(self):
         self.btn_zoom_1 = QPushButton("  ZOOM IN ")
@@ -105,7 +110,8 @@ class Second(QMainWindow):
 
         self.btn_zoom_2 = QPushButton("  ZOOM OUT")
         # btn_zoom_2.resize(400, 400)
-        self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
+        # self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
+        self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}fusee.webp"))
         self.btn_zoom_2.setFont(QFont('Times', 14))
         self.btn_zoom_2.clicked.connect(self.zoom_out)
 
@@ -175,9 +181,8 @@ class Second(QMainWindow):
                     continue       
 
         pixmap = QPixmap(self.path + self.out + file_out)
-        scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
-        self.label.setPixmap(scaled_pixmap)
+        self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
 
         self.switch_button_zoom_in = True
@@ -216,44 +221,44 @@ class Second(QMainWindow):
         print(x, y)
 
     def getPos_and_zoom(self, event):
-        
-        print("get_pos_and_zoom")
 
-        x = event.pos().x()
-        y = event.pos().y()
+        pos = event.pos()
 
-        print(f"center on : x={x}, y={y}")
+        pixmapRect = self.label.pixmap().rect()
+        contentsRect = QtCore.QRectF(self.label.contentsRect())
+
+        fx = pixmapRect.width() / contentsRect.width()
+        fy = pixmapRect.height() / contentsRect.height()
+
+        x = int(pos.x() * fx)
+        y = int(pos.y() * fy)
+
+        zoom_x = int(self.pixmapWidth / 2.5)
+        zoom_y = int(self.pixmapHeight / 2.5)
 
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
 
         if self.switch_button_zoom_in and self.ZOOM:
-        
+
             A = IMAGE()
             A.load(self.path2image)
+            
+            j_min = max(x-zoom_x//2, 0)
+            j_max = min(x+zoom_x//2, A.data.shape[1])
 
-            print("direction X")
-            j_min = max(x-self.zoom_x, 0)
-            j_max = min(x+self.zoom_x, A.data.shape[1])
+            i_min = max(y-zoom_y//2, 0)
+            i_max = min(y+zoom_y//2, A.data.shape[0])
 
-            print("dirrection Y")
-            i_min = max(y-self.zoom_y, 0)
-            i_max = min(y+self.zoom_y, A.data.shape[0])
-
-            print(i_min, i_max)
-            print(j_min, j_max)
-            print(A.data.shape)
-
-            image_temp = A.data[i_min:i_max, j_min:x+j_max, :]
+            image_temp = A.data[i_min:i_max, j_min:j_max, :]
 
             new_name = insertnow(self.name + "_" + "zoom" + self.extension)
 
             plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
 
             pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
-            # scaled_pixmap = pixmap.scaled(QSize(delta_y*3, delta_x*3), aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
-            scaled_pixmap = pixmap.scaled(self.windowSize, aspectRatioMode=Qt.KeepAspectRatio, transformMode=Qt.SmoothTransformation)
 
-            self.label.setPixmap(scaled_pixmap)
+            self.label.setPixmap(pixmap)
+
             self.setCentralWidget(self.label)
         
             cursor = QCursor(Qt.ArrowCursor)
@@ -300,17 +305,17 @@ class MainWindow(QMainWindow):
         for w in win_list:
             w.close()
 
-    def closeEvent(self, event: QCloseEvent) -> None:
-        close = QMessageBox()
-        close.setText("Voulez vous vraiment quitter l'application ?")
-        close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-        close = close.exec()
+    # def closeEvent(self, event: QCloseEvent) -> None:
+    #     close = QMessageBox()
+    #     close.setText("Voulez vous vraiment quitter l'application ?")
+    #     close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+    #     close = close.exec()
 
-        if close == QMessageBox.Yes:
-            event.accept()
-            self.close_all_windows()
-        else:
-            event.ignore()
+        # if close == QMessageBox.Yes:
+        #     event.accept()
+        #     self.close_all_windows()
+        # else:
+        #     event.ignore()
 
 
 class Tab(QWidget): 
