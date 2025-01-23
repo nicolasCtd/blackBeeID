@@ -48,6 +48,8 @@ def get_path(path2file):
     return os.sep.join(path_split[:-1]) + os.sep
 
 
+
+
 class Second(QMainWindow):
     def __init__(self, parent=None):
         super(Second, self).__init__(parent)
@@ -102,15 +104,11 @@ class Second(QMainWindow):
     
     def set_dock(self):
         self.btn_zoom_1 = QPushButton("  ZOOM IN ")
-        # btn_zoom_1.resize(400, 400)
         self.btn_zoom_1.setIcon(QtGui.QIcon(f"images{os.sep}search.png"))
         self.btn_zoom_1.setFont(QFont('Times', 14))
         self.btn_zoom_1.clicked.connect(partial(self.zoom_in, True))
-        # self.button_is_clicked = False
 
         self.btn_zoom_2 = QPushButton("  ZOOM OUT")
-        # btn_zoom_2.resize(400, 400)
-        # self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}earth.png"))
         self.btn_zoom_2.setIcon(QtGui.QIcon(f"images{os.sep}fusee.webp"))
         self.btn_zoom_2.setFont(QFont('Times', 14))
         self.btn_zoom_2.clicked.connect(self.zoom_out)
@@ -127,7 +125,6 @@ class Second(QMainWindow):
         self.layout.addWidget(btn_ci_points)
         self.dock = QDockWidget(f"{self.name}{self.extension}", self)
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
-        # self.dock.setStyleSheet("QDockWidget {background : }")
         self.dock.setWidget(self.w)
 
 
@@ -135,93 +132,73 @@ class Second(QMainWindow):
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
 
+        file = self.get_last_file(self.out, zoom_images_rejected=0)
+        print("last file : ", file)
+
         A = IMAGE()
-        A.load(self.path2image)
+        A.load(self.out + file)
 
         self.label.mousePressEvent = self.getPos_ci
 
     
     def zoom_in(self, ZOOM=True):
-
         self.ZOOM = ZOOM
-
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
-        # QApplication.setOverrideCursor(cursor)
         self.setCursor(cursor)
-
         pixmap = QPixmap(self.path2image)
-
         self.label.mousePressEvent = self.getPos_and_zoom
-        
         return 0
 
-    def zoom_out(self):
-
-        file_out =  os.listdir(self.out)[0].replace(self.extension, "")
-        tmp = file_out.split("___")
-
-        date0 = tmp[-2].replace("_", "/")
-        hour0 = tmp[-1].replace("_", ":")
+    def get_last_file(self, path, zoom_images_rejected=0):
         time0 =  datetime.strptime("01/01/2000 00:00:00", "%d/%m/%Y %H:%M:%S")
-
-        for file in os.listdir(self.out):
-            if "zoom" in file:
-                continue
-            else:
+        for file in os.listdir(path):
+            print(file)
+            if zoom_images_rejected:
+                if "zoom" in file:
+                    continue
                 tmp = file.replace(self.extension, "").split("___")
-                date0 = tmp[-2].replace("_", "/")
-                hour0 = tmp[-1].replace("_", ":")
-                time1 = datetime.strptime(date0 + " " + hour0, "%d/%m/%Y %H:%M:%S")
+                date1 = tmp[-2].replace("_", "/")
+                hour1 = tmp[-1].replace("_", ":")
+                time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
                 if time1 >= time0:
                     time0 = time1
                     file_out = file
                 else:
-                    continue       
+                    continue
+        return file_out
 
-        pixmap = QPixmap(self.path + self.out + file_out)
-
+    def zoom_out(self):
+        last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
+        print(last_file)
+        pixmap = QPixmap(self.path + self.out + last_file)
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
-
         self.switch_button_zoom_in = True
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
-
         self.switch_button_zoom_out = False
         self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
-
         return 0
     
         
     def display_error_message(self):
-
         self.move(450, 200)
         layout = QVBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
-
         txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
         layout.addWidget(txt)
-
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
-    def getPos_ci(self, event):
 
-        x = event.pos().x()
-        y = event.pos().y()
-
-        print(x, y)
-
-    def getPos_and_zoom(self, event):
-
+    def get_pos_in_widget(self, event):
         pos = event.pos()
 
         pixmapRect = self.label.pixmap().rect()
@@ -232,6 +209,12 @@ class Second(QMainWindow):
 
         x = int(pos.x() * fx)
         y = int(pos.y() * fy)
+
+        return x, y
+
+    def getPos_and_zoom(self, event):
+
+        x, y = self.get_pos_in_widget(event)
 
         zoom_x = int(self.pixmapWidth / 2.5)
         zoom_y = int(self.pixmapHeight / 2.5)
@@ -274,8 +257,6 @@ class Second(QMainWindow):
             pass
         
         return
-
-
 
 
 class MainWindow(QMainWindow):
@@ -358,8 +339,6 @@ class Tab(QWidget):
         self.tab8 = QWidget()
         self.tab9 = QWidget()
         self.tab10 = QWidget()
-
-        # self.tabs.resize(300, 200)
   
         # Add tabs 
         self.tabs.addTab(self.tab1, "1-5")

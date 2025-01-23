@@ -78,3 +78,29 @@ class IMAGE():
             plt.show()
 
         plt.close()
+
+    def highlight(self, node, color, rayon=5):
+        y, x = np.meshgrid(np.arange(self.nb_col), np.arange(self.nb_lignes))
+        for i in range(3):
+            dot_ci = (np.sqrt(np.abs(node.i - x)**2 + np.abs(node.j-y)**2) <= rayon) * 1
+            idx_ci_i, idx_ci_j = np.where(dot_ci == 1)
+            # Color in blue point that has been identified
+            for i, j in zip(idx_ci_i, idx_ci_j):
+                self.data[i, j][0] = color[0]
+                self.data[i, j][1] = color[1]
+                self.data[i, j][2] = color[2]
+                # "discard" these pixels
+                self.data_copy[i, j][0] = 0
+                self.data_copy[i, j][1] = 0
+                self.data_copy[i, j][2] = 0
+        return 0
+    
+class POINT():
+    def __init__(self):
+        self.i = 0
+        self.j = 0
+        self.color = (0, 0, 255)
+    
+    def __str__(self) -> str:
+        print(f"i : {self.i}")
+        print(f"j : {self.j}")
