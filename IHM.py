@@ -8,7 +8,7 @@ from datetime import datetime
 
 import shutil
 
-from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal
+from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, QEvent
 from PyQt5.QtWidgets import (
     QApplication,
     QHBoxLayout,
@@ -47,8 +47,23 @@ def get_path(path2file):
     path_split = path2file.replace(os.sep, "/").split("/")
     return os.sep.join(path_split[:-1]) + os.sep
 
-
-
+def get_zoom_center(file):
+    xmin, xmax, ymin, ymax = 0, 0, 0, 0
+    if "zoom" not in file:
+        print("Erreur : cette image n'est pas un zoom")
+    else:
+        print(file)
+        a = file.find("xmin")
+        b = file.find("xmax")
+        c = file.find("ymin")
+        d = file.find("ymax")
+        e = file.find("end")
+        print(a, b, c, d)
+        xmin=int(file[a+4:b])
+        xmax=int(file[b+4:c])
+        ymin=int(file[c+4:d])
+        ymax=int(file[d+4:e])
+    return xmin, xmax, ymin, ymax
 
 class Second(QMainWindow):
     def __init__(self, parent=None):
@@ -64,6 +79,12 @@ class Second(QMainWindow):
         self.switch_button_zoom_out = False
 
         self.ZOOM = False
+
+        self.count_ci_points = 1
+        self.switch_ci = False
+
+        self.last_name = ""
+
 
     def display(self, fileName):
 
@@ -87,6 +108,8 @@ class Second(QMainWindow):
 
         self.label = QLabel(self)
         pixmap = QPixmap(fileName)
+
+        self.last_name = self.name + self.extension
 
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
@@ -116,31 +139,75 @@ class Second(QMainWindow):
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
         self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
 
-        btn_ci_points = QPushButton("Add CI points")
-        btn_ci_points.setFont(QFont('Times', 14))
-        btn_ci_points.clicked.connect(self.set_ci_points)
+        self.btn_ci_points = QPushButton("3 CI points")
+        self.btn_ci_points.setFont(QFont('Times', 13))
+        self.btn_ci_points.clicked.connect(partial(self.set_ci_points, switch=self.switch_ci))
 
         self.layout.addWidget(self.btn_zoom_1)
         self.layout.addWidget(self.btn_zoom_2)
-        self.layout.addWidget(btn_ci_points)
+        self.layout.addWidget(self.btn_ci_points)
         self.dock = QDockWidget(f"{self.name}{self.extension}", self)
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
         self.dock.setWidget(self.w)
 
-
-    def set_ci_points(self, event):
+    def set_ci_points(self, switch):
+        self.switch_ci = switch
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
-
-        file = self.get_last_file(self.out, zoom_images_rejected=0)
-        print("last file : ", file)
-
-        A = IMAGE()
-        A.load(self.out + file)
-
+        # print(self.count_ci_points)
+        # if self.count_ci_points == 3:
+        #     self.btn_ci_points.setDisabled()
         self.label.mousePressEvent = self.getPos_ci
 
-    
+    def getPos_ci(self, event):
+        if  self.count_ci_points <= 3:
+            x, y = self.get_pos_in_widget(event)
+            # file = self.get_last_file(self.out, zoom_images_rejected=0)
+            file = self.last_name
+            if self.ZOOM:
+                xmin, xmax, ymin, ymax = get_zoom_center(file)
+                new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"CI_{self.count_ci_points}" + self.extension)
+            else:
+                new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
+            
+            self.last_name = new_name
+            print("last name")
+            print(new_name)
+
+            A = IMAGE()
+            A.load(self.out + file)
+            node = POINT()
+            node.j, node.i = x, y
+            A.highlight(node, [255, 255, 51])
+
+            plt.imsave(fname=f"{self.out}{new_name}", arr=A.data)
+            pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
+            self.last_name = new_name
+            self.label.setPixmap(pixmap)
+            self.setCentralWidget(self.label)
+            self.setCursor(Qt.ArrowCursor)
+
+            if self.ZOOM:
+                print("aaaaaaaaaaaazzzzzzzzeeeeeeeeeeeeeee")
+                xmin, xmax, ymin, ymax = get_zoom_center(file)
+                file = self.get_last_file(self.out, zoom_images_rejected=1)
+                print(file)
+                B = IMAGE()
+                B.load(self.out + file)
+                node = POINT()
+                node.j, node.i = x+xmin, y+ymin
+                B.highlight(node, [255, 255, 51])
+                new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
+                plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
+
+            self.count_ci_points += 1
+
+        if self.count_ci_points > 3:
+            self.switch_ci = False
+            self.btn_ci_points.setEnabled(self.switch_ci)
+            self.setCursor(Qt.ArrowCursor)
+
+
     def zoom_in(self, ZOOM=True):
         self.ZOOM = ZOOM
         pixmap = QPixmap(f"images{os.sep}search.png")
@@ -152,26 +219,53 @@ class Second(QMainWindow):
         return 0
 
     def get_last_file(self, path, zoom_images_rejected=0):
+
         time0 =  datetime.strptime("01/01/2000 00:00:00", "%d/%m/%Y %H:%M:%S")
-        for file in os.listdir(path):
-            print(file)
-            if zoom_images_rejected:
-                if "zoom" in file:
-                    continue
-                tmp = file.replace(self.extension, "").split("___")
-                date1 = tmp[-2].replace("_", "/")
-                hour1 = tmp[-1].replace("_", ":")
-                time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
-                if time1 >= time0:
-                    time0 = time1
+
+        if zoom_images_rejected:
+
+            # file_out =  os.listdir(path)[0].replace(self.extension, "")
+        
+            for file in os.listdir(path):
+                if "zoom" not in file:
                     file_out = file
-                else:
-                    continue
+                    break
+
+            for file in os.listdir(path):
+                if "zoom" not in file:
+                    tmp = file.replace(self.extension, "").split("___")
+                    date1 = tmp[-2].replace("_", "/")
+                    hour1 = tmp[-1].replace("_", ":")
+                    time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
+                    if time1 >= time0:
+                        time0 = time1
+                        file_out = file
+                    else:
+                        continue
+
+        else:
+
+            for file in os.listdir(path):
+                if "zoom" in file:
+                    file_out = file
+                    break
+
+            for file in os.listdir(path):
+                if "zoom" in file:
+                    tmp = file.replace(self.extension, "").split("___")
+                    date1 = tmp[-2].replace("_", "/")
+                    hour1 = tmp[-1].replace("_", ":")
+                    time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
+                    if time1 >= time0:
+                        time0 = time1
+                        file_out = file
+                    else:
+                        continue
+
         return file_out
 
     def zoom_out(self):
         last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
-        print(last_file)
         pixmap = QPixmap(self.path + self.out + last_file)
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
@@ -179,6 +273,7 @@ class Second(QMainWindow):
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
         self.switch_button_zoom_out = False
         self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
+        self.ZOOM = False
         return 0
     
         
@@ -234,7 +329,8 @@ class Second(QMainWindow):
 
             image_temp = A.data[i_min:i_max, j_min:j_max, :]
 
-            new_name = insertnow(self.name + "_" + "zoom" + self.extension)
+            new_name = insertnow(self.name + "_zoom_" + f"xmin{j_min}xmax{j_max}ymin{i_min}ymax{i_max}end" + self.extension)
+            self.last_name = new_name
 
             plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
 
@@ -251,7 +347,7 @@ class Second(QMainWindow):
             self.switch_button_zoom_out = True
             self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
             self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
-            self.ZOOM = False
+            self.ZOOM = True
 
         else:
             pass
