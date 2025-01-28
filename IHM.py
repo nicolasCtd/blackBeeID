@@ -82,6 +82,8 @@ class Second(QMainWindow):
 
         self.count_ci_points = 1
         self.switch_ci = False
+        self.switch_ds = False
+        self.switch_back = False
 
         self.last_name = ""
 
@@ -105,6 +107,7 @@ class Second(QMainWindow):
             shutil.copyfile(fileName, insertnow(self.path + self.out + self.name + self.extension))
         except:
             pass
+
 
         self.label = QLabel(self)
         pixmap = QPixmap(fileName)
@@ -139,18 +142,40 @@ class Second(QMainWindow):
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
         self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
 
+        self.btn_cancel = QPushButton("")
+        self.btn_cancel.setIcon(QtGui.QIcon(f"images{os.sep}back.png"))
+        self.btn_cancel.clicked.connect(self.cancel)
+
+        self.btn_cancel.setEnabled(self.switch_back)
+
         self.btn_ci_points = QPushButton("3 CI points")
         self.btn_ci_points.setFont(QFont('Times', 13))
         self.btn_ci_points.clicked.connect(partial(self.set_ci_points, switch=self.switch_ci))
 
+        self.btn_ds_points = QPushButton("4 DS points")
+        self.btn_ds_points.setFont(QFont('Times', 13))
+        self.btn_ds_points.clicked.connect(partial(self.set_ds_points, switch=self.switch_ds))
+
+
         self.layout.addWidget(self.btn_zoom_1)
         self.layout.addWidget(self.btn_zoom_2)
+        self.layout.addWidget(self.btn_cancel)
         self.layout.addWidget(self.btn_ci_points)
+        self.layout.addWidget(self.btn_ds_points)
         self.dock = QDockWidget(f"{self.name}{self.extension}", self)
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
         self.dock.setWidget(self.w)
 
     def set_ci_points(self, switch):
+        self.switch_ci = switch
+        # Set the cursor to a cross cursor
+        self.setCursor(Qt.CrossCursor)
+        # print(self.count_ci_points)
+        # if self.count_ci_points == 3:
+        #     self.btn_ci_points.setDisabled()
+        self.label.mousePressEvent = self.getPos_ci
+    
+    def set_ds_points(self, switch):
         self.switch_ci = switch
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
@@ -171,8 +196,6 @@ class Second(QMainWindow):
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
             
             self.last_name = new_name
-            print("last name")
-            print(new_name)
 
             A = IMAGE()
             A.load(self.out + file)
@@ -188,10 +211,8 @@ class Second(QMainWindow):
             self.setCursor(Qt.ArrowCursor)
 
             if self.ZOOM:
-                print("aaaaaaaaaaaazzzzzzzzeeeeeeeeeeeeeee")
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
                 file = self.get_last_file(self.out, zoom_images_rejected=1)
-                print(file)
                 B = IMAGE()
                 B.load(self.out + file)
                 node = POINT()
@@ -199,13 +220,39 @@ class Second(QMainWindow):
                 B.highlight(node, [255, 255, 51])
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
                 plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
+                self.path2image = self.path + self.out + new_name
 
             self.count_ci_points += 1
+            self.path2image = self.path + self.out + new_name
+            
+        if self.count_ci_points>=1:
+            self.switch_back = True
+        else:
+            self.switch_back = False
+        self.btn_cancel.setEnabled(self.switch_back)
 
         if self.count_ci_points > 3:
             self.switch_ci = False
             self.btn_ci_points.setEnabled(self.switch_ci)
             self.setCursor(Qt.ArrowCursor)
+    
+    def cancel(self):
+
+        last_zoom_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
+        last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
+
+        os.remove(self.path + self.out + last_file)
+        try:
+            os.remove(self.path + self.out + last_zoom_file)
+        except:
+            pass
+
+        last_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
+        self.last_name = last_file
+        pixmap = QPixmap(f"{self.out}{os.sep}{last_file}")
+        self.label.setPixmap(pixmap)
+        self.setCentralWidget(self.label)
+        return 0
 
 
     def zoom_in(self, ZOOM=True):
@@ -373,6 +420,16 @@ class MainWindow(QMainWindow):
             os.makedirs("out")
         except:
             pass
+
+        for filename in os.listdir("out"):
+            print(filename)
+            # try:
+            #     if os.path.isfile(file_path):
+            #         os.unlink(file_path)
+            #     elif os.path.isdir(file_path):
+            #         shutil.rmtree(file_path)
+            # except Exception as e:
+            #     print('Failed to delete %s. Reason: %s' % (file_path, e))
 
     def calculate(self):
         return self.frameGeometry().height()
