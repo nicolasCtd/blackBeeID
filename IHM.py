@@ -81,6 +81,8 @@ class Second(QMainWindow):
         self.ZOOM = False
 
         self.count_ci_points = 1
+        self.count_ds_points = 1
+
         self.switch_ci = False
         self.switch_ds = False
         self.switch_back = False
@@ -237,21 +239,29 @@ class Second(QMainWindow):
             self.setCursor(Qt.ArrowCursor)
     
     def cancel(self):
-
-        last_zoom_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
+        last_zoom_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
         last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
-
         os.remove(self.path + self.out + last_file)
         try:
             os.remove(self.path + self.out + last_zoom_file)
         except:
             pass
-
         last_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
         self.last_name = last_file
         pixmap = QPixmap(f"{self.out}{os.sep}{last_file}")
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
+
+        if ("CI" in last_zoom_file) or ("CI" in last_file):
+            self.count_ci_points -= 1
+        if ("DS" in last_zoom_file) or ("DS" in last_file):
+            self.count_ds_points -= 1
+        
+        if (self.count_ci_points<=1) or (self.count_ds_points<=1):
+            self.switch_back = False
+
+        self.btn_cancel.setEnabled(self.switch_back)
+
         return 0
 
 
@@ -270,8 +280,6 @@ class Second(QMainWindow):
         time0 =  datetime.strptime("01/01/2000 00:00:00", "%d/%m/%Y %H:%M:%S")
 
         if zoom_images_rejected:
-
-            # file_out =  os.listdir(path)[0].replace(self.extension, "")
         
             for file in os.listdir(path):
                 if "zoom" not in file:
@@ -421,15 +429,17 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        for filename in os.listdir("out"):
-            print(filename)
-            # try:
-            #     if os.path.isfile(file_path):
-            #         os.unlink(file_path)
-            #     elif os.path.isdir(file_path):
-            #         shutil.rmtree(file_path)
-            # except Exception as e:
-            #     print('Failed to delete %s. Reason: %s' % (file_path, e))
+        path = os.path.abspath(os.getcwd()) + os.sep + "out"
+        for filename in os.listdir(path):
+            file_path = path + os.sep + filename
+            print(file_path)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
 
     def calculate(self):
         return self.frameGeometry().height()
