@@ -80,8 +80,8 @@ class Second(QMainWindow):
 
         self.ZOOM = False
 
-        self.count_ci_points = 1
-        self.count_ds_points = 1
+        self.count_ci_points = 0
+        self.count_ds_points = 0
 
         self.switch_ci = False
         self.switch_ds = False
@@ -172,21 +172,16 @@ class Second(QMainWindow):
         self.switch_ci = switch
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
-        # print(self.count_ci_points)
-        # if self.count_ci_points == 3:
-        #     self.btn_ci_points.setDisabled()
         self.label.mousePressEvent = self.getPos_ci
     
     def set_ds_points(self, switch):
         self.switch_ci = switch
         # Set the cursor to a cross cursor
         self.setCursor(Qt.CrossCursor)
-        # print(self.count_ci_points)
-        # if self.count_ci_points == 3:
-        #     self.btn_ci_points.setDisabled()
         self.label.mousePressEvent = self.getPos_ci
 
     def getPos_ci(self, event):
+        self.count_ci_points += 1
         if  self.count_ci_points <= 3:
             x, y = self.get_pos_in_widget(event)
             # file = self.get_last_file(self.out, zoom_images_rejected=0)
@@ -224,19 +219,23 @@ class Second(QMainWindow):
                 plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
                 self.path2image = self.path + self.out + new_name
 
-            self.count_ci_points += 1
             self.path2image = self.path + self.out + new_name
             
-        if self.count_ci_points>=1:
+        if self.count_ci_points in [1, 2, 3]:
             self.switch_back = True
         else:
             self.switch_back = False
-        self.btn_cancel.setEnabled(self.switch_back)
-
-        if self.count_ci_points > 3:
+        
+        if self.count_ci_points >= 3:
             self.switch_ci = False
-            self.btn_ci_points.setEnabled(self.switch_ci)
-            self.setCursor(Qt.ArrowCursor)
+        else:
+            self.switch_ci = True
+            
+        self.btn_cancel.setEnabled(self.switch_back)
+        self.btn_ci_points.setEnabled(self.switch_ci)
+
+        self.setCursor(Qt.ArrowCursor)
+
     
     def cancel(self):
         last_zoom_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
@@ -257,10 +256,18 @@ class Second(QMainWindow):
         if ("DS" in last_zoom_file) or ("DS" in last_file):
             self.count_ds_points -= 1
         
-        if (self.count_ci_points<=1) or (self.count_ds_points<=1):
+        if (self.count_ci_points<1) and (self.count_ds_points<1):
             self.switch_back = False
+        else:
+            self.switch_back = True
+
+        if self.count_ci_points > 3:
+            self.switch_ci = False 
+        else:
+            self.switch_ci = True
 
         self.btn_cancel.setEnabled(self.switch_back)
+        self.btn_ci_points.setEnabled(self.switch_ci)
 
         return 0
 
