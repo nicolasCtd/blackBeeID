@@ -78,8 +78,6 @@ class Second(QMainWindow):
         self.switch_button_zoom_in = True
         self.switch_button_zoom_out = False
 
-        self.ZOOM = False
-
         self.count_ci_points = 0
         self.count_ds_points = 0
 
@@ -87,7 +85,8 @@ class Second(QMainWindow):
         self.switch_ds = False
         self.switch_back = False
 
-        self.last_name = ""
+        self.ZOOM = 0
+        self.last_name =  ["", ""]
 
 
     def display(self, fileName):
@@ -100,21 +99,20 @@ class Second(QMainWindow):
 
         self.out = "out" + os.sep + self.name + os.sep
 
+        self.last_name[self.ZOOM] = insertnow(self.name + self.extension)
+
         try:
             os.makedirs("out" + os.sep + self.name)
         except:
             pass
 
         try:
-            shutil.copyfile(fileName, insertnow(self.path + self.out + self.name + self.extension))
+            shutil.copyfile(fileName, self.path + self.out + self.last_name[self.ZOOM])
         except:
             pass
 
-
         self.label = QLabel(self)
         pixmap = QPixmap(fileName)
-
-        self.last_name = self.name + self.extension
 
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
@@ -182,17 +180,17 @@ class Second(QMainWindow):
 
     def getPos_ci(self, event):
         self.count_ci_points += 1
+        print(self.count_ci_points)
         if  self.count_ci_points <= 3:
             x, y = self.get_pos_in_widget(event)
-            # file = self.get_last_file(self.out, zoom_images_rejected=0)
-            file = self.last_name
+            file = self.last_name[self.ZOOM]
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
                 new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"CI_{self.count_ci_points}" + self.extension)
             else:
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
             
-            self.last_name = new_name
+            self.last_name[self.ZOOM] = new_name
 
             A = IMAGE()
             A.load(self.out + file)
@@ -200,26 +198,22 @@ class Second(QMainWindow):
             node.j, node.i = x, y
             A.highlight(node, [255, 255, 51])
 
-            plt.imsave(fname=f"{self.out}{new_name}", arr=A.data)
-            pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
-            self.last_name = new_name
+            plt.imsave(fname=f"{self.out}{self.last_name[self.ZOOM]}", arr=A.data)
+            pixmap = QPixmap(f"{self.out}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
             self.setCentralWidget(self.label)
             self.setCursor(Qt.ArrowCursor)
 
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
-                file = self.get_last_file(self.out, zoom_images_rejected=1)
+                file_wo_zoom, file_w_zoom = self.get_last_file(self.out)
                 B = IMAGE()
-                B.load(self.out + file)
+                B.load(self.out + file_wo_zoom)
                 node = POINT()
                 node.j, node.i = x+xmin, y+ymin
                 B.highlight(node, [255, 255, 51])
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + self.extension)
                 plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
-                self.path2image = self.path + self.out + new_name
-
-            self.path2image = self.path + self.out + new_name
             
         if self.count_ci_points in [1, 2, 3]:
             self.switch_back = True
@@ -238,24 +232,32 @@ class Second(QMainWindow):
 
     
     def cancel(self):
-        last_zoom_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
-        last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
-        os.remove(self.path + self.out + last_file)
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
+        os.remove(self.path + self.out + last_file_wo_zoom)
         try:
-            os.remove(self.path + self.out + last_zoom_file)
+            os.remove(self.path + self.out + last_file_w_zoom)
         except:
             pass
-        last_file = self.get_last_file(path=self.out, zoom_images_rejected=0)
-        self.last_name = last_file
-        pixmap = QPixmap(f"{self.out}{os.sep}{last_file}")
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
+        self.last_name[0] = last_file_wo_zoom
+        self.last_name[1] = last_file_w_zoom
+
+        pixmap = QPixmap(f"{self.out}{os.sep}{self.last_name[self.ZOOM]}")
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
 
-        if ("CI" in last_zoom_file) or ("CI" in last_file):
-            self.count_ci_points -= 1
-        if ("DS" in last_zoom_file) or ("DS" in last_file):
-            self.count_ds_points -= 1
-        
+        print("zzzz")
+        print(last_file_wo_zoom)
+
+        if "CI" not in last_file_wo_zoom:
+            self.count_ci_points = 0
+        elif "CI_1" in last_file_wo_zoom:
+            self.count_ci_points = 1
+        elif "CI_2" in last_file_wo_zoom:
+            self.count_ci_points = 2
+        elif "CI_3" in last_file_wo_zoom:
+            self.count_ci_points = 3
+
         if (self.count_ci_points<1) and (self.count_ds_points<1):
             self.switch_back = False
         else:
@@ -273,62 +275,62 @@ class Second(QMainWindow):
 
 
     def zoom_in(self, ZOOM=True):
+        file_wo_zoom, file_w_zoom = self.get_last_file(self.path + self.out)
         self.ZOOM = ZOOM
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
         self.setCursor(cursor)
-        pixmap = QPixmap(self.path2image)
+        pixmap = QPixmap(file_wo_zoom)
         self.label.mousePressEvent = self.getPos_and_zoom
         return 0
 
-    def get_last_file(self, path, zoom_images_rejected=0):
+    def get_last_file(self, path):
+
+        file_w_zoom = ""
+        file_wo_zoom = ""
 
         time0 =  datetime.strptime("01/01/2000 00:00:00", "%d/%m/%Y %H:%M:%S")
+       
+        # for file in os.listdir(path):
+        #     if "zoom" not in file:
+        #         file_wo_zoom = file
+        #         break
 
-        if zoom_images_rejected:
-        
-            for file in os.listdir(path):
-                if "zoom" not in file:
-                    file_out = file
-                    break
+        # for file in os.listdir(path):
+        #     if "zoom" in file:
+        #         file_out = file
+        #         break
 
-            for file in os.listdir(path):
-                if "zoom" not in file:
-                    tmp = file.replace(self.extension, "").split("___")
-                    date1 = tmp[-2].replace("_", "/")
-                    hour1 = tmp[-1].replace("_", ":")
-                    time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
-                    if time1 >= time0:
-                        time0 = time1
-                        file_out = file
-                    else:
-                        continue
+        for file in os.listdir(path):
+            if "zoom" not in file:
+                tmp = file.replace(self.extension, "").split("___")
+                date1 = tmp[-2].replace("_", "/")
+                hour1 = tmp[-1].replace("_", ":")
+                time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
+                if time1 >= time0:
+                    time0 = time1
+                    file_wo_zoom = file
+                else:
+                    continue
 
-        else:
+        for file in os.listdir(path):
+            if "zoom" in file:
+                tmp = file.replace(self.extension, "").split("___")
+                date1 = tmp[-2].replace("_", "/")
+                hour1 = tmp[-1].replace("_", ":")
+                time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
+                if time1 >= time0:
+                    time0 = time1
+                    file_w_zoom = file
+                else:
+                    continue
 
-            for file in os.listdir(path):
-                if "zoom" in file:
-                    file_out = file
-                    break
-
-            for file in os.listdir(path):
-                if "zoom" in file:
-                    tmp = file.replace(self.extension, "").split("___")
-                    date1 = tmp[-2].replace("_", "/")
-                    hour1 = tmp[-1].replace("_", ":")
-                    time1 = datetime.strptime(date1 + " " + hour1, "%d/%m/%Y %H:%M:%S")
-                    if time1 >= time0:
-                        time0 = time1
-                        file_out = file
-                    else:
-                        continue
-
-        return file_out
+        return file_wo_zoom, file_w_zoom
 
     def zoom_out(self):
-        last_file = self.get_last_file(path=self.out, zoom_images_rejected=1)
-        pixmap = QPixmap(self.path + self.out + last_file)
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
+        pixmap = QPixmap(self.path + self.out + last_file_wo_zoom)
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
         self.switch_button_zoom_in = True
@@ -380,8 +382,10 @@ class Second(QMainWindow):
 
         if self.switch_button_zoom_in and self.ZOOM:
 
+            file_wo_zoom, file_w_zoom = self.get_last_file(self.out)
+
             A = IMAGE()
-            A.load(self.path2image)
+            A.load(self.path + self.out + file_wo_zoom)
             
             j_min = max(x-zoom_x//2, 0)
             j_max = min(x+zoom_x//2, A.data.shape[1])
@@ -392,7 +396,7 @@ class Second(QMainWindow):
             image_temp = A.data[i_min:i_max, j_min:j_max, :]
 
             new_name = insertnow(self.name + "_zoom_" + f"xmin{j_min}xmax{j_max}ymin{i_min}ymax{i_max}end" + self.extension)
-            self.last_name = new_name
+            self.last_name[self.ZOOM] = new_name
 
             plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
 
