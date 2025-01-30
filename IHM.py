@@ -58,7 +58,7 @@ def get_zoom_center(file):
         c = file.find("ymin")
         d = file.find("ymax")
         e = file.find("end")
-        print(a, b, c, d)
+
         xmin=int(file[a+4:b])
         xmax=int(file[b+4:c])
         ymin=int(file[c+4:d])
@@ -84,9 +84,13 @@ class Second(QMainWindow):
         self.switch_ci = False
         self.switch_ds = False
         self.switch_back = False
+        self.switch_done = False
 
         self.ZOOM = 0
         self.last_name =  ["", ""]
+
+        self.color_ci = [64, 224, 208]
+        self.color_ds = [255, 255, 51]
 
 
     def display(self, fileName):
@@ -95,17 +99,18 @@ class Second(QMainWindow):
         self.extension = "." + fileName.split(".")[-1]
         self.path = get_path(fileName)
 
+        self.tmp = "tmp" + os.sep + self.name + os.sep
         self.out = "out" + os.sep + self.name + os.sep
 
         self.last_name[self.ZOOM] = insertnow(self.name + self.extension)
 
         try:
-            os.makedirs("out" + os.sep + self.name)
+            os.makedirs("tmp" + os.sep + self.name)
         except:
             pass
 
         try:
-            shutil.copyfile(fileName, self.path + self.out + self.last_name[self.ZOOM])
+            shutil.copyfile(fileName, self.path + self.tmp + self.last_name[self.ZOOM])
         except:
             pass
 
@@ -153,14 +158,25 @@ class Second(QMainWindow):
         self.btn_ds_points.setFont(QFont('Times', 13))
         self.btn_ds_points.clicked.connect(partial(self.set_ds_points, switch=self.switch_ds))
 
+        self.btn_done = QPushButton("  Done")
+        self.btn_done.setIcon(QtGui.QIcon(f"images{os.sep}done.jpg"))
+        self.btn_done.setFont(QFont('Times', 14))
+        self.btn_done.setEnabled(self.switch_done)
+        self.btn_done.clicked.connect(partial(self.validate_editing, switch=self.switch_done))
+
         self.layout.addWidget(self.btn_zoom_1)
         self.layout.addWidget(self.btn_zoom_2)
         self.layout.addWidget(self.btn_cancel)
         self.layout.addWidget(self.btn_ci_points)
         self.layout.addWidget(self.btn_ds_points)
+        self.layout.addWidget(self.btn_done)
         self.dock = QDockWidget(f"{self.name}{self.extension}", self)
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
         self.dock.setWidget(self.w)
+
+    def validate_editing(self, switch):
+        pass
+        return 0
 
     def set_ci_points(self, switch):
         self.switch_ci = switch
@@ -186,25 +202,25 @@ class Second(QMainWindow):
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
             self.last_name[self.ZOOM] = new_name
             A = IMAGE()
-            A.load(self.out + file)
+            A.load(self.tmp + file)
             node = POINT()
             node.j, node.i = x, y
-            A.highlight(node, [255, 255, 51])
-            plt.imsave(fname=f"{self.out}{self.last_name[self.ZOOM]}", arr=A.data)
-            pixmap = QPixmap(f"{self.out}{os.sep}{self.last_name[self.ZOOM]}")
+            A.highlight(node, self.color_ci)
+            plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
+            pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
             self.setCentralWidget(self.label)
             self.setCursor(Qt.ArrowCursor)
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
-                file_wo_zoom, file_w_zoom = self.get_last_file(self.out)
+                file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
                 B = IMAGE()
-                B.load(self.out + file_wo_zoom)
+                B.load(self.tmp + file_wo_zoom)
                 node = POINT()
                 node.j, node.i = x+xmin, y+ymin
-                B.highlight(node, [255, 255, 51])
+                B.highlight(node, self.color_ci)
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
-                plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
+                plt.imsave(fname=f"{self.tmp}{new_name}", arr=B.data)
         if self.count_ci_points in [1, 2, 3]:
             self.switch_back = True
         else:
@@ -213,8 +229,13 @@ class Second(QMainWindow):
             self.switch_ci = False
         else:
             self.switch_ci = True
+        
+        if self.count_ci_points == 3 and self.count_ds_points == 4:
+            self.switch_done = True
+        
         self.btn_cancel.setEnabled(self.switch_back)
         self.btn_ci_points.setEnabled(self.switch_ci)
+        self.btn_done.setEnabled(self.switch_done)
         self.setCursor(Qt.ArrowCursor)
 
     def getPos_ds(self, event):
@@ -224,32 +245,32 @@ class Second(QMainWindow):
             file = self.last_name[self.ZOOM]
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
-                new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"CI_{self.count_ci_points}" + f"DS_{self.count_ds_points}" + self.extension)
+                new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
             else:
-                new_name = insertnow(self.name + f"CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
+                new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
             self.last_name[self.ZOOM] = new_name
             A = IMAGE()
-            A.load(self.out + file)
+            A.load(self.tmp + file)
             node = POINT()
             node.j, node.i = x, y
-            A.highlight(node, [0, 0, 255])
+            A.highlight(node, self.color_ds)
 
-            plt.imsave(fname=f"{self.out}{self.last_name[self.ZOOM]}", arr=A.data)
-            pixmap = QPixmap(f"{self.out}{os.sep}{self.last_name[self.ZOOM]}")
+            plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
+            pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
             self.setCentralWidget(self.label)
             self.setCursor(Qt.ArrowCursor)
 
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
-                file_wo_zoom, file_w_zoom = self.get_last_file(self.out)
+                file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
                 B = IMAGE()
-                B.load(self.out + file_wo_zoom)
+                B.load(self.tmp + file_wo_zoom)
                 node = POINT()
                 node.j, node.i = x+xmin, y+ymin
-                B.highlight(node, [0, 0, 255])
-                new_name = insertnow(self.name + f"CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
-                plt.imsave(fname=f"{self.out}{new_name}", arr=B.data)
+                B.highlight(node, self.color_ds)
+                new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
+                plt.imsave(fname=f"{self.tmp}{new_name}", arr=B.data)
             
         if self.count_ds_points in [1, 2, 3, 4]:
             self.switch_back = True
@@ -260,26 +281,28 @@ class Second(QMainWindow):
             self.switch_ds = False
         else:
             self.switch_ds = True
+        
+        if self.count_ci_points == 3 and self.count_ds_points == 4:
+            self.switch_done = True
             
         self.btn_cancel.setEnabled(self.switch_back)
         self.btn_ds_points.setEnabled(self.switch_ds)
+        self.btn_done.setEnabled(self.switch_done)
 
         self.setCursor(Qt.ArrowCursor)
 
     def cancel(self):
-        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
-        os.remove(self.path + self.out + last_file_wo_zoom)
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
+        os.remove(self.path + self.tmp + last_file_wo_zoom)
         try:
-            os.remove(self.path + self.out + last_file_w_zoom)
+            os.remove(self.path + self.tmp + last_file_w_zoom)
         except:
             pass
-        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
         self.last_name[0] = last_file_wo_zoom
         self.last_name[1] = last_file_w_zoom
 
-        print(last_file_wo_zoom, last_file_w_zoom)
-
-        pixmap = QPixmap(f"{self.out}{os.sep}{self.last_name[self.ZOOM]}")
+        pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
 
@@ -308,25 +331,27 @@ class Second(QMainWindow):
         else:
             self.switch_back = True
 
-        if self.count_ci_points > 3:
+        if self.count_ci_points >= 3:
             self.switch_ci = False 
         else:
             self.switch_ci = True
 
-        if self.count_ds_points > 4:
+        if self.count_ds_points >= 4:
             self.switch_ds = False 
         else:
             self.switch_ds = True
 
         self.btn_cancel.setEnabled(self.switch_back)
         self.btn_ci_points.setEnabled(self.switch_ci)
-        self.btn_ci_points.setEnabled(self.switch_ds)
+        self.btn_ds_points.setEnabled(self.switch_ds)
+        self.switch_done = False
+        self.btn_done.setEnabled(self.switch_done)
         
         return 0
 
 
     def zoom_in(self, ZOOM=True):
-        file_wo_zoom, file_w_zoom = self.get_last_file(self.path + self.out)
+        file_wo_zoom, file_w_zoom = self.get_last_file(self.path + self.tmp)
         self.ZOOM = ZOOM
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
@@ -370,8 +395,8 @@ class Second(QMainWindow):
         return file_wo_zoom, file_w_zoom
 
     def zoom_out(self):
-        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.out)
-        pixmap = QPixmap(self.path + self.out + last_file_wo_zoom)
+        last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
+        pixmap = QPixmap(self.path + self.tmp + last_file_wo_zoom)
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
         self.switch_button_zoom_in = True
@@ -423,10 +448,10 @@ class Second(QMainWindow):
 
         if self.switch_button_zoom_in and self.ZOOM:
 
-            file_wo_zoom, file_w_zoom = self.get_last_file(self.out)
+            file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
 
             A = IMAGE()
-            A.load(self.path + self.out + file_wo_zoom)
+            A.load(self.path + self.tmp + file_wo_zoom)
             
             j_min = max(x-zoom_x//2, 0)
             j_max = min(x+zoom_x//2, A.data.shape[1])
@@ -439,9 +464,9 @@ class Second(QMainWindow):
             new_name = insertnow(self.name + "_zoom_" + f"xmin{j_min}xmax{j_max}ymin{i_min}ymax{i_max}end" + self.extension)
             self.last_name[self.ZOOM] = new_name
 
-            plt.imsave(fname=f"{self.out}{new_name}", arr=image_temp)
+            plt.imsave(fname=f"{self.tmp}{new_name}", arr=image_temp)
 
-            pixmap = QPixmap(f"{self.out}{os.sep}{new_name}")
+            pixmap = QPixmap(f"{self.tmp}{os.sep}{new_name}")
 
             self.label.setPixmap(pixmap)
 
@@ -481,10 +506,25 @@ class MainWindow(QMainWindow):
         except:
             pass
 
+        try:
+            os.makedirs("tmp")
+        except:
+            pass
+
         path = os.path.abspath(os.getcwd()) + os.sep + "out"
         for filename in os.listdir(path):
             file_path = path + os.sep + filename
-            print(file_path)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+        
+        path = os.path.abspath(os.getcwd()) + os.sep + "tmp"
+        for filename in os.listdir(path):
+            file_path = path + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
