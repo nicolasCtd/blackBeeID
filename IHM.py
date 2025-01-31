@@ -89,7 +89,7 @@ class Second(QMainWindow):
         self.ZOOM = 0
         self.last_name =  ["", ""]
 
-        self.color_ci = [64, 224, 208]
+        self.color_ci = [0, 255, 255]
         self.color_ds = [255, 255, 51]
 
 
@@ -106,6 +106,11 @@ class Second(QMainWindow):
 
         try:
             os.makedirs("tmp" + os.sep + self.name)
+        except:
+            pass
+
+        try:
+            os.makedirs("out" + os.sep + self.name)
         except:
             pass
 
@@ -162,7 +167,7 @@ class Second(QMainWindow):
         self.btn_done.setIcon(QtGui.QIcon(f"images{os.sep}done.jpg"))
         self.btn_done.setFont(QFont('Times', 14))
         self.btn_done.setEnabled(self.switch_done)
-        self.btn_done.clicked.connect(partial(self.validate_editing, switch=self.switch_done))
+        self.btn_done.clicked.connect(self.validate_editing)
 
         self.layout.addWidget(self.btn_zoom_1)
         self.layout.addWidget(self.btn_zoom_2)
@@ -174,8 +179,9 @@ class Second(QMainWindow):
         self.dock.setFeatures(QDockWidget.DockWidgetMovable)
         self.dock.setWidget(self.w)
 
-    def validate_editing(self, switch):
-        pass
+    def validate_editing(self):
+        file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
+        shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
         return 0
 
     def set_ci_points(self, switch):
@@ -403,7 +409,9 @@ class Second(QMainWindow):
         self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
         self.switch_button_zoom_out = False
         self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
-        self.ZOOM = False
+        self.ZOOM = 0
+        self.last_name[0] = last_file_wo_zoom
+        self.last_name[1] = last_file_w_zoom
         return 0
     
         
@@ -479,7 +487,7 @@ class Second(QMainWindow):
             self.switch_button_zoom_out = True
             self.btn_zoom_1.setEnabled(self.switch_button_zoom_in)
             self.btn_zoom_2.setEnabled(self.switch_button_zoom_out)
-            self.ZOOM = True
+            self.ZOOM = 1
 
         else:
             pass
