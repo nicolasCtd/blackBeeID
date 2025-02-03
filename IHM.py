@@ -66,7 +66,7 @@ def get_zoom_center(file):
     return xmin, xmax, ymin, ymax
 
 class Second(QMainWindow):
-    def __init__(self, parent=None):
+    def __init__(self, Tab, parent=None):
         super(Second, self).__init__(parent)
         self.setWindowTitle("Fenêtre d'édition")
 
@@ -91,6 +91,10 @@ class Second(QMainWindow):
 
         self.color_ci = [0, 255, 255]
         self.color_ds = [255, 255, 51]
+
+        self.LAB_RIGHT = Tab.label_right
+        self.WIDTH = Tab.width
+        self.HEIGHT = Tab.height
 
 
     def display(self, fileName):
@@ -182,6 +186,10 @@ class Second(QMainWindow):
     def validate_editing(self):
         file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
         shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
+        pixmap = QPixmap(self.path + "out" + os.sep + self.name + os.sep + file_wo_zoom)
+        pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
+        self.LAB_RIGHT[0].setPixmap(pixmap)
+        self.close()
         return 0
 
     def set_ci_points(self, switch):
@@ -519,9 +527,9 @@ class MainWindow(QMainWindow):
         except:
             pass
 
-        path = os.path.abspath(os.getcwd()) + os.sep + "out"
-        for filename in os.listdir(path):
-            file_path = path + os.sep + filename
+        self.path = os.path.abspath(os.getcwd()) + os.sep + "out"
+        for filename in os.listdir(self.path):
+            file_path = self.path + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
@@ -729,10 +737,10 @@ class Tab(QWidget):
         
     def editFile1(self):
         if self.fileName1 == "im1.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName1)
         self.dialog.show()
         
@@ -744,6 +752,8 @@ class Tab(QWidget):
             self.dialog = Second()
             self.dialog.display(self.fileName2)
         self.dialog.show()
+        if self.dialog.closeEvent(self.dialog):
+            print("aaaaaaa")
     
     def editFile3(self):
         if self.fileName3 == "im3.png":
@@ -1155,3 +1165,10 @@ window = MainWindow()
 window.show()
 
 app.exec()
+
+        # for file in os.listdir(self.dialog.path + "out" + os.sep + self.dialog.name):
+        #     filename = file
+        # pixmap = QPixmap(self.dialog.path + "out" + os.sep + self.dialog.name + os.sep + filename)
+        # print(self.dialog.path + "out" + os.sep + self.dialog.name + os.sep + filename)
+        # pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        # self.label_right[0].setPixmap(pixmap)
