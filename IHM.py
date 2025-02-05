@@ -1,4 +1,5 @@
-from images import *
+# from images import *
+from images2 import *
 import matplotlib.pyplot as plt
 
 import sys
@@ -95,6 +96,10 @@ class Second(QMainWindow):
         self.LAB_RIGHT = Tab.label_right
         self.WIDTH = Tab.width
         self.HEIGHT = Tab.height
+        self.NUM = Tab.num
+
+        self.ci_points = [POINT(), POINT(), POINT()]
+        self.ds_points = [POINT(), POINT(), POINT(), POINT()]
 
 
     def display(self, fileName):
@@ -185,10 +190,16 @@ class Second(QMainWindow):
 
     def validate_editing(self):
         file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
+        im = IMAGE()
+        im.load(f"{self.path}{self.tmp}{file_wo_zoom}")
+        # im.customize()
         shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
         pixmap = QPixmap(self.path + "out" + os.sep + self.name + os.sep + file_wo_zoom)
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
-        self.LAB_RIGHT[0].setPixmap(pixmap)
+        self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
+        print(self.ci_points[0].i, self.ci_points[0].j)
+        print(self.ci_points[1].i, self.ci_points[1].j)
+        print(self.ci_points[2].i, self.ci_points[2].j)
         self.close()
         return 0
 
@@ -219,6 +230,7 @@ class Second(QMainWindow):
             A.load(self.tmp + file)
             node = POINT()
             node.j, node.i = x, y
+            self.ci_points[self.count_ci_points-1] = node
             A.highlight(node, self.color_ci)
             plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
             pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
@@ -267,6 +279,7 @@ class Second(QMainWindow):
             A.load(self.tmp + file)
             node = POINT()
             node.j, node.i = x, y
+            self.ds_points[self.count_ds_points-1] = node
             A.highlight(node, self.color_ds)
 
             plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
@@ -324,8 +337,11 @@ class Second(QMainWindow):
             self.count_ci_points = 0
         elif "CI_1" in last_file_wo_zoom:
             self.count_ci_points = 1
+            self.ci_points[1] = POINT()
+            self.ci_points[2] = POINT()
         elif "CI_2" in last_file_wo_zoom:
             self.count_ci_points = 2
+            self.ci_points[2] = POINT()
         elif "CI_3" in last_file_wo_zoom:
             self.count_ci_points = 3
 
@@ -574,6 +590,8 @@ class Tab(QWidget):
     def __init__(self, parent): 
         super(QWidget, self).__init__(parent)
 
+        self.num = 0
+
         self.fileName1 = "im1.png"
         self.fileName2 = "im2.png"
         self.fileName3 = "im3.png"
@@ -746,93 +764,91 @@ class Tab(QWidget):
         
     def editFile2(self):
         if self.fileName2 == "im2.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName2)
         self.dialog.show()
-        if self.dialog.closeEvent(self.dialog):
-            print("aaaaaaa")
     
     def editFile3(self):
         if self.fileName3 == "im3.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName3)
         self.dialog.show()
     
     def editFile4(self):
         if self.fileName4 == "im4.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName4)
         self.dialog.show()
 
     def editFile5(self):
         if self.fileName5 == "im5.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName5)
         self.dialog.show()
     
     def editFile6(self):
         if self.fileName6 == "im6.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName6)
         self.dialog.show()
     
     def editFile7(self):
         if self.fileName7 == "im7.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName7)
         self.dialog.show()
     
     def editFile8(self):
         if self.fileName8 == "im8.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName8)
         self.dialog.show()
     
     def editFile9(self):
         if self.fileName9 == "im9.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName8)
         self.dialog.show()
     
     def editFile10(self):
         if self.fileName10 == "im10.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName10)
         self.dialog.show()
 
     def editFile11(self):
         if self.fileName11 == "im11.png":
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self)
             self.dialog.display(self.fileName11)
         self.dialog.show()
 
@@ -926,10 +942,10 @@ class Tab(QWidget):
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[0].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[0], 0, 2, 1, 1)
+            self.num = 1
         else:
             pass
         
-
     def browseFile2(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
@@ -939,8 +955,10 @@ class Tab(QWidget):
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[1].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[1], 1, 2, 1, 1)
+            self.num = 2
         else:
             pass
+            
 
     def browseFile3(self):
         options = QFileDialog.Options()
@@ -951,6 +969,7 @@ class Tab(QWidget):
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[2].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[2], 2, 2, 1, 1)
+            self.num = 3
         else:
             pass
 
@@ -963,6 +982,7 @@ class Tab(QWidget):
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[3].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[3], 3, 2, 1, 1)
+            self.num = 4
         else:
             pass
 
@@ -975,6 +995,7 @@ class Tab(QWidget):
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
             self.label_left[4].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[4], 4, 2, 1, 1)
+            self.num = 5
         else:
             pass
 
