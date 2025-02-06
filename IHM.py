@@ -33,6 +33,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 from functools import partial
 
+from PIL import Image, ImageDraw, ImageFont
+
+
 def insertnow(file):       
     now = datetime.now()
     dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace("/", "_").replace(" ", "___").replace(":", "_")
@@ -90,8 +93,25 @@ def sort_ds_points(nodes):
         for i in range(3):
             nodes_ordered.append(nodes[order[i]])
         nodes_ordered.append(DS)
+    print(nodes_ordered)
     return nodes_ordered
 
+def compute_cubital_index(ci_points):
+    n0 = ci_points[0]
+    n1 = ci_points[1]
+    n2 = ci_points[2]
+    a = DROITE(n0, n1).distance
+    b = DROITE(n1, n2).distance
+    cubital_index = a/b
+    return cubital_index
+
+def compute_discoidal_shift(perp_02_point1, perp_02_point2, ds_points):
+    U = DROITE(perp_02_point1, perp_02_point2)
+    V = DROITE(ds_points[1], ds_points[3])
+    dot = U.nX * V.nX + U.nY * V.nY
+    delta = ds_points[3].j - U.get_x(ds_points[3].i)
+    discoidal_shift = np.sign(delta) *  np.arccos(dot/(U.distance * V.distance)) * 180/np.pi
+    return discoidal_shift
 
 class Second(QMainWindow):
     def __init__(self, Tab, parent=None):
@@ -222,15 +242,46 @@ class Second(QMainWindow):
         im.ci_points = sort_ci_points(self.ci_points)
         im.ds_points = sort_ds_points(self.ds_points)
         im.draw_ci_lines(self.color_ci)
+        im.draw_ds_line_02(self.color_ds)
+        im.draw_ds_line_02_perpendicular(self.color_ds)
+        self.ci_value = compute_cubital_index(self.ci_points)
+        self.ds_value = compute_discoidal_shift(im.point1, im.point2, im.ds_points)
         # im.customize()
         # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
         plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
+        self.add_infos()
+        
         pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
         self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
 
         self.close()
         return 0
+
+    def add_infos(self):
+        img = Image.open(f"{self.path}{self.out}{self.name}_out{self.extension}")
+        # Create a drawing object
+        draw = ImageDraw.Draw(img)
+
+        # Define text attributes
+        num = 2
+        ci = int(self.ci_value*100)/100
+        ds = int(self.ds_value*100)/100
+        tt = ""
+        if np.sign(ds) == 1:
+            tt = "+"
+        text = f"Abeille #{num}             Indice cubital : {ci}             Angle discoïdal : {tt}{ds}°"
+        font = ImageFont.truetype(f"{self.path}font{os.sep}Paul-le1V.ttf", size=40)
+        text_color = (255, 0, 0)  # Red color
+
+        # Position of the text
+        position = (50, 25)
+
+        # Add text to the image
+        draw.text(position, text, fill=text_color, font=font)
+
+        # Save or display the image
+        img.save(f"{self.path}{self.out}{self.name}_out{self.extension}")
 
     def set_ci_points(self, switch):
         self.switch_ci = switch

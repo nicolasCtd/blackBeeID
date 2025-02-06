@@ -59,6 +59,61 @@ class IMAGE():
         DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=clr)
         return 0
     
+    def draw_ds_line_02(self, clr):
+        DROITE(self.ds_points[0], self.ds_points[2]).draw(self, 2, 2, color=clr)
+        return 0
+    
+    def draw_ds_line_02_perpendicular(self, clr):
+        point1 = POINT()
+        point2 = POINT()
+        x, y = DROITE(self.ds_points[0], self.ds_points[2]).xy
+        dot_product = np.ones(x.size)
+        for pixel in range(x.size):
+            u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
+            v = (x[pixel] - self.ds_points[1].j, y[pixel] - self.ds_points[1].i)
+            dot_product[pixel] = u[0] * v[0] + u[1] * v[1]
+        idx = int(np.argmin(np.abs(dot_product)))
+        Pyy, Pxx = y[idx], x[idx]
+
+        # look for another pixel (point1) in this area that minimizes the dot product
+        square = 20
+        dot_product = np.ones((self.nb_lignes, self.nb_col)) * 1000
+        for dY in np.arange(0, int(1.5*square)):
+            for dX in np.arange(-square, +square+1):
+                Py_test, Px_test = Pyy - dY, Pxx - dX
+                u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
+                v = (Px_test - self.ds_points[1].j, Py_test - self.ds_points[1].i)
+                dot_product[Py_test, Px_test] = u[0] * v[0] + u[1] * v[1]
+        Py, Px = np.where(np.abs(dot_product) == np.min(np.abs(dot_product)))
+
+        if len(Py)>1:
+            txt = "draw_ds_line_02_perpendicular(): la recherche + précise d'un autre pixel "
+            txt += "appartenant à la droite perpendiculaire à la première n'a pas marché"
+            # print(txt, file=self.log)
+            print(txt)
+            Py, Px = Pyy, Pxx
+
+        point1.i = Py
+        point1.j = Px
+        point1.color = self.ds_points[0].color
+        # Now find another point far from the second DS point but in the same alignment
+        distance_ref = 0.8 * DROITE(self.ds_points[0], self.ds_points[2]).distance
+        small_line = DROITE(point1, self.ds_points[1])
+        x = np.arange(self.nb_col)
+        y = small_line.get_y(x)
+        x = x[y>0]
+        y = y[y>0]
+        distance = np.sqrt((x - point1.j) **2 + (y - point1.i) ** 2)
+        delta = np.abs(distance - distance_ref)
+        idx = int(np.where(delta == np.min(delta))[0][0])
+        point2.i = int(y[idx])
+        point2.j = int(x[idx])
+        DROITE(point1, point2).draw(self, 2, 5, color=clr)
+        self.point1 = point1
+        self.point2 = point2
+        return 0
+        
+    
 class POINT():
     def __init__(self):
         self.i = 0
