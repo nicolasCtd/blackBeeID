@@ -66,6 +66,33 @@ def get_zoom_center(file):
         ymax=int(file[d+4:e])
     return xmin, xmax, ymin, ymax
 
+def sort_ci_points(nodes):
+    nodes_ordered = list()
+    if len(nodes) != 3:
+        print("Erreur : le nombre de points CI devrait être égal à 3")
+    else:
+        # sort the 3 points from left to right 
+        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
+        for i in range(3):
+            nodes_ordered.append(nodes[order[i]])
+    return nodes_ordered
+
+def sort_ds_points(nodes):
+    nodes_ordered = list()
+    if len(nodes) != 4:
+        print("Erreur : le nombre de points DS devrait être égal à 4")
+    else:
+        idx = np.argmax([nodes[0].i, nodes[1].i, nodes[2].i, nodes[3].i])
+        DS = nodes[idx]
+        nodes.remove(nodes[idx])
+        # sort the 3 points from left to right 
+        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
+        for i in range(3):
+            nodes_ordered.append(nodes[order[i]])
+        nodes_ordered.append(DS)
+    return nodes_ordered
+
+
 class Second(QMainWindow):
     def __init__(self, Tab, parent=None):
         super(Second, self).__init__(parent)
@@ -192,14 +219,16 @@ class Second(QMainWindow):
         file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
         im = IMAGE()
         im.load(f"{self.path}{self.tmp}{file_wo_zoom}")
+        im.ci_points = sort_ci_points(self.ci_points)
+        im.ds_points = sort_ds_points(self.ds_points)
+        im.draw_ci_lines(self.color_ci)
         # im.customize()
-        shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
-        pixmap = QPixmap(self.path + "out" + os.sep + self.name + os.sep + file_wo_zoom)
+        # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
+        plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
+        pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
         self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
-        print(self.ci_points[0].i, self.ci_points[0].j)
-        print(self.ci_points[1].i, self.ci_points[1].j)
-        print(self.ci_points[2].i, self.ci_points[2].j)
+
         self.close()
         return 0
 
@@ -281,7 +310,6 @@ class Second(QMainWindow):
             node.j, node.i = x, y
             self.ds_points[self.count_ds_points-1] = node
             A.highlight(node, self.color_ds)
-
             plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
             pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)

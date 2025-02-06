@@ -53,6 +53,12 @@ class IMAGE():
                 self.data_copy[i, j][2] = 0
         return 0
     
+    def draw_ci_lines(self, clr):
+        # draw lines between cubital index points
+        DROITE(self.ci_points[0], self.ci_points[1]).draw(self, 2, 2, color=clr)
+        DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=clr)
+        return 0
+    
 class POINT():
     def __init__(self):
         self.i = 0
@@ -62,3 +68,64 @@ class POINT():
     def __str__(self) -> str:
         print(f"i : {self.i}")
         print(f"j : {self.j}")
+
+class DROITE(IMAGE):
+    def __init__(self, P1, P2):
+        self.coefficients(P1, P2)
+        self.coords_xy(P1, P2)
+        self.color = P1.color
+        self.distance(P1, P2)
+        self.vect(P1, P2)
+    
+    def __str__(self) -> str:
+        print(f"a : {self.slope}")
+        print(f"b : {self.offset}")
+        return super().__str__()
+
+    def coefficients(self, P1, P2):
+        if np.abs(P2.j - P1.j)>0:
+            slope = (P2.i - P1.i) / (P2.j - P1.j)
+        else:
+            slope = (P2.i - P1.i) / (P2.j+1 - P1.j)
+        offset = P1.i - slope * P1.j
+        self.slope = slope 
+        self.offset = offset
+        self.coeffs = (slope, offset)
+        return slope, offset
+
+    def coords_xy(self, P1, P2):
+        if np.abs(P1.j - P2.j) > np.abs(P1.i - P2.i):
+            x = np.arange(P1.j, P2.j+1, step=np.sign(P2.j - P1.j))
+            y = self.get_y(x)
+        else:
+            y = np.arange(P1.i, P2.i+1)
+            x = self.get_x(y)
+        self.x = x 
+        self.y = y
+        self.xy = x, y
+        return x, y
+
+    def draw(self, image, dx, dy, color):
+        for i in range(self.x.size):
+            for g in range(-dy//2, +dy//2+1):
+                for h in range(-dx//2, +dx//2+1):
+                    image.data[self.y[i]+g, self.x[i]+h][0] = color[0]
+                    image.data[self.y[i]+g, self.x[i]+h][1] = color[1]
+                    image.data[self.y[i]+g, self.x[i]+h][2] = color[2]
+
+
+    def distance(self, P1, P2):
+        distance = np.sqrt(np.abs(P2.i - P1.i) ** 2 + np.abs(P2.j - P1.j) ** 2)
+        self.distance = distance
+        return distance
+
+    def get_y(self, x):
+        return np.int32(self.slope * x + self.offset)
+    
+    def get_x(self, y):
+        return np.int32((y - self.offset) / self.slope)
+    
+    def vect(self, P1, P2):
+        self.nX = P2.j - P1.j
+        self.nY = P2.i - P1.i
+        return 0
