@@ -114,10 +114,10 @@ def compute_discoidal_shift(perp_02_point1, perp_02_point2, ds_points):
     return discoidal_shift
 
 class Second(QMainWindow):
-    def __init__(self, Tab, parent=None):
+    def __init__(self, Tab, num=1, parent=None):
         super(Second, self).__init__(parent)
         self.setWindowTitle("Fenêtre d'édition")
-
+        self.num = num
         self.move(50, 100)
 
         self.w = QWidget()
@@ -264,7 +264,7 @@ class Second(QMainWindow):
         draw = ImageDraw.Draw(img)
 
         # Define text attributes
-        num = 2
+        num = self.num
         ci = int(self.ci_value*100)/100
         ds = int(self.ds_value*100)/100
         tt = ""
@@ -305,25 +305,27 @@ class Second(QMainWindow):
                 new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
             else:
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
+                xmin, xmax, ymin, ymax = 0, 0, 0, 0
             self.last_name[self.ZOOM] = new_name
             A = IMAGE()
             A.load(self.tmp + file)
-            node = POINT()
-            node.j, node.i = x, y
+            node, node_zoom = POINT(), POINT()
+            node_zoom.j, node_zoom.i = x, y
+            node.j, node.i = x+xmin, y+ymin
             self.ci_points[self.count_ci_points-1] = node
-            A.highlight(node, self.color_ci)
+            if self.ZOOM:
+                A.highlight(node_zoom, self.color_ci)
+            else:
+                A.highlight(node, self.color_ci)
             plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
             pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
             self.setCentralWidget(self.label)
             self.setCursor(Qt.ArrowCursor)
             if self.ZOOM:
-                xmin, xmax, ymin, ymax = get_zoom_center(file)
                 file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
                 B = IMAGE()
                 B.load(self.tmp + file_wo_zoom)
-                node = POINT()
-                node.j, node.i = x+xmin, y+ymin
                 B.highlight(node, self.color_ci)
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
                 plt.imsave(fname=f"{self.tmp}{new_name}", arr=B.data)
@@ -354,26 +356,29 @@ class Second(QMainWindow):
                 new_name = insertnow(self.name + "_zoom_" + f"xmin{xmin}xmax{xmax}ymin{ymin}ymax{ymax}end" + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
             else:
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
+                xmin, xmax, ymin, ymax = 0, 0, 0, 0
             self.last_name[self.ZOOM] = new_name
             A = IMAGE()
             A.load(self.tmp + file)
-            node = POINT()
-            node.j, node.i = x, y
+            node, node_zoom = POINT(), POINT()
+            node_zoom.j, node_zoom.i = x, y
+            node.j, node.i = x+xmin, y+ymin
             self.ds_points[self.count_ds_points-1] = node
+            if self.ZOOM:
+                A.highlight(node_zoom, self.color_ds)
+            else:
+                A.highlight(node, self.color_ds)
+
             A.highlight(node, self.color_ds)
             plt.imsave(fname=f"{self.tmp}{self.last_name[self.ZOOM]}", arr=A.data)
             pixmap = QPixmap(f"{self.tmp}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
             self.setCentralWidget(self.label)
             self.setCursor(Qt.ArrowCursor)
-
             if self.ZOOM:
-                xmin, xmax, ymin, ymax = get_zoom_center(file)
                 file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
                 B = IMAGE()
                 B.load(self.tmp + file_wo_zoom)
-                node = POINT()
-                node.j, node.i = x+xmin, y+ymin
                 B.highlight(node, self.color_ds)
                 new_name = insertnow(self.name + f"_CI_{self.count_ci_points}" + f"_DS_{self.count_ds_points}" + self.extension)
                 plt.imsave(fname=f"{self.tmp}{new_name}", arr=B.data)
@@ -834,181 +839,181 @@ class Tab(QWidget):
         
     def editFile1(self):
         if self.fileName1 == "im1.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 1)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 1)
             self.dialog.display(self.fileName1)
         self.dialog.show()
         
     def editFile2(self):
         if self.fileName2 == "im2.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 2)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 2)
             self.dialog.display(self.fileName2)
         self.dialog.show()
     
     def editFile3(self):
         if self.fileName3 == "im3.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 3)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 3)
             self.dialog.display(self.fileName3)
         self.dialog.show()
     
     def editFile4(self):
         if self.fileName4 == "im4.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 4)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 4)
             self.dialog.display(self.fileName4)
         self.dialog.show()
 
     def editFile5(self):
         if self.fileName5 == "im5.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 5)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 5)
             self.dialog.display(self.fileName5)
         self.dialog.show()
     
     def editFile6(self):
         if self.fileName6 == "im6.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 6)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 6)
             self.dialog.display(self.fileName6)
         self.dialog.show()
     
     def editFile7(self):
         if self.fileName7 == "im7.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 7)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 7)
             self.dialog.display(self.fileName7)
         self.dialog.show()
     
     def editFile8(self):
         if self.fileName8 == "im8.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 8)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 8)
             self.dialog.display(self.fileName8)
         self.dialog.show()
     
     def editFile9(self):
         if self.fileName9 == "im9.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 9)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
-            self.dialog.display(self.fileName8)
+            self.dialog = Second(self, 9)
+            self.dialog.display(self.fileName9)
         self.dialog.show()
     
     def editFile10(self):
         if self.fileName10 == "im10.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 10)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 10)
             self.dialog.display(self.fileName10)
         self.dialog.show()
 
     def editFile11(self):
         if self.fileName11 == "im11.png":
-            self.dialog = Second(self)
+            self.dialog = Second(self, 11)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second(self)
+            self.dialog = Second(self, 11)
             self.dialog.display(self.fileName11)
         self.dialog.show()
 
     def editFile12(self):
         if self.fileName12 == "im12.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 12)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 12)
             self.dialog.display(self.fileName12)
         self.dialog.show()
 
     def editFile13(self):
         if self.fileName13 == "im13.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 13)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 13)
             self.dialog.display(self.fileName13)
         self.dialog.show()
 
     def editFile14(self):
         if self.fileName14 == "im14.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 14)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 14)
             self.dialog.display(self.fileName14)
         self.dialog.show()
     
     def editFile15(self):
         if self.fileName15 == "im15.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 15)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 15)
             self.dialog.display(self.fileName15)
         self.dialog.show()
 
     def editFile16(self):
         if self.fileName16 == "im16.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 16)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 16)
             self.dialog.display(self.fileName16)
         self.dialog.show()
 
     def editFile17(self):
         if self.fileName17 == "im17.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 17)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 17)
             self.dialog.display(self.fileName17)
         self.dialog.show()
     
     def editFile18(self):
         if self.fileName18 == "im18.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 18)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 18)
             self.dialog.display(self.fileName18)
         self.dialog.show()
 
     def editFile19(self):
         if self.fileName18 == "im19.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 19)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 19)
             self.dialog.display(self.fileName19)
         self.dialog.show()
     
     def editFile20(self):
         if self.fileName18 == "im20.png":
-            self.dialog = Second()
+            self.dialog = Second(self, 20)
             self.dialog.display_error_message()
         else:
-            self.dialog = Second()
+            self.dialog = Second(self, 20)
             self.dialog.display(self.fileName20)
         self.dialog.show()
 
