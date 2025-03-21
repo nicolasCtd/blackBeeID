@@ -35,6 +35,7 @@ from functools import partial
 
 from PIL import Image, ImageDraw, ImageFont
 
+print("test")
 
 def insertnow(file):       
     now = datetime.now()
