@@ -161,12 +161,12 @@ class Second(QMainWindow):
         self.last_name[self.ZOOM] = insertnow(self.name + self.extension)
 
         try:
-            os.makedirs("tmp" + os.sep + self.name)
+            os.makedirs("tmp" + os.sep + self.num)
         except:
             pass
 
         try:
-            os.makedirs("out" + os.sep + self.name)
+            os.makedirs("out" + os.sep + self.num)
         except:
             pass
 
@@ -190,6 +190,14 @@ class Second(QMainWindow):
         self.label.setScaledContents(True)
 
         self.set_dock()
+    
+    # def show(self, fileName):
+    #     self.label = QLabel(self)
+    #     pixmap = QPixmap(fileName)
+
+    #     self.label.setPixmap(pixmap)
+    #     self.setCentralWidget(self.label)
+    #     return
     
     def set_dock(self):
         self.btn_zoom_1 = QPushButton("  ZOOM IN ")
@@ -610,13 +618,6 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("Analyse des ailes d'abeilles")
 
-        self.tab_widget = Tab(self)
-        self.setCentralWidget(self.tab_widget)
-    
-        self.showMaximized()
-
-        QTimer.singleShot(100, self.calculate)
-
         try:
             os.makedirs("out")
         except:
@@ -648,6 +649,13 @@ class MainWindow(QMainWindow):
                     shutil.rmtree(file_path)
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
+        
+        self.tab_widget = Tab(self, self.path)
+        self.setCentralWidget(self.tab_widget)
+    
+        self.showMaximized()
+
+        QTimer.singleShot(100, self.calculate)
 
     def calculate(self):
         return self.frameGeometry().height()
@@ -671,10 +679,11 @@ class MainWindow(QMainWindow):
 
 
 class Tab(QWidget): 
-    def __init__(self, parent): 
+    def __init__(self, parent, path): 
         super(QWidget, self).__init__(parent)
 
         self.num = 0
+        self.path = path
 
         self.fileName1 = "im1.png"
         self.fileName2 = "im2.png"
@@ -762,6 +771,11 @@ class Tab(QWidget):
                        11:self.editFile11, 12:self.editFile12, 13:self.editFile13, 14:self.editFile14, 15:self.editFile15,
                        16:self.editFile16, 17:self.editFile17, 18:self.editFile18, 19:self.editFile19, 20:self.editFile20}
 
+        connections_visu = {1:self.visu1, 2:self.visu2, 3:self.visu3, 4:self.visu4, 5:self.visu5,
+                       6:self.visu6, 7:self.visu7, 8:self.visu8, 9:self.visu9, 10:self.visu10,
+                       11:self.visu11, 12:self.visu12, 13:self.visu13, 14:self.visu14, 15:self.visu15,
+                       16:self.visu16, 17:self.visu17, 18:self.visu18, 19:self.visu19, 20:self.visu20}
+
         self.grids = list()
 
         for num_tab in range(1, nb_tabs+1):
@@ -795,19 +809,25 @@ class Tab(QWidget):
                 btn2.resize(50, 150)
                 btn2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
+                btn3 = QPushButton("Visualize")
+                btn3.resize(50, 150)
+                btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
                 # self.grids[-1].addWidget(btn1, i, 1, alignment=QtCore.Qt.AlignLeft)
                 # self.grids[-1].addWidget(btn2, i, 2, alignment=QtCore.Qt.AlignCenter)
                 self.grids[-1].addWidget(btn1, i, 1)
                 self.grids[-1].addWidget(btn2, i, 3)
+                self.grids[-1].addWidget(btn3, i, 5)
                 
 
                 btn1.clicked.connect(connections_load[num_image])
                 btn2.clicked.connect(connections_edit[num_image])
+                btn3.clicked.connect(connections_visu[num_image])
 
-                pixmap = QPixmap(f"images{os.sep}dardagnan.png")
-                label = QLabel()
-                label.setPixmap(pixmap)
-                self.grids[-1].addWidget(label, i, 5)
+                # pixmap = QPixmap(f"images{os.sep}dardagnan.png")
+                # label = QLabel()
+                # label.setPixmap(pixmap)
+                # self.grids[-1].addWidget(label, i, 5)
 
                 pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 aaa = QLabel()
@@ -1027,6 +1047,7 @@ class Tab(QWidget):
             self.label_left[0].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[0], 0, 2, 1, 1)
             self.num = 1
+            self.nameOut1 = "1"
         else:
             pass
         
@@ -1040,6 +1061,7 @@ class Tab(QWidget):
             self.label_left[1].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[1], 1, 2, 1, 1)
             self.num = 2
+            self.nameOut2 = "2"
         else:
             pass
             
@@ -1054,6 +1076,7 @@ class Tab(QWidget):
             self.label_left[2].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[2], 2, 2, 1, 1)
             self.num = 3
+            self.nameOut3 = 3
         else:
             pass
 
@@ -1067,6 +1090,7 @@ class Tab(QWidget):
             self.label_left[3].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[3], 3, 2, 1, 1)
             self.num = 4
+            self.nameOut4 = "4"
         else:
             pass
 
@@ -1080,6 +1104,7 @@ class Tab(QWidget):
             self.label_left[4].setPixmap(pixmap)
             self.grids[0].addWidget(self.label_left[4], 4, 2, 1, 1)
             self.num = 5
+            self.nameOut5 = "5"
         else:
             pass
 
@@ -1262,7 +1287,73 @@ class Tab(QWidget):
             self.label_left[19].setPixmap(pixmap)
             self.grids[3].addWidget(self.label_left[19], 4, 2, 1, 1)
         else:
-            pass 
+            pass
+
+    def visu1(self):
+        path = self.path + "out" + os.sep + "1"
+        fileName = os.listdir(path)[0]
+        a = Second(self, path)
+        a.show()
+        return 0
+
+    def visu2(self):
+        path = self.path + "out" + os.sep + "1"
+        fileName = os.listdir(path)[0]
+        a = Second(self, path)
+        a.show()
+        return 0
+    
+    def visu3(self):
+        path = self.path + "out" + os.sep + "1"
+        fileName = os.listdir(path)[0]
+        a = Second(self, path)
+        a.show()
+        return 0
+
+    def visu4(self):
+        path = self.path + "out" + os.sep + "1"
+        fileName = os.listdir(path)[0]
+        a = Second(self, path)
+        a.show()
+        return 0
+
+    def visu5(self):
+        path = self.path + "out" + os.sep + "1"
+        fileName = os.listdir(path)[0]
+        a = Second(self, path)
+        a.show()
+        return 0
+
+    def visu6(self):
+        return 0
+    def visu7(self):
+        return 0
+    def visu8(self):
+        return 0
+    def visu9(self):
+        return 0
+    def visu10(self):
+        return 0
+    def visu11(self):
+        return 0
+    def visu12(self):
+        return 0
+    def visu13(self):
+        return 0
+    def visu14(self):
+        return 0
+    def visu15(self):
+        return 0
+    def visu16(self):
+        return 0
+    def visu17(self):
+        return 0
+    def visu18(self):
+        return 0
+    def visu19(self):
+        return 0
+    def visu20(self):
+        return 0
 
 app = QApplication(sys.argv)
 
