@@ -36,7 +36,7 @@ from functools import partial
 from PIL import Image, ImageDraw, ImageFont
 
 print("test")
-x = 3
+x = 4
 print(x)
 
 def insertnow(file):       
