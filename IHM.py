@@ -279,6 +279,7 @@ class Second(QMainWindow):
         # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
         plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
         self.add_infos()
+        self.write_results()
         
         pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -311,6 +312,14 @@ class Second(QMainWindow):
 
         # Save or display the image
         img.save(f"{self.path}{self.out}{self.name}_out{self.extension}")
+
+    def write_results(self):
+        with open(self.path + os.sep + "out" + os.sep + "results.txt", "a") as f:
+            ds_value = float(str(self.ds_value).replace("[", "").replace("]", ""))
+            line = f"{self.num} {int(self.ci_value*100)/100} {int(ds_value*100)/100}\n"
+            f.write(line)
+        f.close()
+        return 0
 
     def set_ci_points(self, switch):
         self.switch_ci = switch
@@ -650,15 +659,23 @@ class MainWindow(QMainWindow):
             pass
 
         self.path = os.path.abspath(os.getcwd()) + os.sep + "out"
-        for filename in os.listdir(self.path):
-            file_path = self.path + os.sep + filename
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+
+        with open(self.path + os.sep + "results.txt", "w") as f:
+            line = f"num indice_cubital angle_discoidal\n"
+            f.write(line)
+            f.close
+
+
+        # for filename in os.listdir(self.path):
+        #     file_path = self.path + os.sep + filename
+        #     try:
+        #         if os.path.isfile(file_path):
+        #             os.unlink(file_path)
+        #         elif os.path.isdir(file_path):
+        #             shutil.rmtree(file_path)
+        #     except Exception as e:
+        #         print('Failed to delete %s. Reason: %s' % (file_path, e))
         
         path = os.path.abspath(os.getcwd()) + os.sep + "tmp"
         for filename in os.listdir(path):
@@ -800,11 +817,17 @@ class Tab(QWidget):
                        16:self.visu16, 17:self.visu17, 18:self.visu18, 19:self.visu19, 20:self.visu20}
 
         layout_main = QGridLayout()
-        btn1 = QPushButton("Sauvegarder l'analyse")
-        btn2 = QPushButton("Charger une analyse")
-        btn3 = QPushButton("Lancer \n l'analyse")
+        btn1 = QPushButton("Charger \nune analyse")
+        btn2 = QPushButton("Sauvegarder \nl'analyse")
+        btn3 = QPushButton("Lancer \nl'analyse")
         label1 = QLabel("Histogramme de l'Indice Cubital")
         label2 = QLabel("Indice Cubital vs Discoidal shift")
+
+        btn1.resize(150, 150)
+        btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
+        btn2.resize(150, 150)
+        btn2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         btn3.resize(150, 150)
         btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -817,13 +840,13 @@ class Tab(QWidget):
         image_empty2 = QLabel()
         image_empty2.setPixmap(pixmap)
 
-        layout_main.addWidget(btn2, 0, 0, 1, 1)
-        layout_main.addWidget(btn1, 1, 0, 1, 1)
-        layout_main.addWidget(btn3, 0, 3, 2, 2)
-        layout_main.addWidget(label1, 3, 1, 1, 2)
-        layout_main.addWidget(label2, 3, 4, 1, 2)
-        layout_main.addWidget(image_empty1, 4, 0, 3, 3)
-        layout_main.addWidget(image_empty2, 4, 3, 3, 3)
+        layout_main.addWidget(btn1, 0, 3, 2, 2)
+        layout_main.addWidget(btn2, 0, 4, 2, 2)
+        layout_main.addWidget(btn3, 0, 5, 2, 2)
+        layout_main.addWidget(label1, 3, 2, 1, 2)
+        layout_main.addWidget(label2, 3, 8, 1, 2)
+        layout_main.addWidget(image_empty1, 4, 0, 5, 5)
+        layout_main.addWidget(image_empty2, 4, 6, 5, 5)
 
         self.grids = list()
 
@@ -1346,6 +1369,7 @@ class Tab(QWidget):
         path = self.path + os.sep + "1"
         fileName = os.listdir(path)[0]
         A = Third(self)
+        A.move(50, 50)
         A.display(path + os.sep + fileName)
         A.show()
         return 0
