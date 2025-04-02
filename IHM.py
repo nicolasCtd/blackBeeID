@@ -5,9 +5,11 @@ import matplotlib.pyplot as plt
 import sys
 import os
 
-from datetime import datetime
+from datetime import datetime, date
 
 import shutil
+
+import zipfile
 
 from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, QEvent
 from PyQt5.QtWidgets import (
@@ -24,7 +26,10 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QDesktopWidget,
     QDockWidget,
-    QMessageBox
+    QMessageBox,
+    QLineEdit,
+    QFileDialog,
+    QInputDialog
 )
 from PyQt5.QtGui import QPixmap, QCursor, QFont
 
@@ -34,6 +39,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from functools import partial
 
 from PIL import Image, ImageDraw, ImageFont
+
 
 
 def insertnow(file):       
@@ -111,6 +117,23 @@ def compute_discoidal_shift(perp_02_point1, perp_02_point2, ds_points):
     delta = ds_points[3].j - U.get_x(ds_points[3].i)
     discoidal_shift = np.sign(delta) *  np.arccos(dot/(U.distance * V.distance)) * 180/np.pi
     return discoidal_shift
+
+
+class FolderSelector(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+        self.button = QPushButton('Select Folder', self)
+        self.button.clicked.connect(self.showFolderDialog)
+        layout.addWidget(self.button)
+        self.setLayout(layout)
+
+    def showFolderDialog(self):
+        folder_path = QFileDialog.getExistingDirectory(self, 'Select Folder')
+        print('Selected Folder:', folder_path)
 
 
 class Third(QMainWindow):
@@ -723,6 +746,8 @@ class Tab(QWidget):
         self.num = 0
         self.path = path
 
+        self.analyse_name = str(date.today())
+
         self.fileName1 = "im1.png"
         self.fileName2 = "im2.png"
         self.fileName3 = "im3.png"
@@ -761,7 +786,10 @@ class Tab(QWidget):
         self.tab9 = QWidget()
         self.tab10 = QWidget()
   
-        # Add tabs 
+        # Add tabs
+
+        mf = QFont("Times New Roman", 13)
+
         self.tabs.addTab(self.tab0, "Main")
         self.tabs.addTab(self.tab1, "1-5")
         self.tabs.addTab(self.tab2, "6-10")
@@ -773,7 +801,7 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab8, "36-40")
         self.tabs.addTab(self.tab9, "41-45")
         self.tabs.addTab(self.tab10, "46-50")
-   
+
         self.width = 413
         self.height = 307
 
@@ -820,8 +848,26 @@ class Tab(QWidget):
         btn1 = QPushButton("Charger \nune analyse")
         btn2 = QPushButton("Sauvegarder \nl'analyse")
         btn3 = QPushButton("Lancer \nl'analyse")
-        label1 = QLabel("Histogramme de l'Indice Cubital")
-        label2 = QLabel("Indice Cubital vs Discoidal shift")
+        label0 = QLabel("Nom de l'analyse : ")
+        self.label00 = QLabel(self.analyse_name)
+        label1 = QLabel("<u>Histogramme de l'Indice Cubital<u>")
+        label2 = QLabel("<u>Indice Cubital vs Discoidal shift<u>")
+        # self.edit_analyse_name = QLineEdit()
+
+        self.pb = QPushButton("Editer")
+        self.pb.clicked.connect(self.edit_name)
+
+        my_font = QFont("Times New Roman", 20)
+        my_font2 = QFont("Times New Roman", 15)
+        my_font3 = QFont("Times New Roman", 13)
+        label1.setFont(my_font)
+        label2.setFont(my_font)
+        label0.setFont(my_font2)
+        btn1.setFont(my_font3)
+        btn2.setFont(my_font3)
+        btn3.setFont(my_font3)
+
+        # label1.setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
 
         btn1.resize(150, 150)
         btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -832,6 +878,9 @@ class Tab(QWidget):
         btn3.resize(150, 150)
         btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
+        self.pb.resize(150, 150)
+        self.pb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+
         pixmap = QPixmap(f"images{os.sep}empty1.png")
         image_empty1 = QLabel()
         image_empty1.setPixmap(pixmap)
@@ -840,13 +889,19 @@ class Tab(QWidget):
         image_empty2 = QLabel()
         image_empty2.setPixmap(pixmap)
 
-        layout_main.addWidget(btn1, 0, 3, 2, 2)
-        layout_main.addWidget(btn2, 0, 4, 2, 2)
-        layout_main.addWidget(btn3, 0, 5, 2, 2)
-        layout_main.addWidget(label1, 3, 2, 1, 2)
-        layout_main.addWidget(label2, 3, 8, 1, 2)
+        layout_main.addWidget(label0, 0, 0, 1, 2)
+        # layout_main.addWidget(self.edit_analyse_name, 0, 1, 1, 2)
+        layout_main.addWidget(self.label00, 0, 1, 1, 2)
+        layout_main.addWidget(self.pb, 0, 2, 1, 1)
+        layout_main.addWidget(btn1, 1, 0, 2, 2)
+        layout_main.addWidget(btn2, 1, 1, 2, 2)
+        layout_main.addWidget(btn3, 1, 2, 2, 2)
+        layout_main.addWidget(label1, 3, 0, 1, 5)
+        layout_main.addWidget(label2, 3, 7, 1, 5)
         layout_main.addWidget(image_empty1, 4, 0, 5, 5)
-        layout_main.addWidget(image_empty2, 4, 6, 5, 5)
+        layout_main.addWidget(image_empty2, 4, 7, 5, 5)
+
+        btn2.clicked.connect(self.save_project)
 
         self.grids = list()
 
@@ -902,26 +957,30 @@ class Tab(QWidget):
                 # self.grids[-1].addWidget(label, i, 5)
 
                 pixmap = QPixmap(f"images{os.sep}dardagnan.png")
-                aaa = QLabel()
-                aaa.setPixmap(pixmap)
-                self.grids[-1].addWidget(aaa, i, 6)
+                darda = QLabel()
+                darda.setPixmap(pixmap)
+                self.grids[-1].addWidget(darda, i, 6)
 
                 # self.grids[-1].addWidget(label_right, i, 3)
 
         # Create main tab 
         self.tab0.layout = layout_main
+        self.tab0.setFont(mf)
         self.tab0.setLayout(self.tab0.layout)
 
         # Create first tab 
         self.tab1.layout = self.grids[0]
+        self.tab1.setFont(mf)
         self.tab1.setLayout(self.tab1.layout)
 
         # Create second tab 
         self.tab2.layout = self.grids[1]
+        self.tab2.setFont(mf)
         self.tab2.setLayout(self.tab2.layout)
 
         # Create third tab 
         self.tab3.layout = self.grids[2]
+        self.tab3.setFont(mf)
         self.tab3.setLayout(self.tab3.layout)
 
         # Create fourth tab 
@@ -932,7 +991,16 @@ class Tab(QWidget):
         # #######
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
-        
+
+    def edit_name(self):
+        text, okPressed = QInputDialog.getText(self, " ", "Entrer le nom de l'analyse :", QLineEdit.Normal, "")
+        if okPressed and text != '':
+            self.analyse_name = text
+            self.label00.setText(text)
+
+
+        return 0
+
     def editFile1(self):
         if self.fileName1 == "im1.png":
             self.dialog = Second(self, num=1)
@@ -1431,6 +1499,16 @@ class Tab(QWidget):
     def visu19(self):
         return 0
     def visu20(self):
+        return 0
+
+    def save_project(self):
+        DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
+        with zipfile.ZipFile(DIR + os.sep + self.analyse_name + '.zip', "w") as zf:
+            for root, _, filenames in os.walk(os.path.basename(self.path)):
+                for name in filenames:
+                    name = os.path.join(root, name)
+                    name = os.path.normpath(name)
+                    zf.write(name, name)
         return 0
 
 app = QApplication(sys.argv)

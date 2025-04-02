@@ -1,3 +1,1 @@
 num indice_cubital angle_discoidal
-1 2.47 -3.45
-2 2.42 2.69
