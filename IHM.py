@@ -40,7 +40,24 @@ from functools import partial
 
 from PIL import Image, ImageDraw, ImageFont
 
+def clean(value):
+    return str(value).replace("[", "").replace("]", "")
 
+def load_results(file):
+    res = {}
+    with open(file, "r") as f:
+        a = f.readlines()
+    for i in range(1, len(a)):
+        line = a[i].split(" ")
+        res[i] = (line[1], line[2])
+    return res
+
+def write_line(file, num, ci_value, ds_value):
+    line = f"{num} {ci_value} {ds_value}\n"
+    with open(file, "a") as f:
+        f.write(line)
+    f.close()
+    return 0
 
 def insertnow(file):       
     now = datetime.now()
@@ -302,13 +319,16 @@ class Second(QMainWindow):
         # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
         plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
         self.add_infos()
-        self.write_results()
+        # self.write_results()
         
         pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
         self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
 
         self.close()
+        print(self.num, self.ci_value, self.ds_value)
+        write_line(f"{self.path}{os.sep}out{os.sep}results.txt", self.num, clean(self.ci_value), clean(self.ds_value))
+
         return 0
 
     def add_infos(self):
@@ -336,13 +356,13 @@ class Second(QMainWindow):
         # Save or display the image
         img.save(f"{self.path}{self.out}{self.name}_out{self.extension}")
 
-    def write_results(self):
-        with open(self.path + os.sep + "out" + os.sep + "results.txt", "a") as f:
-            ds_value = float(str(self.ds_value).replace("[", "").replace("]", ""))
-            line = f"{self.num} {int(self.ci_value*100)/100} {int(ds_value*100)/100}\n"
-            f.write(line)
-        f.close()
-        return 0
+    # def write_results(self):
+    #     with open(self.path + os.sep + "out" + os.sep + "results.txt", "a") as f:
+    #         ds_value = float(str(self.ds_value).replace("[", "").replace("]", ""))
+    #         line = f"{self.num} {int(self.ci_value*100)/100} {int(ds_value*100)/100}\n"
+    #         f.write(line)
+    #     f.close()
+    #     return 0
 
     def set_ci_points(self, switch):
         self.switch_ci = switch
@@ -674,14 +694,22 @@ class MainWindow(QMainWindow):
         try:
             os.makedirs("out")
         except:
-            pass
+            print("Le dossier 'out' existe déjà")
+
+        try:
+            os.makedirs("in")
+        except:
+            print("Le dossier 'in' existe déjà")
 
         try:
             os.makedirs("tmp")
         except:
-            pass
+            print("Le dossier 'tmp' existe déjà")
 
-        self.path = os.path.abspath(os.getcwd()) + os.sep + "out"
+        self.out = os.path.abspath(os.getcwd()) + os.sep + "out"
+        self.in_ = os.path.abspath(os.getcwd()) + os.sep + "in"
+        self.tmp = os.path.abspath(os.getcwd()) + os.sep + "tmp"
+        self.path = os.path.abspath(os.getcwd())
 
 
         with open(self.path + os.sep + "results.txt", "w") as f:
@@ -700,9 +728,9 @@ class MainWindow(QMainWindow):
         #     except Exception as e:
         #         print('Failed to delete %s. Reason: %s' % (file_path, e))
         
-        path = os.path.abspath(os.getcwd()) + os.sep + "tmp"
-        for filename in os.listdir(path):
-            file_path = path + os.sep + filename
+
+        for filename in os.listdir(self.tmp):
+            file_path = self.tmp + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
@@ -745,6 +773,8 @@ class Tab(QWidget):
 
         self.num = 0
         self.path = path
+        self.in_ = path + os.sep + "in"
+        self.out = path + os.sep + "out"
 
         self.analyse_name = str(date.today())
 
@@ -901,6 +931,7 @@ class Tab(QWidget):
         layout_main.addWidget(image_empty1, 4, 0, 5, 5)
         layout_main.addWidget(image_empty2, 4, 7, 5, 5)
 
+        btn1.clicked.connect(self.load_project)
         btn2.clicked.connect(self.save_project)
 
         self.grids = list()
@@ -946,7 +977,6 @@ class Tab(QWidget):
                 self.grids[-1].addWidget(btn2, i, 3)
                 self.grids[-1].addWidget(btn3, i, 5)
                 
-
                 btn1.clicked.connect(connections_load[num_image])
                 btn2.clicked.connect(connections_edit[num_image])
                 btn3.clicked.connect(connections_visu[num_image])
@@ -997,8 +1027,6 @@ class Tab(QWidget):
         if okPressed and text != '':
             self.analyse_name = text
             self.label00.setText(text)
-
-
         return 0
 
     def editFile1(self):
@@ -1185,6 +1213,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName1, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName1, self.in_ + os.sep + "1.png")
+        except Exception as e:
+            print(e)
         if self.fileName1 != "":
             pixmap = QPixmap(self.fileName1)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1199,6 +1231,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName2, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName2, self.in_ + os.sep + "2.png")
+        except Exception as e:
+            print(e)
         if self.fileName2 != "":
             pixmap = QPixmap(self.fileName2)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1208,12 +1244,15 @@ class Tab(QWidget):
             self.nameOut2 = "2"
         else:
             pass
-            
 
     def browseFile3(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName3, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName3, self.in_ + os.sep + "3.png")
+        except Exception as e:
+            print(e)
         if self.fileName3 != "":
             pixmap = QPixmap(self.fileName3)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1228,6 +1267,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName4, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName4, self.in_ + os.sep + "4.png")
+        except Exception as e:
+            print(e)        
         if self.fileName4 != "":
             pixmap = QPixmap(self.fileName4)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1242,6 +1285,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName5, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName5, self.in_ + os.sep + "5.png")
+        except Exception as e:
+            print(e)        
         if self.fileName5 != "":
             pixmap = QPixmap(self.fileName5)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1256,6 +1303,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName6, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName6, self.in_ + os.sep + "6.png")
+        except Exception as e:
+            print(e)        
         if self.fileName6 != "":
             pixmap = QPixmap(self.fileName6)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1268,6 +1319,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName7, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName7, self.in_ + os.sep + "7.png")
+        except Exception as e:
+            print(e)        
         if self.fileName7 != "":
             pixmap = QPixmap(self.fileName7)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1280,6 +1335,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName8, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName8, self.in_ + os.sep + "8.png")
+        except Exception as e:
+            print(e)        
         if self.fileName8 != "":
             pixmap = QPixmap(self.fileName8)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1288,11 +1347,14 @@ class Tab(QWidget):
         else:
             pass
 
-
     def browseFile9(self):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName9, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName9, self.in_ + os.sep + "9.png")
+        except Exception as e:
+            print(e)        
         if self.fileName9 != "":
             pixmap = QPixmap(self.fileName9)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1305,6 +1367,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName10, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName10, self.in_ + os.sep + "10.png")
+        except Exception as e:
+            print(e)        
         if self.fileName10 != "":
             pixmap = QPixmap(self.fileName10)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1317,6 +1383,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName11, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName11, self.in_ + os.sep + "11.png")
+        except Exception as e:
+            print(e)        
         if self.fileName11 != "":
             pixmap = QPixmap(self.fileName11)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1329,6 +1399,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName12, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName12, self.in_ + os.sep + "12.png")
+        except Exception as e:
+            print(e)        
         if self.fileName12 != "":
             pixmap = QPixmap(self.fileName12)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1341,6 +1415,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName13, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName13, self.in_ + os.sep + "13.png")
+        except Exception as e:
+            print(e)        
         if self.fileName13 != "":
             pixmap = QPixmap(self.fileName13)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1353,6 +1431,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName14, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName14, self.in_ + os.sep + "14.png")
+        except Exception as e:
+            print(e)        
         if self.fileName14 != "":
             pixmap = QPixmap(self.fileName14)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1365,6 +1447,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName15, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName15, self.in_ + os.sep + "15.png")
+        except Exception as e:
+            print(e)        
         if self.fileName15 != "":
             pixmap = QPixmap(self.fileName15)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1377,6 +1463,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName16, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName16, self.in_ + os.sep + "16.png")
+        except Exception as e:
+            print(e)        
         if self.fileName16 != "":
             pixmap = QPixmap(self.fileName16)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1389,6 +1479,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName17, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName17, self.in_ + os.sep + "17.png")
+        except Exception as e:
+            print(e) 
         if self.fileName18 != "":
             pixmap = QPixmap(self.fileName17)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1401,6 +1495,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName18, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName18, self.in_ + os.sep + "18.png")
+        except Exception as e:
+            print(e) 
         if self.fileName18 != "":
             pixmap = QPixmap(self.fileName18)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1413,6 +1511,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName19, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName19, self.in_ + os.sep + "19.png")
+        except Exception as e:
+            print(e) 
         if self.fileName19 != "":
             pixmap = QPixmap(self.fileName19)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1425,6 +1527,10 @@ class Tab(QWidget):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         self.fileName20, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
+        try:
+            shutil.copyfile(self.fileName20, self.in_ + os.sep + "20.png")
+        except Exception as e:
+            print(e) 
         if self.fileName20 != "":
             pixmap = QPixmap(self.fileName20)
             pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
@@ -1434,7 +1540,7 @@ class Tab(QWidget):
             pass
 
     def visu1(self):
-        path = self.path + os.sep + "1"
+        path = self.out + os.sep + "1"
         fileName = os.listdir(path)[0]
         A = Third(self)
         A.move(50, 50)
@@ -1443,28 +1549,28 @@ class Tab(QWidget):
         return 0
 
     def visu2(self):
-        path = self.path + os.sep + "1"
+        path = self.out + os.sep + "1"
         fileName = os.listdir(path)[0]
         a = Second(self, path)
         a.show()
         return 0
     
     def visu3(self):
-        path = self.path + os.sep + "1"
+        path = self.out + os.sep + "1"
         fileName = os.listdir(path)[0]
         a = Second(self, path)
         a.show()
         return 0
 
     def visu4(self):
-        path = self.path + os.sep + "1"
+        path = self.out + os.sep + "1"
         fileName = os.listdir(path)[0]
         a = Second(self, path)
         a.show()
         return 0
 
     def visu5(self):
-        path = self.path + "out" + os.sep + "1"
+        path = self.out + "out" + os.sep + "1"
         fileName = os.listdir(path)[0]
         a = Second(self, path)
         a.show()
@@ -1504,11 +1610,38 @@ class Tab(QWidget):
     def save_project(self):
         DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         with zipfile.ZipFile(DIR + os.sep + self.analyse_name + '.zip', "w") as zf:
-            for root, _, filenames in os.walk(os.path.basename(self.path)):
+            for root, _, filenames in os.walk(os.path.basename(self.out)):
                 for name in filenames:
                     name = os.path.join(root, name)
                     name = os.path.normpath(name)
                     zf.write(name, name)
+            for root, _, filenames in os.walk(os.path.basename(self.in_)):
+                for name in filenames:
+                    name = os.path.join(root, name)
+                    name = os.path.normpath(name)
+                    zf.write(name, name)
+        return 0
+    
+    def load_project(self):
+        DIR = QFileDialog.getOpenFileName(self, "Select a .zip project file")
+        project_file = str(DIR[0])
+        print(project_file)
+        out_dir = os.path.abspath(os.getcwd()) + os.sep + "tmp"
+        try:
+            os.makedirs(out_dir)
+        except:
+            pass
+        shutil.unpack_archive(filename=project_file, extract_dir=out_dir)
+
+        res = load_results(out_dir + os.sep + "out" + os.sep + "results.txt")
+        for abeille in res.keys():
+            fileName1 = ""
+            pixmap = QPixmap(fileName1)
+            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+            self.label_left[0].setPixmap(pixmap)
+            self.grids[0].addWidget(self.label_left[abeille-1], 0, 2, 1, 1)
+            print(abeille)
+
         return 0
 
 app = QApplication(sys.argv)
