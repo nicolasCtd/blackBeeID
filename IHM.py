@@ -67,7 +67,7 @@ def insertnow(file):
 
 def get_file_name(path):
     path_split = path.replace(os.sep, "/").split("/")
-    name = path_split[-1]
+    name = path_split[-1].replace(".zip","")
     return name.split("_")[0]
 
 def get_path(path2file):
@@ -203,6 +203,7 @@ class Second(QMainWindow):
         self.WIDTH = Tab.width
         self.HEIGHT = Tab.height
         self.NUM = Tab.num
+        self.LAB_RES = Tab.label_results
 
         self.ci_points = [POINT(), POINT(), POINT()]
         self.ds_points = [POINT(), POINT(), POINT(), POINT()]
@@ -328,6 +329,8 @@ class Second(QMainWindow):
         self.close()
         print(self.num, self.ci_value, self.ds_value)
         write_line(f"{self.path}{os.sep}out{os.sep}results.txt", self.num, clean(self.ci_value), clean(self.ds_value))
+
+        self.LAB_RES[self.NUM-1].setText(f"     Ci : {self.ci_value}\n     Ds : {clean(self.ds_value)}°")
 
         return 0
 
@@ -775,6 +778,7 @@ class Tab(QWidget):
         self.path = path
         self.in_ = path + os.sep + "in"
         self.out = path + os.sep + "out"
+        self.tmp = path + os.sep + "tmp"
 
         self.analyse_name = str(date.today())
 
@@ -855,6 +859,15 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
         
+        self.label_results = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
+
         # self.dialog = [Second(self), Second(self), Second(self), Second(self), Second(self),
         #                 Second(self), Second(self), Second(self), Second(self), Second(self),
         #                 Second(self), Second(self), Second(self), Second(self), Second(self)]
@@ -876,8 +889,8 @@ class Tab(QWidget):
 
         layout_main = QGridLayout()
         btn1 = QPushButton("Charger \nune analyse")
-        btn2 = QPushButton("Sauvegarder \nl'analyse")
-        btn3 = QPushButton("Lancer \nl'analyse")
+        self.btn2 = QPushButton(f"Sauvegarder \nl'analyse \n{self.analyse_name}")
+        self.btn3 = QPushButton(f"Lancer \nl'analyse \n{self.analyse_name}")
         label0 = QLabel("Nom de l'analyse : ")
         self.label00 = QLabel(self.analyse_name)
         label1 = QLabel("<u>Histogramme de l'Indice Cubital<u>")
@@ -894,45 +907,67 @@ class Tab(QWidget):
         label2.setFont(my_font)
         label0.setFont(my_font2)
         btn1.setFont(my_font3)
-        btn2.setFont(my_font3)
-        btn3.setFont(my_font3)
+        self.btn2.setFont(my_font3)
+        self.btn3.setFont(my_font3)
+
+        self.btn2.setStyleSheet("QPushButton {background-color: plum}")
+        self.btn3.setStyleSheet("QPushButton {background-color: lightblue}")
 
         # label1.setStyleSheet("border-bottom-width: 1px; border-bottom-style: solid; border-radius: 0px;");
 
         btn1.resize(150, 150)
         btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-        btn2.resize(150, 150)
-        btn2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.btn2.resize(150, 150)
+        self.btn2.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-        btn3.resize(150, 150)
-        btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        self.btn3.resize(150, 150)
+        self.btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.pb.resize(150, 150)
         self.pb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         pixmap = QPixmap(f"images{os.sep}empty1.png")
+        # pixmap = QPixmap(f"images{os.sep}carte_dardagnan.png")
         image_empty1 = QLabel()
         image_empty1.setPixmap(pixmap)
 
         pixmap = QPixmap(f"images{os.sep}empty2.png")
+        # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
         image_empty2 = QLabel()
         image_empty2.setPixmap(pixmap)
+
+        pixmap = QPixmap(f"images{os.sep}carte_dardagnan3.png")
+        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
+        deco1 = QLabel()
+        deco1.setPixmap(pixmap)
+
+        pixmap = QPixmap(f"images{os.sep}carte_dardagnan2.png")
+        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
+        deco2 = QLabel()
+        deco2.setPixmap(pixmap)
+
+        
+        # deco.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         layout_main.addWidget(label0, 0, 0, 1, 2)
         # layout_main.addWidget(self.edit_analyse_name, 0, 1, 1, 2)
         layout_main.addWidget(self.label00, 0, 1, 1, 2)
         layout_main.addWidget(self.pb, 0, 2, 1, 1)
         layout_main.addWidget(btn1, 1, 0, 2, 2)
-        layout_main.addWidget(btn2, 1, 1, 2, 2)
-        layout_main.addWidget(btn3, 1, 2, 2, 2)
+        layout_main.addWidget(self.btn2, 1, 1, 2, 2)
+        layout_main.addWidget(self.btn3, 1, 2, 2, 2)
         layout_main.addWidget(label1, 3, 0, 1, 5)
         layout_main.addWidget(label2, 3, 7, 1, 5)
         layout_main.addWidget(image_empty1, 4, 0, 5, 5)
         layout_main.addWidget(image_empty2, 4, 7, 5, 5)
+        layout_main.addWidget(deco1, 0, 8, 2, 2)
+        layout_main.addWidget(deco2, 0, 10, 2, 2)
 
         btn1.clicked.connect(self.load_project)
-        btn2.clicked.connect(self.save_project)
+        self.btn2.clicked.connect(self.save_project)
 
         self.grids = list()
 
@@ -959,6 +994,11 @@ class Tab(QWidget):
                 label_right.setPixmap(pixmap)
                 self.grids[-1].addWidget(label_right, i, 4, 1, 1)
 
+                # self.label_results = QLabel()
+                label_results = self.label_results[num_image-1]
+                label_results.setText("     Ci : \n     Ds :")
+                self.grids[-1].addWidget(label_results, i, 6, 1, 1)
+
                 btn1 = QPushButton("Load")
                 btn1.resize(50, 150)
                 btn1.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
@@ -982,14 +1022,14 @@ class Tab(QWidget):
                 btn3.clicked.connect(connections_visu[num_image])
 
                 # pixmap = QPixmap(f"images{os.sep}dardagnan.png")
-                # label = QLabel()
+                # self.label_results = QLabel()
                 # label.setPixmap(pixmap)
                 # self.grids[-1].addWidget(label, i, 5)
 
                 pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 darda = QLabel()
                 darda.setPixmap(pixmap)
-                self.grids[-1].addWidget(darda, i, 6)
+                self.grids[-1].addWidget(darda, i, 7)
 
                 # self.grids[-1].addWidget(label_right, i, 3)
 
@@ -1027,6 +1067,8 @@ class Tab(QWidget):
         if okPressed and text != '':
             self.analyse_name = text
             self.label00.setText(text)
+            self.btn2.setText(f"Sauvegarder l'analyse \n{self.analyse_name}")
+            self.btn3.setText(f"Lancer l'analyse \n{self.analyse_name}")
         return 0
 
     def editFile1(self):
@@ -1549,35 +1591,50 @@ class Tab(QWidget):
         return 0
 
     def visu2(self):
-        path = self.out + os.sep + "1"
+        path = self.out + os.sep + "2"
         fileName = os.listdir(path)[0]
-        a = Second(self, path)
-        a.show()
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
     
     def visu3(self):
-        path = self.out + os.sep + "1"
+        path = self.out + os.sep + "3"
         fileName = os.listdir(path)[0]
-        a = Second(self, path)
-        a.show()
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
 
     def visu4(self):
-        path = self.out + os.sep + "1"
+        path = self.out + os.sep + "4"
         fileName = os.listdir(path)[0]
-        a = Second(self, path)
-        a.show()
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
 
     def visu5(self):
-        path = self.out + "out" + os.sep + "1"
+        path = self.out + "out" + os.sep + "5"
         fileName = os.listdir(path)[0]
-        a = Second(self, path)
-        a.show()
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
 
     def visu6(self):
+        path = self.out + "out" + os.sep + "6"
+        fileName = os.listdir(path)[0]
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
+    
     def visu7(self):
         return 0
     def visu8(self):
@@ -1609,39 +1666,60 @@ class Tab(QWidget):
 
     def save_project(self):
         DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
-        with zipfile.ZipFile(DIR + os.sep + self.analyse_name + '.zip', "w") as zf:
-            for root, _, filenames in os.walk(os.path.basename(self.out)):
-                for name in filenames:
-                    name = os.path.join(root, name)
-                    name = os.path.normpath(name)
-                    zf.write(name, name)
-            for root, _, filenames in os.walk(os.path.basename(self.in_)):
-                for name in filenames:
-                    name = os.path.join(root, name)
-                    name = os.path.normpath(name)
-                    zf.write(name, name)
+        if DIR != "":
+            with zipfile.ZipFile(DIR + os.sep + self.analyse_name + '.zip', "w") as zf:
+                for root, _, filenames in os.walk(os.path.basename(self.out)):
+                    for name in filenames:
+                        name = os.path.join(root, name)
+                        name = os.path.normpath(name)
+                        zf.write(name, name)
+                for root, _, filenames in os.walk(os.path.basename(self.in_)):
+                    for name in filenames:
+                        name = os.path.join(root, name)
+                        name = os.path.normpath(name)
+                        zf.write(name, name)
+        else:
+            pass
         return 0
     
     def load_project(self):
         DIR = QFileDialog.getOpenFileName(self, "Select a .zip project file")
-        project_file = str(DIR[0])
-        print(project_file)
-        out_dir = os.path.abspath(os.getcwd()) + os.sep + "tmp"
-        try:
-            os.makedirs(out_dir)
-        except:
+        if DIR[0] != "":
+            project_file = str(DIR[0])
+
+            self.analyse_name = get_file_name(project_file)
+            self.label00.setText(self.analyse_name)
+            self.btn2.setText(f"Sauvegarder l'analyse\n {self.analyse_name}")
+            self.btn3.setText(f"Lancer l'analyse\n {self.analyse_name}")
+            
+            shutil.unpack_archive(filename=project_file, extract_dir=self.tmp)
+
+            res = load_results(self.tmp + os.sep + "out" + os.sep + "results.txt")
+                    
+            for file in os.listdir(self.tmp + os.sep + "in"):
+                num_abeille = int(file.split(".")[0])
+                print(num_abeille)
+                if num_abeille not in res.keys():
+                    print(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
+                else:
+                    ff_in = self.tmp + os.sep + "in" + os.sep + file
+                    print(ff_in)
+                    # image in
+                    pixmap = QPixmap(ff_in)
+                    pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    self.label_left[num_abeille-1].setPixmap(pixmap)
+                    self.grids[0].addWidget(self.label_left[num_abeille-1], num_abeille-1, 2, 1, 1)
+                
+                    #image out
+                    # !!! Attention : mieux gérer les extensions des fichiers (.jpeg, .png)
+                    ff_out = self.tmp + os.sep + "out" + os.sep + str(num_abeille) + os.sep + str(num_abeille) + "_out.jpg" 
+                    print(ff_out)
+                    pixmap_out = QPixmap(ff_out)
+                    pixmap_out = pixmap_out.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+                    self.label_right[num_abeille-1].setPixmap(pixmap_out)
+                    self.grids[0].addWidget(self.label_right[num_abeille-1], num_abeille-1, 4, 1, 1)
+        else:
             pass
-        shutil.unpack_archive(filename=project_file, extract_dir=out_dir)
-
-        res = load_results(out_dir + os.sep + "out" + os.sep + "results.txt")
-        for abeille in res.keys():
-            fileName1 = ""
-            pixmap = QPixmap(fileName1)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[0].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[abeille-1], 0, 2, 1, 1)
-            print(abeille)
-
         return 0
 
 app = QApplication(sys.argv)
