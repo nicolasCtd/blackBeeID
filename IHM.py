@@ -40,8 +40,22 @@ from functools import partial
 
 from PIL import Image, ImageDraw, ImageFont
 
+error1 = "Veuillez d'abord charger une image \navant de l'éditer..."
+error2 = "Veuillez d'abord éditer une image..."
+success_msg = "L'analyse 'r1' a bien été enregistrée dans\nr2"
+
 def clean(value):
     return str(value).replace("[", "").replace("]", "")
+
+def get_ci_ds(ci_value, ds_value):
+    ci = int(ci_value * 100)/100
+    ds_ = clean(ds_value)
+    
+    tt = "+"
+    if float(ds_) < 0:
+        tt = "-"
+
+    return str(ci), tt + str(np.abs(int(float(ds_)*100)/100))
 
 def load_results(file):
     res = {}
@@ -173,9 +187,9 @@ class Third(QMainWindow):
         self.label.setScaledContents(True)
 
 class Second(QMainWindow):
-    def __init__(self, Tab, num, parent=None):
+    def __init__(self, Tab, num, type='Echec', parent=None):
         super(Second, self).__init__(parent)
-        self.setWindowTitle("Fenêtre d'édition")
+        self.setWindowTitle(type)
         self.num = str(num)
         self.move(50, 100)
 
@@ -330,7 +344,10 @@ class Second(QMainWindow):
         print(self.num, self.ci_value, self.ds_value)
         write_line(f"{self.path}{os.sep}out{os.sep}results.txt", self.num, clean(self.ci_value), clean(self.ds_value))
 
-        self.LAB_RES[self.NUM-1].setText(f"     Ci : {self.ci_value}\n     Ds : {clean(self.ds_value)}°")
+
+        ci, ds = get_ci_ds(self.ci_value, self.ds_value)
+
+        self.LAB_RES[self.NUM-1].setText(f"     Ci : {ci}\n     Ds : {ds}°")
 
         return 0
 
@@ -607,14 +624,16 @@ class Second(QMainWindow):
         return 0
     
         
-    def display_error_message(self):
-        self.move(450, 200)
+    def display_error_message(self, error_msg):
+        self.move(600, 300)
         layout = QVBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
-        txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+        txt = QLabel(error_msg)
+        txt.setFont(QFont('Times', 13))
         layout.addWidget(txt)
         widget = QWidget()
         widget.setLayout(layout)
@@ -622,6 +641,22 @@ class Second(QMainWindow):
         self.setFixedWidth(300)
         self.setFixedHeight(300)
 
+    def display_success_message(self, success_msg, nom_analyse, dossier):
+        self.move(600, 300)
+        layout = QVBoxLayout()
+        pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
+        label = QLabel()
+        label.setPixmap(pixmap)
+        layout.addWidget(label)
+        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+        txt = QLabel(success_msg.replace('r1', nom_analyse).replace('r2', dossier))
+        txt.setFont(QFont('Times', 13))
+        layout.addWidget(txt)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        # self.setFixedWidth(380)
+        # self.setFixedHeight(300)
 
     def get_pos_in_widget(self, event):
         pos = event.pos()
@@ -731,14 +766,29 @@ class MainWindow(QMainWindow):
         #     except Exception as e:
         #         print('Failed to delete %s. Reason: %s' % (file_path, e))
         
-
+        print(f"nettoyage du dossier 'tmp' : {self.tmp}")
         for filename in os.listdir(self.tmp):
             file_path = self.tmp + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
+                    print(f"suppression du fichier {file_path}")
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
+                    print(f"suppression du dossier {file_path}")
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+        
+        print(f"nettoyage du dossier 'out' : {self.out}")
+        for filename in os.listdir(self.out):
+            file_path = self.out + os.sep + filename
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                    print(f"suppression du fichier {file_path}")
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+                    print(f"suppression du dossier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
         
@@ -819,10 +869,11 @@ class Tab(QWidget):
         self.tab8 = QWidget()
         self.tab9 = QWidget()
         self.tab10 = QWidget()
-  
+
+
         # Add tabs
 
-        mf = QFont("Times New Roman", 13)
+        mf = QFont("Times New Roman", 14)
 
         self.tabs.addTab(self.tab0, "Main")
         self.tabs.addTab(self.tab1, "1-5")
@@ -835,6 +886,10 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab8, "36-40")
         self.tabs.addTab(self.tab9, "41-45")
         self.tabs.addTab(self.tab10, "46-50")
+
+        self.tabs.setFont(QFont('Times', 13))
+        # self.tab2.setFont(QFont('Times', 18))
+        # self.tab3.setFont(QFont('Times', 18))
 
         self.width = 413
         self.height = 307
@@ -937,6 +992,12 @@ class Tab(QWidget):
         image_empty2 = QLabel()
         image_empty2.setPixmap(pixmap)
 
+        # pixmap = QPixmap(f"images{os.sep}bee_real.png")
+        # pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
+        # deco0 = QLabel()
+        # deco0.setPixmap(pixmap)
+
         pixmap = QPixmap(f"images{os.sep}carte_dardagnan3.png")
         pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
         # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
@@ -963,6 +1024,7 @@ class Tab(QWidget):
         layout_main.addWidget(label2, 3, 7, 1, 5)
         layout_main.addWidget(image_empty1, 4, 0, 5, 5)
         layout_main.addWidget(image_empty2, 4, 7, 5, 5)
+        # layout_main.addWidget(deco0, 0, 4, 2, 2)
         layout_main.addWidget(deco1, 0, 8, 2, 2)
         layout_main.addWidget(deco2, 0, 10, 2, 2)
 
@@ -1067,14 +1129,14 @@ class Tab(QWidget):
         if okPressed and text != '':
             self.analyse_name = text
             self.label00.setText(text)
-            self.btn2.setText(f"Sauvegarder l'analyse \n{self.analyse_name}")
-            self.btn3.setText(f"Lancer l'analyse \n{self.analyse_name}")
+            self.btn2.setText(f"Sauvegarder \nl'analyse \n{self.analyse_name}")
+            self.btn3.setText(f"Lancer \nl'analyse \n{self.analyse_name}")
         return 0
 
     def editFile1(self):
         if self.fileName1 == "im1.png":
             self.dialog = Second(self, num=1)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=1)
             self.dialog.display(self.fileName1)
@@ -1083,7 +1145,7 @@ class Tab(QWidget):
     def editFile2(self):
         if self.fileName2 == "im2.png":
             self.dialog = Second(self, num=2)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=2)
             self.dialog.display(self.fileName2)
@@ -1092,7 +1154,7 @@ class Tab(QWidget):
     def editFile3(self):
         if self.fileName3 == "im3.png":
             self.dialog = Second(self, num=3)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=3)
             self.dialog.display(self.fileName3)
@@ -1101,7 +1163,7 @@ class Tab(QWidget):
     def editFile4(self):
         if self.fileName4 == "im4.png":
             self.dialog = Second(self, num=4)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=4)
             self.dialog.display(self.fileName4)
@@ -1110,7 +1172,7 @@ class Tab(QWidget):
     def editFile5(self):
         if self.fileName5 == "im5.png":
             self.dialog = Second(self, num=5)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=5)
             self.dialog.display(self.fileName5)
@@ -1119,7 +1181,7 @@ class Tab(QWidget):
     def editFile6(self):
         if self.fileName6 == "im6.png":
             self.dialog = Second(self, num=6)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=6)
             self.dialog.display(self.fileName6)
@@ -1128,7 +1190,7 @@ class Tab(QWidget):
     def editFile7(self):
         if self.fileName7 == "im7.png":
             self.dialog = Second(self, num=7)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=7)
             self.dialog.display(self.fileName7)
@@ -1137,7 +1199,7 @@ class Tab(QWidget):
     def editFile8(self):
         if self.fileName8 == "im8.png":
             self.dialog = Second(self, num=8)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=8)
             self.dialog.display(self.fileName8)
@@ -1146,7 +1208,7 @@ class Tab(QWidget):
     def editFile9(self):
         if self.fileName9 == "im9.png":
             self.dialog = Second(self, num=9)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=9)
             self.dialog.display(self.fileName9)
@@ -1155,7 +1217,7 @@ class Tab(QWidget):
     def editFile10(self):
         if self.fileName10 == "im10.png":
             self.dialog = Second(self, num=10)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=10)
             self.dialog.display(self.fileName10)
@@ -1164,7 +1226,7 @@ class Tab(QWidget):
     def editFile11(self):
         if self.fileName11 == "im11.png":
             self.dialog = Second(self, num=11)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=11)
             self.dialog.display(self.fileName11)
@@ -1173,7 +1235,7 @@ class Tab(QWidget):
     def editFile12(self):
         if self.fileName12 == "im12.png":
             self.dialog = Second(self, num=12)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=12)
             self.dialog.display(self.fileName12)
@@ -1182,7 +1244,7 @@ class Tab(QWidget):
     def editFile13(self):
         if self.fileName13 == "im13.png":
             self.dialog = Second(self, num=13)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=13)
             self.dialog.display(self.fileName13)
@@ -1191,7 +1253,7 @@ class Tab(QWidget):
     def editFile14(self):
         if self.fileName14 == "im14.png":
             self.dialog = Second(self, num=14)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=14)
             self.dialog.display(self.fileName14)
@@ -1200,7 +1262,7 @@ class Tab(QWidget):
     def editFile15(self):
         if self.fileName15 == "im15.png":
             self.dialog = Second(self, num=15)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=15)
             self.dialog.display(self.fileName15)
@@ -1209,7 +1271,7 @@ class Tab(QWidget):
     def editFile16(self):
         if self.fileName16 == "im16.png":
             self.dialog = Second(self, num=16)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=16)
             self.dialog.display(self.fileName16)
@@ -1218,7 +1280,7 @@ class Tab(QWidget):
     def editFile17(self):
         if self.fileName17 == "im17.png":
             self.dialog = Second(self, num=17)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=17)
             self.dialog.display(self.fileName17)
@@ -1227,7 +1289,7 @@ class Tab(QWidget):
     def editFile18(self):
         if self.fileName18 == "im18.png":
             self.dialog = Second(self, num=18)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=18)
             self.dialog.display(self.fileName18)
@@ -1236,7 +1298,7 @@ class Tab(QWidget):
     def editFile19(self):
         if self.fileName18 == "im19.png":
             self.dialog = Second(self, num=19)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=19)
             self.dialog.display(self.fileName19)
@@ -1245,7 +1307,7 @@ class Tab(QWidget):
     def editFile20(self):
         if self.fileName18 == "im20.png":
             self.dialog = Second(self, num=20)
-            self.dialog.display_error_message()
+            self.dialog.display_error_message(error1)
         else:
             self.dialog = Second(self, num=20)
             self.dialog.display(self.fileName20)
@@ -1583,51 +1645,105 @@ class Tab(QWidget):
 
     def visu1(self):
         path = self.out + os.sep + "1"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=1)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
+            
         return 0
 
     def visu2(self):
         path = self.out + os.sep + "2"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=2)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
         return 0
     
     def visu3(self):
         path = self.out + os.sep + "3"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=3)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
         return 0
 
     def visu4(self):
         path = self.out + os.sep + "4"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=4)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
         return 0
 
     def visu5(self):
         path = self.out + "out" + os.sep + "5"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=5)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
         return 0
 
     def visu6(self):
         path = self.out + "out" + os.sep + "6"
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=6)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
+        return 0
+    
+    def visu7(self):
+        path = self.out + "out" + os.sep + "7"
+        try:
+            fileName = os.listdir(path)[0]
+            A = Third(self)
+            A.move(50, 50)
+            A.display(path + os.sep + fileName)
+            A.show()
+        except:
+            self.dialog = Second(self, num=7)
+            self.dialog.display_error_message(error2)
+            self.dialog.show()
+        return 0
+    
+    def visu8(self):
+        path = self.out + "out" + os.sep + "8"
         fileName = os.listdir(path)[0]
         A = Third(self)
         A.move(50, 50)
@@ -1635,14 +1751,24 @@ class Tab(QWidget):
         A.show()
         return 0
     
-    def visu7(self):
-        return 0
-    def visu8(self):
-        return 0
     def visu9(self):
+        path = self.out + "out" + os.sep + "9"
+        fileName = os.listdir(path)[0]
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
+    
     def visu10(self):
+        path = self.out + "out" + os.sep + "10"
+        fileName = os.listdir(path)[0]
+        A = Third(self)
+        A.move(50, 50)
+        A.display(path + os.sep + fileName)
+        A.show()
         return 0
+    
     def visu11(self):
         return 0
     def visu12(self):
@@ -1678,6 +1804,9 @@ class Tab(QWidget):
                         name = os.path.join(root, name)
                         name = os.path.normpath(name)
                         zf.write(name, name)
+            self.dialog = Second(self, num=1, type='Succès')
+            self.dialog.display_success_message(success_msg, self.analyse_name, DIR)
+            self.dialog.show()
         else:
             pass
         return 0
