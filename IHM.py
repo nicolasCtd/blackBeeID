@@ -40,9 +40,33 @@ from functools import partial
 
 from PIL import Image, ImageDraw, ImageFont
 
+from buttons_edit import *
+from buttons_visu import *
+
 error1 = "Veuillez d'abord charger une image \navant de l'éditer..."
 error2 = "Veuillez d'abord éditer une image..."
 success_msg = "L'analyse 'r1' a bien été enregistrée dans\nr2"
+
+connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFile5,
+                    6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
+                    11:editFile11, 12:editFile12, 13:editFile13, 14:editFile14, 15:editFile15,
+                    16:editFile16, 17:editFile17, 18:editFile18, 19:editFile19, 20:editFile20,
+                    21:editFile21, 22:editFile22, 23:editFile23, 24:editFile24, 25:editFile25,
+                    26:editFile26, 27:editFile27, 28:editFile28, 29:editFile29, 30:editFile30,
+                    31:editFile31, 32:editFile32, 33:editFile33, 34:editFile34, 35:editFile35,
+                    36:editFile36, 37:editFile37, 38:editFile38, 39:editFile39, 40:editFile40,
+                    41:editFile41, 42:editFile42, 43:editFile43, 44:editFile44, 45:editFile45,
+                    46:editFile46, 47:editFile37, 48:editFile48, 49:editFile49, 50:editFile50,
+                    }
+
+connections_visu = {1:visu1, 2:visu2, 3:visu3, 4:visu4, 5:visu5,
+                       6:visu6, 7:visu7, 8:visu8, 9:visu9, 10:visu10,
+                       11:visu11, 12:visu12, 13:visu13, 14:visu14, 15:visu15,
+                       16:visu16, 17:visu17, 18:visu18, 19:visu19, 20:visu20,
+                       21:visu21, 22:visu22, 23:visu23, 24:visu24, 25:visu25,
+                       26:visu26, 27:visu27, 28:visu28, 29:visu29, 30:visu30,
+                       31:visu31, 32:visu32, 33:visu33, 34:visu34, 35:visu35,
+                       36:visu36, 37:visu37, 38:visu38, 39:visu39, 40:visu40}
 
 def clean(value):
     return str(value).replace("[", "").replace("]", "")
@@ -166,10 +190,9 @@ class FolderSelector(QWidget):
         folder_path = QFileDialog.getExistingDirectory(self, 'Select Folder')
         print('Selected Folder:', folder_path)
 
-
-class Third(QMainWindow):
-    def __init__(self, parent=None):
-        super(Third, self).__init__(parent)
+class VISU(QMainWindow):
+    def __init__(self):
+        super(VISU, self).__init__()
 
     def display(self, path_to_image):
         self.label = QLabel(self)
@@ -185,10 +208,36 @@ class Third(QMainWindow):
         self.label.setFixedSize(int(self.pixmapWidth*coeff), int(self.pixmapHeight*coeff))
 
         self.label.setScaledContents(True)
+        self.move(50, 50)
+        self.show()
 
-class Second(QMainWindow):
-    def __init__(self, Tab, num, type='Echec', parent=None):
-        super(Second, self).__init__(parent)
+
+class MSG(QMainWindow):
+    def __init__(self):
+        super(MSG, self).__init__()
+
+    def display_error_message(self, error_msg):
+        self.move(600, 50)
+        layout = QVBoxLayout()
+        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
+        label = QLabel()
+        label.setPixmap(pixmap)
+        layout.addWidget(label)
+        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+        txt = QLabel(error_msg)
+        txt.setFont(QFont('Times', 12))
+        layout.addWidget(txt)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        # self.setFixedWidth(320)
+        # self.setFixedHeight(300)
+        self.show()
+
+
+class EDIT(QMainWindow):
+    def __init__(self, tab, num, type='Echec', parent=None):
+        super(EDIT, self).__init__(parent)
         self.setWindowTitle(type)
         self.num = str(num)
         self.move(50, 100)
@@ -213,11 +262,11 @@ class Second(QMainWindow):
         self.color_ci = [0, 255, 255]
         self.color_ds = [255, 255, 51]
 
-        self.LAB_RIGHT = Tab.label_right
-        self.WIDTH = Tab.width
-        self.HEIGHT = Tab.height
-        self.NUM = Tab.num
-        self.LAB_RES = Tab.label_results
+        self.LAB_RIGHT = tab.label_right
+        self.WIDTH = tab.width
+        self.HEIGHT = tab.height
+        self.NUM = tab.num
+        self.LAB_RES = tab.label_results
 
         self.ci_points = [POINT(), POINT(), POINT()]
         self.ds_points = [POINT(), POINT(), POINT(), POINT()]
@@ -266,7 +315,32 @@ class Second(QMainWindow):
         self.label.setScaledContents(True)
 
         self.set_dock()
-    
+        self.show()
+
+
+    # def display_error_message(self, error_msg):
+    #     print("display error message")
+    #     self.move(600, 300)
+    #     # self.w = QVBoxLayout()
+    #     pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
+    #     self.label = QLabel()
+    #     self.label.setPixmap(pixmap)
+    #     # self.w.addWidget(self.label)
+    #     # txt = QLabel(error_msg)
+    #     # txt.setFont(QFont('Times', 13))
+    #     # self.w.addWidget(txt)
+    #     # self.w.setLayout(self.layout)
+
+    #     self.label.setFixedSize(300, 300)
+    #     self.setCentralWidget(self.label)
+    #     # self.setFixedWidth(300)
+    #     # self.setFixedHeight(300)
+    #     # self.label.setScaledContents(True)
+
+    #     # self.set_dock()
+
+    #     self.show()
+
     # def show(self, fileName):
     #     self.label = QLabel(self)
     #     pixmap = QPixmap(fileName)
@@ -623,23 +697,6 @@ class Second(QMainWindow):
         self.last_name[1] = last_file_w_zoom
         return 0
     
-        
-    def display_error_message(self, error_msg):
-        self.move(600, 300)
-        layout = QVBoxLayout()
-        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
-        label = QLabel()
-        label.setPixmap(pixmap)
-        layout.addWidget(label)
-        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
-        txt = QLabel(error_msg)
-        txt.setFont(QFont('Times', 13))
-        layout.addWidget(txt)
-        widget = QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
-        self.setFixedWidth(300)
-        self.setFixedHeight(300)
 
     def display_success_message(self, success_msg, nom_analyse, dossier):
         self.move(600, 300)
@@ -873,6 +930,8 @@ class Tab(QWidget):
         self.fileName39 = "im39.png"
         self.fileName40 = "im40.png"
 
+        self.filenames = {1:self.fileName1, 2:self.fileName2, 3:self.fileName3, 4:self.fileName4, 5:self.fileName5}
+
         self.layout = QVBoxLayout(self)
   
         # Initialize tab screen 
@@ -908,13 +967,11 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab10, "46-50")
 
         self.tabs.setFont(QFont('Times', 13))
-        # self.tab2.setFont(QFont('Times', 18))
-        # self.tab3.setFont(QFont('Times', 18))
 
         self.width = 413
         self.height = 307
 
-        nb_tabs = 8
+        nb_tabs = 1
 
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -956,23 +1013,14 @@ class Tab(QWidget):
                        31:self.browseFile31, 32:self.browseFile32, 33:self.browseFile33, 34:self.browseFile34, 35:self.browseFile35,
                        36:self.browseFile36, 37:self.browseFile37, 38:self.browseFile38, 39:self.browseFile39, 40:self.browseFile40}
         
-        connections_edit = {1:self.editFile1, 2:self.editFile2, 3:self.editFile3, 4:self.editFile4, 5:self.editFile5,
-                       6:self.editFile6, 7:self.editFile7, 8:self.editFile8, 9:self.editFile9, 10:self.editFile10,
-                       11:self.editFile11, 12:self.editFile12, 13:self.editFile13, 14:self.editFile14, 15:self.editFile15,
-                       16:self.editFile16, 17:self.editFile17, 18:self.editFile18, 19:self.editFile19, 20:self.editFile20,
-                       21:self.editFile21, 22:self.editFile22, 23:self.editFile23, 24:self.editFile24, 25:self.editFile25,
-                       26:self.editFile26, 27:self.editFile27, 28:self.editFile28, 29:self.editFile29, 30:self.editFile30,
-                       31:self.editFile31, 32:self.editFile32, 33:self.editFile33, 34:self.editFile34, 35:self.editFile35,
-                       36:self.editFile36, 37:self.editFile37, 38:self.editFile38, 39:self.editFile39, 40:self.editFile40}
 
-        connections_visu = {1:self.visu1, 2:self.visu2, 3:self.visu3, 4:self.visu4, 5:self.visu5,
-                       6:self.visu6, 7:self.visu7, 8:self.visu8, 9:self.visu9, 10:self.visu10,
-                       11:self.visu11, 12:self.visu12, 13:self.visu13, 14:self.visu14, 15:self.visu15,
-                       16:self.visu16, 17:self.visu17, 18:self.visu18, 19:self.visu19, 20:self.visu20,
-                       21:self.visu21, 22:self.visu22, 23:self.visu23, 24:self.visu24, 25:self.visu25,
-                       26:self.visu26, 27:self.visu27, 28:self.visu28, 29:self.visu29, 30:self.visu30,
-                       31:self.visu31, 32:self.visu32, 33:self.visu33, 34:self.visu34, 35:self.visu35,
-                       36:self.visu36, 37:self.visu37, 38:self.visu38, 39:self.visu39, 40:self.visu40}
+                    #    6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
+                    #    11:editFile11, 12:editFile12, 13:editFile13, 14:editFile14, 15:editFile15,
+                    #    16:editFile16, 17:editFile17, 18:editFile18, 19:editFile19, 20:editFile20,
+                    #    21:editFile21, 22:editFile22, 23:editFile23, 24:editFile24, 25:editFile25,
+                    #    26:editFile26, 27:editFile27, 28:editFile28, 29:editFile29, 30:editFile30,
+                    #    31:editFile31, 32:editFile32, 33:editFile33, 34:editFile34, 35:editFile35,
+                    #    36:editFile36, 37:editFile37, 38:editFile38, 39:editFile39, 40:editFile40}
 
         layout_main = QGridLayout()
         btn1 = QPushButton("Charger \nune analyse")
@@ -1112,8 +1160,8 @@ class Tab(QWidget):
                 self.grids[-1].addWidget(btn3, i, 5)
                 
                 btn1.clicked.connect(connections_load[num_image])
-                btn2.clicked.connect(connections_edit[num_image])
-                btn3.clicked.connect(connections_visu[num_image])
+                btn2.clicked.connect(partial(connections_edit[num_image], TAB=self))
+                btn3.clicked.connect(partial(connections_visu[num_image], TAB=self))
 
                 # pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 # self.label_results = QLabel()
@@ -1137,36 +1185,35 @@ class Tab(QWidget):
         self.tab1.setFont(mf)
         self.tab1.setLayout(self.tab1.layout)
 
-        # Create second tab 
-        self.tab2.layout = self.grids[1]
-        self.tab2.setFont(mf)
-        self.tab2.setLayout(self.tab2.layout)
+        # # Create second tab 
+        # self.tab2.layout = self.grids[1]
+        # self.tab2.setFont(mf)
+        # self.tab2.setLayout(self.tab2.layout)
 
-        # Create third tab 
-        self.tab3.layout = self.grids[2]
-        self.tab3.setFont(mf)
-        self.tab3.setLayout(self.tab3.layout)
+        # # Create third tab 
+        # self.tab3.layout = self.grids[2]
+        # self.tab3.setFont(mf)
+        # self.tab3.setLayout(self.tab3.layout)
 
-        # Create fourth tab 
-        self.tab4.layout = self.grids[3]
-        self.tab4.setLayout(self.tab4.layout)
+        # # Create fourth tab 
+        # self.tab4.layout = self.grids[3]
+        # self.tab4.setLayout(self.tab4.layout)
 
-        # Create fifth tab 
-        self.tab5.layout = self.grids[4]
-        self.tab5.setLayout(self.tab5.layout)
+        # # Create fifth tab 
+        # self.tab5.layout = self.grids[4]
+        # self.tab5.setLayout(self.tab5.layout)
 
-        # Create sixth tab 
-        self.tab6.layout = self.grids[5]
-        self.tab6.setLayout(self.tab6.layout)
+        # # Create sixth tab 
+        # self.tab6.layout = self.grids[5]
+        # self.tab6.setLayout(self.tab6.layout)
 
+        # # Create seventh tab 
+        # self.tab7.layout = self.grids[6]
+        # self.tab7.setLayout(self.tab7.layout)
 
-        # Create seventh tab 
-        self.tab7.layout = self.grids[6]
-        self.tab7.setLayout(self.tab7.layout)
-
-        # Create eighth tab 
-        self.tab8.layout = self.grids[7]
-        self.tab8.setLayout(self.tab8.layout)
+        # # Create eighth tab 
+        # self.tab8.layout = self.grids[7]
+        # self.tab8.setLayout(self.tab8.layout)
 
         # Final step
         # #######
@@ -1182,344 +1229,6 @@ class Tab(QWidget):
             self.btn3.setText(f"Lancer \nl'analyse \n{self.analyse_name}")
         return 0
 
-    def editFile1(self):
-        if self.fileName1 == "im1.png":
-            self.dialog = Second(self, num=1)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=1)
-            self.dialog.display(self.fileName1)
-        self.dialog.show()
-        
-    def editFile2(self):
-        if self.fileName2 == "im2.png":
-            self.dialog = Second(self, num=2)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=2)
-            self.dialog.display(self.fileName2)
-        self.dialog.show()
-    
-    def editFile3(self):
-        if self.fileName3 == "im3.png":
-            self.dialog = Second(self, num=3)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=3)
-            self.dialog.display(self.fileName3)
-        self.dialog.show()
-    
-    def editFile4(self):
-        if self.fileName4 == "im4.png":
-            self.dialog = Second(self, num=4)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=4)
-            self.dialog.display(self.fileName4)
-        self.dialog.show()
-
-    def editFile5(self):
-        if self.fileName5 == "im5.png":
-            self.dialog = Second(self, num=5)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=5)
-            self.dialog.display(self.fileName5)
-        self.dialog.show()
-    
-    def editFile6(self):
-        if self.fileName6 == "im6.png":
-            self.dialog = Second(self, num=6)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=6)
-            self.dialog.display(self.fileName6)
-        self.dialog.show()
-    
-    def editFile7(self):
-        if self.fileName7 == "im7.png":
-            self.dialog = Second(self, num=7)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=7)
-            self.dialog.display(self.fileName7)
-        self.dialog.show()
-    
-    def editFile8(self):
-        if self.fileName8 == "im8.png":
-            self.dialog = Second(self, num=8)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=8)
-            self.dialog.display(self.fileName8)
-        self.dialog.show()
-    
-    def editFile9(self):
-        if self.fileName9 == "im9.png":
-            self.dialog = Second(self, num=9)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=9)
-            self.dialog.display(self.fileName9)
-        self.dialog.show()
-    
-    def editFile10(self):
-        if self.fileName10 == "im10.png":
-            self.dialog = Second(self, num=10)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=10)
-            self.dialog.display(self.fileName10)
-        self.dialog.show()
-
-    def editFile11(self):
-        if self.fileName11 == "im11.png":
-            self.dialog = Second(self, num=11)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=11)
-            self.dialog.display(self.fileName11)
-        self.dialog.show()
-
-    def editFile12(self):
-        if self.fileName12 == "im12.png":
-            self.dialog = Second(self, num=12)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=12)
-            self.dialog.display(self.fileName12)
-        self.dialog.show()
-
-    def editFile13(self):
-        if self.fileName13 == "im13.png":
-            self.dialog = Second(self, num=13)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=13)
-            self.dialog.display(self.fileName13)
-        self.dialog.show()
-
-    def editFile14(self):
-        if self.fileName14 == "im14.png":
-            self.dialog = Second(self, num=14)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=14)
-            self.dialog.display(self.fileName14)
-        self.dialog.show()
-    
-    def editFile15(self):
-        if self.fileName15 == "im15.png":
-            self.dialog = Second(self, num=15)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=15)
-            self.dialog.display(self.fileName15)
-        self.dialog.show()
-
-    def editFile16(self):
-        if self.fileName16 == "im16.png":
-            self.dialog = Second(self, num=16)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=16)
-            self.dialog.display(self.fileName16)
-        self.dialog.show()
-
-    def editFile17(self):
-        if self.fileName17 == "im17.png":
-            self.dialog = Second(self, num=17)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=17)
-            self.dialog.display(self.fileName17)
-        self.dialog.show()
-    
-    def editFile18(self):
-        if self.fileName18 == "im18.png":
-            self.dialog = Second(self, num=18)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=18)
-            self.dialog.display(self.fileName18)
-        self.dialog.show()
-
-    def editFile19(self):
-        if self.fileName18 == "im19.png":
-            self.dialog = Second(self, num=19)
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog = Second(self, num=19)
-            self.dialog.display(self.fileName19)
-        self.dialog.show()
-    
-    def editFile20(self):
-        self.dialog = Second(self, num=20)
-        if self.fileName20 == "im20.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName20)
-        self.dialog.show()
-
-    def editFile21(self):
-        self.dialog = Second(self, num=21)
-        if self.fileName21 == "im21.png":   
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName21)
-        self.dialog.show()
-    
-    def editFile22(self):
-        self.dialog = Second(self, num=22)
-        if self.fileName22 == "im22.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName22)
-        self.dialog.show()
-
-    def editFile23(self):
-        self.dialog = Second(self, num=23)
-        if self.fileName23 == "im23.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName23)
-        self.dialog.show()
-
-    def editFile24(self):
-        self.dialog = Second(self, num=24)
-        if self.fileName24 == "im24.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName24)
-        self.dialog.show()
-
-    def editFile25(self):
-        self.dialog = Second(self, num=25)
-        if self.fileName25 == "im25.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName25)
-        self.dialog.show()
-
-    def editFile26(self):
-        self.dialog = Second(self, num=26)
-        if self.fileName26 == "im26.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName26)
-        self.dialog.show()
-
-    def editFile27(self):
-        self.dialog = Second(self, num=27)
-        if self.fileName27 == "im27.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName25)
-        self.dialog.show()
-
-    def editFile28(self):
-        self.dialog = Second(self, num=28)
-        if self.fileName28 == "im28.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName28)
-        self.dialog.show()
-
-    def editFile29(self):
-        self.dialog = Second(self, num=29)
-        if self.fileName29 == "im29.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName29)
-        self.dialog.show()
-
-    def editFile30(self):
-        self.dialog = Second(self, num=30)
-        if self.fileName30 == "im30.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName30)
-        self.dialog.show()
-
-    def editFile31(self):
-        self.dialog = Second(self, num=31)
-        if self.fileName31 == "im31.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName31)
-        self.dialog.show()
-
-    def editFile32(self):
-        self.dialog = Second(self, num=32)
-        if self.fileName32 == "im32.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName32)
-        self.dialog.show()
-
-    def editFile33(self):
-        self.dialog = Second(self, num=33)
-        if self.fileName33 == "im33.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName33)
-        self.dialog.show()
-
-    def editFile34(self):
-        self.dialog = Second(self, num=34)
-        if self.fileName34 == "im34.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName34)
-        self.dialog.show()
-
-    def editFile35(self):
-        self.dialog = Second(self, num=30)
-        if self.fileName35 == "im35.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName35)
-        self.dialog.show()
-
-    def editFile36(self):
-        self.dialog = Second(self, num=36)
-        if self.fileName36 == "im36.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName36)
-        self.dialog.show()
-
-    def editFile37(self):
-        self.dialog = Second(self, num=37)
-        if self.fileName37 == "im37.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName37)
-        self.dialog.show()
-
-    def editFile38(self):
-        self.dialog = Second(self, num=38)
-        if self.fileName38 == "im38.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName38)
-        self.dialog.show()
-
-    def editFile39(self):
-        self.dialog = Second(self, num=39)
-        if self.fileName39 == "im39.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName39)
-        self.dialog.show()
-
-    def editFile40(self):
-        self.dialog = Second(self, num=40)
-        if self.fileName40 == "im40.png":
-            self.dialog.display_error_message(error1)
-        else:
-            self.dialog.display(self.fileName40)
-        self.dialog.show()
 
     def browseFile1(self):
         options = QFileDialog.Options()
@@ -2171,192 +1880,231 @@ class Tab(QWidget):
         else:
             pass
 
-    def visu1(self):
-        path = self.out + os.sep + "1"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=1)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
+    # def visu1(self):
+    #     path = self.out + os.sep + "1"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=1)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
             
-        return 0
+    #     return 0
 
-    def visu2(self):
-        path = self.out + os.sep + "2"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=2)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu2(self):
+    #     path = self.out + os.sep + "2"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=2)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu3(self):
-        path = self.out + os.sep + "3"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=3)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu3(self):
+    #     path = self.out + os.sep + "3"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=3)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
 
-    def visu4(self):
-        path = self.out + os.sep + "4"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=4)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu4(self):
+    #     path = self.out + os.sep + "4"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=4)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
 
-    def visu5(self):
-        path = self.out + "out" + os.sep + "5"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=5)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu5(self):
+    #     path = self.out + "out" + os.sep + "5"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=5)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
 
-    def visu6(self):
-        path = self.out + "out" + os.sep + "6"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=6)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu6(self):
+    #     path = self.out + "out" + os.sep + "6"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=6)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu7(self):
-        path = self.out + "out" + os.sep + "7"
-        try:
-            fileName = os.listdir(path)[0]
-            A = Third(self)
-            A.move(50, 50)
-            A.display(path + os.sep + fileName)
-            A.show()
-        except:
-            self.dialog = Second(self, num=7)
-            self.dialog.display_error_message(error2)
-            self.dialog.show()
-        return 0
+    # def visu7(self):
+    #     path = self.out + "out" + os.sep + "7"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=7)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu8(self):
-        path = self.out + "out" + os.sep + "8"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
-        return 0
+    # def visu8(self):
+    #     path = self.out + "out" + os.sep + "8"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=8)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu9(self):
-        path = self.out + "out" + os.sep + "9"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
-        return 0
+    # def visu9(self):
+    #     path = self.out + "out" + os.sep + "9"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=9)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu10(self):
-        path = self.out + "out" + os.sep + "10"
-        fileName = os.listdir(path)[0]
-        A = Third(self)
-        A.move(50, 50)
-        A.display(path + os.sep + fileName)
-        A.show()
-        return 0
+    # def visu10(self):
+    #     path = self.out + "out" + os.sep + "10"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=10)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
     
-    def visu11(self):
-        return 0
-    def visu12(self):
-        return 0
-    def visu13(self):
-        return 0
-    def visu14(self):
-        return 0
-    def visu15(self):
-        return 0
-    def visu16(self):
-        return 0
-    def visu17(self):
-        return 0
-    def visu18(self):
-        return 0
-    def visu19(self):
-        return 0
-    def visu20(self):
-        return 0
-    def visu21(self):
-        return 0
-    def visu22(self):
-        return 0
-    def visu23(self):
-        return 0
-    def visu24(self):
-        return 0
-    def visu25(self):
-        return 0
-    def visu26(self):
-        return 0
-    def visu27(self):
-        return 0
-    def visu28(self):
-        return 0
-    def visu29(self):
-        return 0
-    def visu30(self):
-        return 0
-    def visu31(self):
-        return 0
-    def visu32(self):
-        return 0
-    def visu33(self):
-        return 0
-    def visu34(self):
-        return 0
-    def visu35(self):
-        return 0
-    def visu36(self):
-        return 0
-    def visu37(self):
-        return 0
-    def visu38(self):
-        return 0
-    def visu39(self):
-        return 0
-    def visu40(self):
-        return 0
+    # def visu11(self):
+    #     path = self.out + "out" + os.sep + "11"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=10)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
+    
+    # def visu12(self):
+    #     path = self.out + "out" + os.sep + "12"
+    #     try:
+    #         fileName = os.listdir(path)[0]
+    #         A = Third(self)
+    #         A.move(50, 50)
+    #         A.display(path + os.sep + fileName)
+    #         A.show()
+    #     except:
+    #         self.dialog = Second(self, num=12)
+    #         self.dialog.display_error_message(error2)
+    #         self.dialog.show()
+    #     return 0
+    
+    # def visu13(self):
+    #     return 0
+    # def visu14(self):
+    #     return 0
+    # def visu15(self):
+    #     return 0
+    # def visu16(self):
+    #     return 0
+    # def visu17(self):
+    #     return 0
+    # def visu18(self):
+    #     return 0
+    # def visu19(self):
+    #     return 0
+    # def visu20(self):
+    #     return 0
+    # def visu21(self):
+    #     return 0
+    # def visu22(self):
+    #     return 0
+    # def visu23(self):
+    #     return 0
+    # def visu24(self):
+    #     return 0
+    # def visu25(self):
+    #     return 0
+    # def visu26(self):
+    #     return 0
+    # def visu27(self):
+    #     return 0
+    # def visu28(self):
+    #     return 0
+    # def visu29(self):
+    #     return 0
+    # def visu30(self):
+    #     return 0
+    # def visu31(self):
+    #     return 0
+    # def visu32(self):
+    #     return 0
+    # def visu33(self):
+    #     return 0
+    # def visu34(self):
+    #     return 0
+    # def visu35(self):
+    #     return 0
+    # def visu36(self):
+    #     return 0
+    # def visu37(self):
+    #     return 0
+    # def visu38(self):
+    #     return 0
+    # def visu39(self):
+    #     return 0
+    # def visu40(self):
+    #     return 0
 
     def save_project(self):
         DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
@@ -2419,12 +2167,13 @@ class Tab(QWidget):
             pass
         return 0
 
-app = QApplication(sys.argv)
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
 
-window = MainWindow()
-window.show()
+    window = MainWindow()
+    window.show()
 
-app.exec()
+    app.exec()
 
         # for file in os.listdir(self.dialog.path + "out" + os.sep + self.dialog.name):
         #     filename = file
