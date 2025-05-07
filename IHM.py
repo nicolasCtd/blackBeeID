@@ -1,5 +1,5 @@
-# from images import *
-from images2 import *
+from images import *
+from analyses import *
 import matplotlib.pyplot as plt
 
 import sys
@@ -11,22 +11,19 @@ import shutil
 
 import zipfile
 
-from PyQt5.QtCore import Qt, QSize, QTimer, pyqtSignal, QEvent
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
     QApplication,
-    QHBoxLayout,
     QLabel,
     QMainWindow,
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QWidget,
-    QFileDialog,
     QGridLayout,
     QSizePolicy,
     QTabWidget,
-    QDesktopWidget,
     QDockWidget,
-    QMessageBox,
     QLineEdit,
     QFileDialog,
     QInputDialog
@@ -42,10 +39,8 @@ from PIL import Image, ImageDraw, ImageFont
 
 from buttons_edit import *
 from buttons_visu import *
+from buttons_browse import *
 
-error1 = "Veuillez d'abord charger une image \navant de l'éditer..."
-error2 = "Veuillez d'abord éditer une image..."
-success_msg = "L'analyse 'r1' a bien été enregistrée dans\nr2"
 
 connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFile5,
                     6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
@@ -56,8 +51,7 @@ connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFi
                     31:editFile31, 32:editFile32, 33:editFile33, 34:editFile34, 35:editFile35,
                     36:editFile36, 37:editFile37, 38:editFile38, 39:editFile39, 40:editFile40,
                     41:editFile41, 42:editFile42, 43:editFile43, 44:editFile44, 45:editFile45,
-                    46:editFile46, 47:editFile37, 48:editFile48, 49:editFile49, 50:editFile50,
-                    }
+                    46:editFile46, 47:editFile37, 48:editFile48, 49:editFile49, 50:editFile50}
 
 connections_visu = {1:visu1, 2:visu2, 3:visu3, 4:visu4, 5:visu5,
                        6:visu6, 7:visu7, 8:visu8, 9:visu9, 10:visu10,
@@ -67,6 +61,15 @@ connections_visu = {1:visu1, 2:visu2, 3:visu3, 4:visu4, 5:visu5,
                        26:visu26, 27:visu27, 28:visu28, 29:visu29, 30:visu30,
                        31:visu31, 32:visu32, 33:visu33, 34:visu34, 35:visu35,
                        36:visu36, 37:visu37, 38:visu38, 39:visu39, 40:visu40}
+
+connections_load = {1:browseFile1, 2:browseFile2, 3:browseFile3, 4:browseFile4, 5:browseFile5,
+                       6:browseFile6, 7:browseFile7, 8:browseFile8, 9:browseFile9, 10:browseFile10,
+                       11:browseFile11, 12:browseFile12, 13:browseFile13, 14:browseFile14, 15:browseFile15,
+                       16:browseFile16, 17:browseFile17, 18:browseFile18, 19:browseFile19, 20:browseFile20,
+                       21:browseFile21, 22:browseFile22, 23:browseFile23, 24:browseFile24, 25:browseFile25,
+                       26:browseFile26, 27:browseFile27, 28:browseFile28, 29:browseFile29, 30:browseFile30,
+                       31:browseFile31, 32:browseFile32, 33:browseFile33, 34:browseFile34, 35:browseFile35,
+                       36:browseFile36, 37:browseFile37, 38:browseFile38, 39:browseFile39, 40:browseFile40}
 
 def clean(value):
     return str(value).replace("[", "").replace("]", "")
@@ -85,9 +88,9 @@ def load_results(file):
     res = {}
     with open(file, "r") as f:
         a = f.readlines()
-    for i in range(1, len(a)):
-        line = a[i].split(" ")
-        res[i] = (line[1], line[2])
+    for i in range(len(a)):
+        line = a[i].replace("\n", "").split(" ")
+        res[int(line[0])] = (line[1], line[2])
     return res
 
 def write_line(file, num, ci_value, ds_value):
@@ -212,28 +215,57 @@ class VISU(QMainWindow):
         self.show()
 
 
-class MSG(QMainWindow):
+class MESSAGE(QMainWindow):
     def __init__(self):
-        super(MSG, self).__init__()
+        super(MESSAGE, self).__init__()
+        self.error1 = "Veuillez d'abord charger une \nimage avant de l'éditer..."
+        self.error2 = "Veuillez d'abord éditer \nune image..."
 
-    def display_error_message(self, error_msg):
-        self.move(600, 50)
+    def message_erreur1(self):
+        self.setWindowTitle('message')
         layout = QVBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
-        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
-        txt = QLabel(error_msg)
+        txt = QLabel(self.error1)
         txt.setFont(QFont('Times', 12))
         layout.addWidget(txt)
         widget = QWidget()
         widget.setLayout(layout)
         self.setCentralWidget(widget)
-        # self.setFixedWidth(320)
-        # self.setFixedHeight(300)
         self.show()
 
+    def message_erreur2(self):
+        self.setWindowTitle('message')
+        layout = QVBoxLayout()
+        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
+        label = QLabel()
+        label.setPixmap(pixmap)
+        layout.addWidget(label)
+        txt = QLabel(self.error2)
+        txt.setFont(QFont('Times', 12))
+        layout.addWidget(txt)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        self.show()
+
+    def message(self, msg):
+        self.move(100, 200)
+        self.setWindowTitle('message')
+        layout = QHBoxLayout()
+        pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
+        label = QLabel()
+        label.setPixmap(pixmap)
+        layout.addWidget(label)
+        txt = QLabel(msg)
+        txt.setFont(QFont('Times', 12))
+        layout.addWidget(txt)
+        widget = QWidget()
+        widget.setLayout(layout)
+        self.setCentralWidget(widget)
+        self.show()
 
 class EDIT(QMainWindow):
     def __init__(self, tab, num, type='Echec', parent=None):
@@ -698,22 +730,22 @@ class EDIT(QMainWindow):
         return 0
     
 
-    def display_success_message(self, success_msg, nom_analyse, dossier):
-        self.move(600, 300)
-        layout = QVBoxLayout()
-        pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
-        label = QLabel()
-        label.setPixmap(pixmap)
-        layout.addWidget(label)
-        # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
-        txt = QLabel(success_msg.replace('r1', nom_analyse).replace('r2', dossier))
-        txt.setFont(QFont('Times', 13))
-        layout.addWidget(txt)
-        widget = QWidget()
-        widget.setLayout(layout)
-        self.setCentralWidget(widget)
-        # self.setFixedWidth(380)
-        # self.setFixedHeight(300)
+    # def display_success_message(self, success_msg, nom_analyse, dossier):
+    #     self.move(600, 300)
+    #     layout = QVBoxLayout()
+    #     pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
+    #     label = QLabel()
+    #     label.setPixmap(pixmap)
+    #     layout.addWidget(label)
+    #     # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
+    #     txt = QLabel(success_msg.replace('r1', nom_analyse).replace('r2', dossier))
+    #     txt.setFont(QFont('Times', 13))
+    #     layout.addWidget(txt)
+    #     widget = QWidget()
+    #     widget.setLayout(layout)
+    #     self.setCentralWidget(widget)
+    #     # self.setFixedWidth(380)
+    #     # self.setFixedHeight(300)
 
     def get_pos_in_widget(self, event):
         pos = event.pos()
@@ -930,7 +962,6 @@ class Tab(QWidget):
         self.fileName39 = "im39.png"
         self.fileName40 = "im40.png"
 
-        self.filenames = {1:self.fileName1, 2:self.fileName2, 3:self.fileName3, 4:self.fileName4, 5:self.fileName5}
 
         self.layout = QVBoxLayout(self)
   
@@ -971,7 +1002,7 @@ class Tab(QWidget):
         self.width = 413
         self.height = 307
 
-        nb_tabs = 1
+        nb_tabs = 8
 
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -1000,32 +1031,10 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
 
-        # self.dialog = [Second(self), Second(self), Second(self), Second(self), Second(self),
-        #                 Second(self), Second(self), Second(self), Second(self), Second(self),
-        #                 Second(self), Second(self), Second(self), Second(self), Second(self)]
-
-        connections_load = {1:self.browseFile1, 2:self.browseFile2, 3:self.browseFile3, 4:self.browseFile4, 5:self.browseFile5,
-                       6:self.browseFile6, 7:self.browseFile7, 8:self.browseFile8, 9:self.browseFile9, 10:self.browseFile10,
-                       11:self.browseFile11, 12:self.browseFile12, 13:self.browseFile13, 14:self.browseFile14, 15:self.browseFile15,
-                       16:self.browseFile16, 17:self.browseFile17, 18:self.browseFile18, 19:self.browseFile19, 20:self.browseFile20,
-                       21:self.browseFile21, 22:self.browseFile22, 23:self.browseFile23, 24:self.browseFile24, 25:self.browseFile25,
-                       26:self.browseFile26, 27:self.browseFile27, 28:self.browseFile28, 29:self.browseFile29, 30:self.browseFile30,
-                       31:self.browseFile31, 32:self.browseFile32, 33:self.browseFile33, 34:self.browseFile34, 35:self.browseFile35,
-                       36:self.browseFile36, 37:self.browseFile37, 38:self.browseFile38, 39:self.browseFile39, 40:self.browseFile40}
-        
-
-                    #    6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
-                    #    11:editFile11, 12:editFile12, 13:editFile13, 14:editFile14, 15:editFile15,
-                    #    16:editFile16, 17:editFile17, 18:editFile18, 19:editFile19, 20:editFile20,
-                    #    21:editFile21, 22:editFile22, 23:editFile23, 24:editFile24, 25:editFile25,
-                    #    26:editFile26, 27:editFile27, 28:editFile28, 29:editFile29, 30:editFile30,
-                    #    31:editFile31, 32:editFile32, 33:editFile33, 34:editFile34, 35:editFile35,
-                    #    36:editFile36, 37:editFile37, 38:editFile38, 39:editFile39, 40:editFile40}
-
         layout_main = QGridLayout()
         btn1 = QPushButton("Charger \nune analyse")
-        self.btn2 = QPushButton(f"Sauvegarder \nl'analyse \n{self.analyse_name}")
-        self.btn3 = QPushButton(f"Lancer \nl'analyse \n{self.analyse_name}")
+        self.btn2 = QPushButton(f"Sauvegarder \nl'analyse\n{self.analyse_name}")
+        self.btn3 = QPushButton(f"Lancer \nl'analyse\n{self.analyse_name}")
         label0 = QLabel("Nom de l'analyse : ")
         self.label00 = QLabel(self.analyse_name)
         label1 = QLabel("<u>Histogramme de l'Indice Cubital<u>")
@@ -1153,27 +1162,18 @@ class Tab(QWidget):
                 btn3.resize(50, 150)
                 btn3.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
-                # self.grids[-1].addWidget(btn1, i, 1, alignment=QtCore.Qt.AlignLeft)
-                # self.grids[-1].addWidget(btn2, i, 2, alignment=QtCore.Qt.AlignCenter)
                 self.grids[-1].addWidget(btn1, i, 1)
                 self.grids[-1].addWidget(btn2, i, 3)
                 self.grids[-1].addWidget(btn3, i, 5)
                 
-                btn1.clicked.connect(connections_load[num_image])
+                btn1.clicked.connect(partial(connections_load[num_image], TAB=self))
                 btn2.clicked.connect(partial(connections_edit[num_image], TAB=self))
                 btn3.clicked.connect(partial(connections_visu[num_image], TAB=self))
-
-                # pixmap = QPixmap(f"images{os.sep}dardagnan.png")
-                # self.label_results = QLabel()
-                # label.setPixmap(pixmap)
-                # self.grids[-1].addWidget(label, i, 5)
 
                 pixmap = QPixmap(f"images{os.sep}dardagnan.png")
                 darda = QLabel()
                 darda.setPixmap(pixmap)
                 self.grids[-1].addWidget(darda, i, 7)
-
-                # self.grids[-1].addWidget(label_right, i, 3)
 
         # Create main tab 
         self.tab0.layout = layout_main
@@ -1185,35 +1185,35 @@ class Tab(QWidget):
         self.tab1.setFont(mf)
         self.tab1.setLayout(self.tab1.layout)
 
-        # # Create second tab 
-        # self.tab2.layout = self.grids[1]
-        # self.tab2.setFont(mf)
-        # self.tab2.setLayout(self.tab2.layout)
+        # Create second tab 
+        self.tab2.layout = self.grids[1]
+        self.tab2.setFont(mf)
+        self.tab2.setLayout(self.tab2.layout)
 
-        # # Create third tab 
-        # self.tab3.layout = self.grids[2]
-        # self.tab3.setFont(mf)
-        # self.tab3.setLayout(self.tab3.layout)
+        # Create third tab 
+        self.tab3.layout = self.grids[2]
+        self.tab3.setFont(mf)
+        self.tab3.setLayout(self.tab3.layout)
 
-        # # Create fourth tab 
-        # self.tab4.layout = self.grids[3]
-        # self.tab4.setLayout(self.tab4.layout)
+        # Create fourth tab 
+        self.tab4.layout = self.grids[3]
+        self.tab4.setLayout(self.tab4.layout)
 
-        # # Create fifth tab 
-        # self.tab5.layout = self.grids[4]
-        # self.tab5.setLayout(self.tab5.layout)
+        # Create fifth tab 
+        self.tab5.layout = self.grids[4]
+        self.tab5.setLayout(self.tab5.layout)
 
-        # # Create sixth tab 
-        # self.tab6.layout = self.grids[5]
-        # self.tab6.setLayout(self.tab6.layout)
+        # Create sixth tab 
+        self.tab6.layout = self.grids[5]
+        self.tab6.setLayout(self.tab6.layout)
 
-        # # Create seventh tab 
-        # self.tab7.layout = self.grids[6]
-        # self.tab7.setLayout(self.tab7.layout)
+        # Create seventh tab 
+        self.tab7.layout = self.grids[6]
+        self.tab7.setLayout(self.tab7.layout)
 
-        # # Create eighth tab 
-        # self.tab8.layout = self.grids[7]
-        # self.tab8.setLayout(self.tab8.layout)
+        # Create eighth tab 
+        self.tab8.layout = self.grids[7]
+        self.tab8.setLayout(self.tab8.layout)
 
         # Final step
         # #######
@@ -1230,882 +1230,6 @@ class Tab(QWidget):
         return 0
 
 
-    def browseFile1(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName1, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName1, self.in_ + os.sep + "1.png")
-        except Exception as e:
-            print(e)
-        if self.fileName1 != "":
-            pixmap = QPixmap(self.fileName1)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[0].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[0], 0, 2, 1, 1)
-            self.num = 1
-            self.nameOut1 = "1"
-        else:
-            pass
-        
-    def browseFile2(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName2, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName2, self.in_ + os.sep + "2.png")
-        except Exception as e:
-            print(e)
-        if self.fileName2 != "":
-            pixmap = QPixmap(self.fileName2)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[1].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[1], 1, 2, 1, 1)
-            self.num = 2
-            self.nameOut2 = "2"
-        else:
-            pass
-
-    def browseFile3(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName3, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName3, self.in_ + os.sep + "3.png")
-        except Exception as e:
-            print(e)
-        if self.fileName3 != "":
-            pixmap = QPixmap(self.fileName3)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[2].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[2], 2, 2, 1, 1)
-            self.num = 3
-            self.nameOut3 = 3
-        else:
-            pass
-
-    def browseFile4(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName4, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName4, self.in_ + os.sep + "4.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName4 != "":
-            pixmap = QPixmap(self.fileName4)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[3].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[3], 3, 2, 1, 1)
-            self.num = 4
-            self.nameOut4 = "4"
-        else:
-            pass
-
-    def browseFile5(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName5, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName5, self.in_ + os.sep + "5.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName5 != "":
-            pixmap = QPixmap(self.fileName5)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[4].setPixmap(pixmap)
-            self.grids[0].addWidget(self.label_left[4], 4, 2, 1, 1)
-            self.num = 5
-            self.nameOut5 = "5"
-        else:
-            pass
-
-    def browseFile6(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName6, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName6, self.in_ + os.sep + "6.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName6 != "":
-            pixmap = QPixmap(self.fileName6)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[5].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[5], 0, 2, 1, 1)
-        else:
-            pass
-    
-    def browseFile7(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName7, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName7, self.in_ + os.sep + "7.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName7 != "":
-            pixmap = QPixmap(self.fileName7)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[6].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[6], 1, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile8(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName8, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName8, self.in_ + os.sep + "8.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName8 != "":
-            pixmap = QPixmap(self.fileName8)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[7].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[7], 2, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile9(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName9, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName9, self.in_ + os.sep + "9.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName9 != "":
-            pixmap = QPixmap(self.fileName9)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[8].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[8], 3, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile10(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName10, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName10, self.in_ + os.sep + "10.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName10 != "":
-            pixmap = QPixmap(self.fileName10)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[9].setPixmap(pixmap)
-            self.grids[1].addWidget(self.label_left[9], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile11(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName11, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName11, self.in_ + os.sep + "11.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName11 != "":
-            pixmap = QPixmap(self.fileName11)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[10].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[10], 0, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile12(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName12, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName12, self.in_ + os.sep + "12.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName12 != "":
-            pixmap = QPixmap(self.fileName12)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[11].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[11], 1, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile13(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName13, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName13, self.in_ + os.sep + "13.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName13 != "":
-            pixmap = QPixmap(self.fileName13)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[12].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[12], 2, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile14(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName14, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName14, self.in_ + os.sep + "14.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName14 != "":
-            pixmap = QPixmap(self.fileName14)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[13].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[13], 3, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile15(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName15, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName15, self.in_ + os.sep + "15.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName15 != "":
-            pixmap = QPixmap(self.fileName15)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[14].setPixmap(pixmap)
-            self.grids[2].addWidget(self.label_left[14], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile16(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName16, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName16, self.in_ + os.sep + "16.png")
-        except Exception as e:
-            print(e)        
-        if self.fileName16 != "":
-            pixmap = QPixmap(self.fileName16)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[15].setPixmap(pixmap)
-            self.grids[3].addWidget(self.label_left[15], 0, 2, 1, 1)
-        else:
-            pass 
-
-    def browseFile17(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName17, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName17, self.in_ + os.sep + "17.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName18 != "":
-            pixmap = QPixmap(self.fileName17)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[16].setPixmap(pixmap)
-            self.grids[3].addWidget(self.label_left[16], 1, 2, 1, 1)
-        else:
-            pass 
-
-    def browseFile18(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName18, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName18, self.in_ + os.sep + "18.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName18 != "":
-            pixmap = QPixmap(self.fileName18)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[17].setPixmap(pixmap)
-            self.grids[3].addWidget(self.label_left[17], 2, 2, 1, 1)
-        else:
-            pass 
-
-    def browseFile19(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName19, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName19, self.in_ + os.sep + "19.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName19 != "":
-            pixmap = QPixmap(self.fileName19)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[18].setPixmap(pixmap)
-            self.grids[3].addWidget(self.label_left[18], 3, 2, 1, 1)
-        else:
-            pass 
-
-    def browseFile20(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName20, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName20, self.in_ + os.sep + "20.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName20 != "":
-            pixmap = QPixmap(self.fileName20)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[19].setPixmap(pixmap)
-            self.grids[3].addWidget(self.label_left[19], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile21(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName21, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName21, self.in_ + os.sep + "21.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName21 != "":
-            pixmap = QPixmap(self.fileName21)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[20].setPixmap(pixmap)
-            self.grids[4].addWidget(self.label_left[20], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile22(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName22, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName22, self.in_ + os.sep + "22.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName22 != "":
-            pixmap = QPixmap(self.fileName22)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[21].setPixmap(pixmap)
-            self.grids[4].addWidget(self.label_left[21], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile23(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName23, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName23, self.in_ + os.sep + "23.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName23 != "":
-            pixmap = QPixmap(self.fileName23)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[22].setPixmap(pixmap)
-            self.grids[4].addWidget(self.label_left[22], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile24(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName24, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName24, self.in_ + os.sep + "24.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName24 != "":
-            pixmap = QPixmap(self.fileName24)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[23].setPixmap(pixmap)
-            self.grids[4].addWidget(self.label_left[23], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile25(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName25, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName25, self.in_ + os.sep + "25.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName26 != "":
-            pixmap = QPixmap(self.fileName25)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[24].setPixmap(pixmap)
-            self.grids[4].addWidget(self.label_left[24], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile26(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName26, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName26, self.in_ + os.sep + "26.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName26 != "":
-            pixmap = QPixmap(self.fileName26)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[25].setPixmap(pixmap)
-            self.grids[5].addWidget(self.label_left[25], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile27(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName27, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName27, self.in_ + os.sep + "27.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName27 != "":
-            pixmap = QPixmap(self.fileName27)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[26].setPixmap(pixmap)
-            self.grids[5].addWidget(self.label_left[26], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile28(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName28, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName28, self.in_ + os.sep + "28.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName28 != "":
-            pixmap = QPixmap(self.fileName28)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[27].setPixmap(pixmap)
-            self.grids[5].addWidget(self.label_left[27], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile29(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName29, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName29, self.in_ + os.sep + "29.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName29 != "":
-            pixmap = QPixmap(self.fileName29)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[28].setPixmap(pixmap)
-            self.grids[5].addWidget(self.label_left[28], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile30(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName30, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName30, self.in_ + os.sep + "30.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName30 != "":
-            pixmap = QPixmap(self.fileName30)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[29].setPixmap(pixmap)
-            self.grids[5].addWidget(self.label_left[29], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile31(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName31, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName31, self.in_ + os.sep + "31.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName31 != "":
-            pixmap = QPixmap(self.fileName31)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[30].setPixmap(pixmap)
-            self.grids[6].addWidget(self.label_left[30], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile32(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName32, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName32, self.in_ + os.sep + "32.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName32 != "":
-            pixmap = QPixmap(self.fileName32)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[31].setPixmap(pixmap)
-            self.grids[6].addWidget(self.label_left[31], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile33(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName33, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName33, self.in_ + os.sep + "33.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName33 != "":
-            pixmap = QPixmap(self.fileName33)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[32].setPixmap(pixmap)
-            self.grids[6].addWidget(self.label_left[32], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile34(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName34, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName34, self.in_ + os.sep + "34.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName34 != "":
-            pixmap = QPixmap(self.fileName34)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[33].setPixmap(pixmap)
-            self.grids[6].addWidget(self.label_left[33], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile35(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName35, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName35, self.in_ + os.sep + "35.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName35 != "":
-            pixmap = QPixmap(self.fileName35)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[6].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile36(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName36, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName36, self.in_ + os.sep + "36.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName36 != "":
-            pixmap = QPixmap(self.fileName36)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[7].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile37(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName37, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName37, self.in_ + os.sep + "37.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName37 != "":
-            pixmap = QPixmap(self.fileName37)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[7].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile38(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName38, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName38, self.in_ + os.sep + "38.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName38 != "":
-            pixmap = QPixmap(self.fileName38)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[7].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile39(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName39, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName39, self.in_ + os.sep + "39.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName39 != "":
-            pixmap = QPixmap(self.fileName39)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[7].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    def browseFile40(self):
-        options = QFileDialog.Options()
-        options |= QFileDialog.DontUseNativeDialog
-        self.fileName40, _ = QFileDialog.getOpenFileName(self, "Select File", "", "All Files (*)", options=options)
-        try:
-            shutil.copyfile(self.fileName40, self.in_ + os.sep + "40.png")
-        except Exception as e:
-            print(e) 
-        if self.fileName40 != "":
-            pixmap = QPixmap(self.fileName40)
-            pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-            self.label_left[34].setPixmap(pixmap)
-            self.grids[7].addWidget(self.label_left[34], 4, 2, 1, 1)
-        else:
-            pass
-
-    # def visu1(self):
-    #     path = self.out + os.sep + "1"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=1)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-            
-    #     return 0
-
-    # def visu2(self):
-    #     path = self.out + os.sep + "2"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=2)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu3(self):
-    #     path = self.out + os.sep + "3"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=3)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-
-    # def visu4(self):
-    #     path = self.out + os.sep + "4"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=4)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-
-    # def visu5(self):
-    #     path = self.out + "out" + os.sep + "5"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=5)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-
-    # def visu6(self):
-    #     path = self.out + "out" + os.sep + "6"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=6)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu7(self):
-    #     path = self.out + "out" + os.sep + "7"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=7)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu8(self):
-    #     path = self.out + "out" + os.sep + "8"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=8)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu9(self):
-    #     path = self.out + "out" + os.sep + "9"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=9)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu10(self):
-    #     path = self.out + "out" + os.sep + "10"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=10)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu11(self):
-    #     path = self.out + "out" + os.sep + "11"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=10)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu12(self):
-    #     path = self.out + "out" + os.sep + "12"
-    #     try:
-    #         fileName = os.listdir(path)[0]
-    #         A = Third(self)
-    #         A.move(50, 50)
-    #         A.display(path + os.sep + fileName)
-    #         A.show()
-    #     except:
-    #         self.dialog = Second(self, num=12)
-    #         self.dialog.display_error_message(error2)
-    #         self.dialog.show()
-    #     return 0
-    
-    # def visu13(self):
-    #     return 0
-    # def visu14(self):
-    #     return 0
-    # def visu15(self):
-    #     return 0
-    # def visu16(self):
-    #     return 0
-    # def visu17(self):
-    #     return 0
-    # def visu18(self):
-    #     return 0
-    # def visu19(self):
-    #     return 0
-    # def visu20(self):
-    #     return 0
-    # def visu21(self):
-    #     return 0
-    # def visu22(self):
-    #     return 0
-    # def visu23(self):
-    #     return 0
-    # def visu24(self):
-    #     return 0
-    # def visu25(self):
-    #     return 0
-    # def visu26(self):
-    #     return 0
-    # def visu27(self):
-    #     return 0
-    # def visu28(self):
-    #     return 0
-    # def visu29(self):
-    #     return 0
-    # def visu30(self):
-    #     return 0
-    # def visu31(self):
-    #     return 0
-    # def visu32(self):
-    #     return 0
-    # def visu33(self):
-    #     return 0
-    # def visu34(self):
-    #     return 0
-    # def visu35(self):
-    #     return 0
-    # def visu36(self):
-    #     return 0
-    # def visu37(self):
-    #     return 0
-    # def visu38(self):
-    #     return 0
-    # def visu39(self):
-    #     return 0
-    # def visu40(self):
-    #     return 0
-
     def save_project(self):
         DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         if DIR != "":
@@ -2120,8 +1244,9 @@ class Tab(QWidget):
                         name = os.path.join(root, name)
                         name = os.path.normpath(name)
                         zf.write(name, name)
-            self.dialog = Second(self, num=1, type='Succès')
-            self.dialog.display_success_message(success_msg, self.analyse_name, DIR)
+            self.dialog = MESSAGE()
+            msg = f"L'analyse '{self.analyse_name}' a bien été enregistrée dans {DIR}"
+            self.dialog.message(msg)
             self.dialog.show()
         else:
             pass
@@ -2134,8 +1259,8 @@ class Tab(QWidget):
 
             self.analyse_name = get_file_name(project_file)
             self.label00.setText(self.analyse_name)
-            self.btn2.setText(f"Sauvegarder l'analyse\n {self.analyse_name}")
-            self.btn3.setText(f"Lancer l'analyse\n {self.analyse_name}")
+            self.btn2.setText(f"Sauvegarder \nl'analyse\n{self.analyse_name}")
+            self.btn3.setText(f"Lancer l'analyse\n{self.analyse_name}")
             
             shutil.unpack_archive(filename=project_file, extract_dir=self.tmp)
 

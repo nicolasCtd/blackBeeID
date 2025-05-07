@@ -1,5 +1,5 @@
 # coding: utf-8
-# test coomit
+
 import numpy as np
 import os
 from fonctions import *
@@ -37,48 +37,6 @@ class IMAGE():
         self.c2 = self.data[:, :, 1]
         self.c3 = self.data[:, :, 2]
 
-
-    def customize(self, save, show, out=''):
-        try:
-            self.compute_cubital_index()
-        except:
-            print("Erreur dans le calcul de l'indice cubital", file=self.log)
-        
-        try:
-            self.compute_discoidal_shift()
-        except:
-            print("Erreur dans le calcul de l'angle discoidal", file=self.log)
-
-        fig = plt.imshow(self.data[:, self.nb_col//2:])
-        fig.axes.get_xaxis().set_visible(False)
-        fig.axes.get_yaxis().set_visible(False)
-        
-        if self.a != 0:
-            ci = int(self.cubital_index*100)/100
-        else:
-            ci = "erreur"
-
-        tt = ""
-        if self.discoidal_shift != 90:
-            ds = int(self.discoidal_shift*100)/100
-            if np.sign(ds) == 1:
-                tt = "+"
-        else:
-            ds = "erreur"
-
-        plt.title(f"Abeille #{num}             Indice cubital : {ci}             Angle discoïdal : {tt}{ds}°", color='white', fontweight='bold', fontsize=15)
-
-        if save:
-            plt.gcf().set_size_inches(18.5, 10.5)
-            plt.gcf().set_facecolor("grey")
-            plt.gcf().savefig(f"{out}{os.sep}{num}.png")
-            print(f"Image successfully saved: {out}{num}.png", file=self.log)
-            
-        if show:
-            plt.show()
-
-        plt.close()
-
     def highlight(self, node, color, rayon=5):
         y, x = np.meshgrid(np.arange(self.nb_col), np.arange(self.nb_lignes))
         for i in range(3):
@@ -94,7 +52,67 @@ class IMAGE():
                 self.data_copy[i, j][1] = 0
                 self.data_copy[i, j][2] = 0
         return 0
+    
+    def draw_ci_lines(self, clr):
+        # draw lines between cubital index points
+        DROITE(self.ci_points[0], self.ci_points[1]).draw(self, 2, 2, color=clr)
+        DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=clr)
+        return 0
+    
+    def draw_ds_line_02(self, clr):
+        DROITE(self.ds_points[0], self.ds_points[2]).draw(self, 2, 2, color=clr)
+        return 0
+    
+    def draw_ds_line_02_perpendicular(self, clr):
+        point1 = POINT()
+        point2 = POINT()
+        x, y = DROITE(self.ds_points[0], self.ds_points[2]).xy
+        dot_product = np.ones(x.size)
+        for pixel in range(x.size):
+            u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
+            v = (x[pixel] - self.ds_points[1].j, y[pixel] - self.ds_points[1].i)
+            dot_product[pixel] = u[0] * v[0] + u[1] * v[1]
+        idx = int(np.argmin(np.abs(dot_product)))
+        Pyy, Pxx = y[idx], x[idx]
 
+        # look for another pixel (point1) in this area that minimizes the dot product
+        square = 20
+        dot_product = np.ones((self.nb_lignes, self.nb_col)) * 1000
+        for dY in np.arange(0, int(1.5*square)):
+            for dX in np.arange(-square, +square+1):
+                Py_test, Px_test = Pyy - dY, Pxx - dX
+                u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
+                v = (Px_test - self.ds_points[1].j, Py_test - self.ds_points[1].i)
+                dot_product[Py_test, Px_test] = u[0] * v[0] + u[1] * v[1]
+        Py, Px = np.where(np.abs(dot_product) == np.min(np.abs(dot_product)))
+
+        if len(Py)>1:
+            txt = "draw_ds_line_02_perpendicular(): la recherche + précise d'un autre pixel "
+            txt += "appartenant à la droite perpendiculaire à la première n'a pas marché"
+            # print(txt, file=self.log)
+            print(txt)
+            Py, Px = Pyy, Pxx
+
+        point1.i = Py
+        point1.j = Px
+        point1.color = self.ds_points[0].color
+        # Now find another point far from the second DS point but in the same alignment
+        distance_ref = 0.8 * DROITE(self.ds_points[0], self.ds_points[2]).distance
+        small_line = DROITE(point1, self.ds_points[1])
+        x = np.arange(self.nb_col)
+        y = small_line.get_y(x)
+        x = x[y>0]
+        y = y[y>0]
+        distance = np.sqrt((x - point1.j) **2 + (y - point1.i) ** 2)
+        delta = np.abs(distance - distance_ref)
+        idx = int(np.where(delta == np.min(delta))[0][0])
+        point2.i = int(y[idx])
+        point2.j = int(x[idx])
+        DROITE(point1, point2).draw(self, 2, 5, color=clr)
+        self.point1 = point1
+        self.point2 = point2
+        return 0
+        
     
 class POINT():
     def __init__(self):
@@ -105,8 +123,6 @@ class POINT():
     def __str__(self) -> str:
         print(f"i : {self.i}")
         print(f"j : {self.j}")
-
-
 
 class DROITE(IMAGE):
     def __init__(self, P1, P2):
