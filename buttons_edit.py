@@ -1,5 +1,6 @@
 
 def editFile1(TAB):
+    TAB.num = 1
     from IHM import EDIT, MESSAGE
     if TAB.fileName1 == "im1.png":
         TAB.dialog = MESSAGE()
@@ -9,6 +10,7 @@ def editFile1(TAB):
         TAB.dialog.display(TAB.fileName1)
     
 def editFile2(TAB):
+    TAB.num = 2
     from IHM import EDIT, MESSAGE
     if TAB.fileName2 == "im2.png":
         TAB.dialog = MESSAGE()
@@ -18,6 +20,7 @@ def editFile2(TAB):
         TAB.dialog.display(TAB.fileName2)
     
 def editFile3(TAB):
+    TAB.num = 3
     from IHM import EDIT, MESSAGE
     if TAB.fileName3 == "im3.png":
         TAB.dialog = MESSAGE()
@@ -28,6 +31,7 @@ def editFile3(TAB):
     
 
 def editFile4(TAB):
+    TAB.num = 4
     from IHM import EDIT, MESSAGE
     if TAB.fileName4 == "im4.png":
         TAB.dialog = MESSAGE()
@@ -36,8 +40,8 @@ def editFile4(TAB):
         TAB.dialog = EDIT(TAB, num=4)
         TAB.dialog.display(TAB.fileName4)
     
-
 def editFile5(TAB):
+    TAB.num = 5
     from IHM import EDIT, MESSAGE
     if TAB.fileName5 == "im5.png":
         TAB.dialog = MESSAGE()
@@ -46,18 +50,8 @@ def editFile5(TAB):
         TAB.dialog = EDIT(TAB, num=5)
         TAB.dialog.display(TAB.fileName5)
     
-
-def editFile5(TAB):
-    from IHM import EDIT, MESSAGE
-    if TAB.fileName5 == "im5.png":
-        TAB.dialog = MESSAGE()
-        TAB.dialog.message_erreur1()
-    else:
-        TAB.dialog = EDIT(TAB, num=5)
-        TAB.dialog.display(TAB.fileName5)
-    
-
 def editFile6(TAB):
+    TAB.num = 6
     from IHM import EDIT, MESSAGE
     if TAB.fileName6 == "im6.png":
         TAB.dialog = MESSAGE()
@@ -66,8 +60,8 @@ def editFile6(TAB):
         TAB.dialog = EDIT(TAB, num=6)
         TAB.dialog.display(TAB.fileName6)
     
-
 def editFile7(TAB):
+    TAB.num = 7
     from IHM import EDIT, MESSAGE
     if TAB.fileName7 == "im7.png":
         TAB.dialog = MESSAGE()
@@ -76,8 +70,8 @@ def editFile7(TAB):
         TAB.dialog = EDIT(TAB, num=7)
         TAB.dialog.display(TAB.fileName7)
     
-
 def editFile8(TAB):
+    TAB.num = 8
     from IHM import EDIT, MESSAGE
     if TAB.fileName8 == "im8.png":
         TAB.dialog = MESSAGE()
@@ -86,8 +80,8 @@ def editFile8(TAB):
         TAB.dialog = EDIT(TAB, num=8)
         TAB.dialog.display(TAB.fileName8)
     
-
 def editFile9(TAB):
+    TAB.num = 9
     from IHM import EDIT, MESSAGE
     if TAB.fileName9 == "im9.png":
         TAB.dialog = MESSAGE()
@@ -96,8 +90,8 @@ def editFile9(TAB):
         TAB.dialog = EDIT(TAB, num=9)
         TAB.dialog.display(TAB.fileName9)
     
-
 def editFile10(TAB):
+    TAB.num = 10
     from IHM import EDIT, MESSAGE
     if TAB.fileName10 == "im10.png":
         TAB.dialog = MESSAGE()
@@ -105,239 +99,240 @@ def editFile10(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=10)
         TAB.dialog.display(TAB.fileName10)
-    
 
 def editFile11(TAB):
+    TAB.num = 11
     from IHM import EDIT, MESSAGE
     if TAB.fileName11 == "im11.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=11)
         TAB.dialog.display(TAB.fileName11)
     
-
 def editFile12(TAB):
+    TAB.num = 12
     from IHM import EDIT, MESSAGE
 
     if TAB.fileName12 == "im12.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=11)
+        TAB.dialog = EDIT(TAB, num=12)
         TAB.dialog.display(TAB.fileName12)
     
-
 def editFile13(TAB):
+    TAB.num = 13
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=13)
     if TAB.fileName13 == "im13.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=13)
         TAB.dialog.display(TAB.fileName13)
     
-
 def editFile14(TAB):
+    TAB.num = 14
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=14)
     if TAB.fileName14 == "im14.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=14)
         TAB.dialog.display(TAB.fileName14)
-    
-
 
 def editFile15(TAB):
+    TAB.num = 15
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=15)
     if TAB.fileName15 == "im15.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=15)
         TAB.dialog.display(TAB.fileName15)
     
 
 def editFile16(TAB):
+    TAB.num = 16
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=16)
     if TAB.fileName16 == "im16.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=16)
         TAB.dialog.display(TAB.fileName16)
-    
 
 def editFile17(TAB):
+    TAB.num = 17
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=17)
     if TAB.fileName17 == "im17.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=17)
         TAB.dialog.display(TAB.fileName17)
     
-
 def editFile18(TAB):
+    TAB.num = 18
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=18)
     if TAB.fileName18 == "im18.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=18)
         TAB.dialog.display(TAB.fileName18)
     
-
 def editFile19(TAB):
+    TAB.num = 19
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=19)
     if TAB.fileName19 == "im19.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=19)
         TAB.dialog.display(TAB.fileName19)
     
 
 def editFile20(TAB):
+    TAB.num = 20
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=20)
     if TAB.fileName20 == "im20.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=20)
         TAB.dialog.display(TAB.fileName20)
     
-
 def editFile21(TAB):
+    TAB.num = 21
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=21)
     if TAB.fileName21 == "im21.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=21)
         TAB.dialog.display(TAB.fileName21)
     
-
 def editFile22(TAB):
+    TAB.num = 22
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=22)
     if TAB.fileName22 == "im22.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=22)
         TAB.dialog.display(TAB.fileName22)
-    
 
 def editFile23(TAB):
+    TAB.num = 23
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=23)
     if TAB.fileName23 == "im23.png":
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=23)
         TAB.dialog.display(TAB.fileName23)
-    
 
 def editFile24(TAB):
+    TAB.num = 24
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=24)
     if TAB.fileName24 == "im24.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=24)
         TAB.dialog.display(TAB.fileName24)
     
-
 def editFile25(TAB):
+    TAB.num = 25
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=25)
     if TAB.fileName25 == "im25.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=25)
         TAB.dialog.display(TAB.fileName25)
-    
 
 def editFile26(TAB):
+    TAB.num = 26
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=26)
     if TAB.fileName26 == "im26.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=26)
         TAB.dialog.display(TAB.fileName26)
-    
 
 def editFile27(TAB):
+    TAB.num = 27
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=27)
     if TAB.fileName27 == "im27.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=27)
         TAB.dialog.display(TAB.fileName27)
     
-
 def editFile28(TAB):
+    TAB.num = 28
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=28)
     if TAB.fileName28 == "im28.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=28)
         TAB.dialog.display(TAB.fileName28)
     
-
 def editFile29(TAB):
+    TAB.num = 29
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=29)
     if TAB.fileName29 == "im29.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=29)
         TAB.dialog.display(TAB.fileName29)
     
-
 def editFile30(TAB):
+    TAB.num = 30
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=30)
     if TAB.fileName30 == "im30.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=30)
         TAB.dialog.display(TAB.fileName30)
     
-
 def editFile31(TAB):
+    TAB.num = 31
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=31)
     if TAB.fileName31 == "im31.png":
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=31)
         TAB.dialog.display(TAB.fileName31)
     
-
 def editFile32(TAB):
+    TAB.num = 32
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=32)
     if TAB.fileName32 == "im32.png":
@@ -347,8 +342,8 @@ def editFile32(TAB):
         TAB.dialog = EDIT(TAB, num=32)
         TAB.dialog.display(TAB.fileName32)
     
-
 def editFile33(TAB):
+    TAB.num = 33
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=33)
     if TAB.fileName33 == "im33.png":
@@ -358,8 +353,8 @@ def editFile33(TAB):
         TAB.dialog = EDIT(TAB, num=33)
         TAB.dialog.display(TAB.fileName33)
     
-
 def editFile34(TAB):
+    TAB.num = 34
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=34)
     if TAB.fileName34 == "im34.png":
@@ -370,6 +365,7 @@ def editFile34(TAB):
     
 
 def editFile35(TAB):
+    TAB.num = 35
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=35)
     if TAB.fileName35 == "im35.png":
@@ -377,9 +373,9 @@ def editFile35(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName35)
-    
 
 def editFile36(TAB):
+    TAB.num = 36
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=36)
     if TAB.fileName36 == "im36.png":
@@ -387,9 +383,9 @@ def editFile36(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName36)
-    
 
 def editFile37(TAB):
+    TAB.num = 37
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=37)
     if TAB.fileName37 == "im37.png":
@@ -397,9 +393,9 @@ def editFile37(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName37)
-    
 
 def editFile38(TAB):
+    TAB.num = 38
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=38)
     if TAB.fileName38 == "im38.png":
@@ -408,8 +404,8 @@ def editFile38(TAB):
     else:
         TAB.dialog.display(TAB.fileName38)
     
-
 def editFile39(TAB):
+    TAB.num = 39
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=39)
     if TAB.fileName39 == "im39.png":
@@ -417,9 +413,9 @@ def editFile39(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName39)
-    
 
 def editFile40(TAB):
+    TAB.num = 40
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=40)
     if TAB.fileName40 == "im40.png":
@@ -427,9 +423,9 @@ def editFile40(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName40)
-    
 
 def editFile41(TAB):
+    TAB.num = 41
     from IHM import EDIT, MESSAGE
     TAB.dialog = EDIT(TAB, num=41)
     if TAB.fileName41 == "im41.png":
@@ -437,7 +433,6 @@ def editFile41(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName41)
-    
 
 def editFile42(TAB):
     from IHM import EDIT, MESSAGE

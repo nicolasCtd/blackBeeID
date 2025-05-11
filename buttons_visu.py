@@ -12,7 +12,7 @@ def visu1(TAB):
         TAB.dialog.display(path + os.sep + fileName)
     else:
         TAB.dialog = MESSAGE()
-        TAB.dialog.message_erreur2(message_erreur2)
+        TAB.dialog.message_erreur2()
 
 def visu2(TAB):
     from IHM import VISU, MESSAGE

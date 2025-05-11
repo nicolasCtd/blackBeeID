@@ -30,8 +30,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtGui import QPixmap, QCursor, QFont
 
-from PyQt5.QtGui import QPainter, QColor, QCloseEvent
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
 
 from functools import partial
 
@@ -71,6 +70,11 @@ connections_load = {1:browseFile1, 2:browseFile2, 3:browseFile3, 4:browseFile4, 
                        31:browseFile31, 32:browseFile32, 33:browseFile33, 34:browseFile34, 35:browseFile35,
                        36:browseFile36, 37:browseFile37, 38:browseFile38, 39:browseFile39, 40:browseFile40}
 
+def copytree(src, dst):
+    if os.path.exists(dst):
+        shutil.rmtree(dst)
+    shutil.copytree(src, dst)
+
 def clean(value):
     return str(value).replace("[", "").replace("]", "")
 
@@ -92,6 +96,13 @@ def load_results(file):
         line = a[i].replace("\n", "").split(" ")
         res[int(line[0])] = (line[1], line[2])
     return res
+
+def save_results_txt(path, res):
+    with open(path + "results.txt", "w") as f:
+        for num in sorted(list(res.keys())):
+            line = f"{num} {clean(res[num][0])} {res[num][1]}\n"
+            f.write(line)
+        f.close()
 
 def write_line(file, num, ci_value, ds_value):
     line = f"{num} {ci_value} {ds_value}\n"
@@ -295,10 +306,13 @@ class EDIT(QMainWindow):
         self.color_ds = [255, 255, 51]
 
         self.LAB_RIGHT = tab.label_right
+
+        self.GRIDS = tab.grids
         self.WIDTH = tab.width
         self.HEIGHT = tab.height
         self.NUM = tab.num
         self.LAB_RES = tab.label_results
+        self.RES = tab.RES
 
         self.ci_points = [POINT(), POINT(), POINT()]
         self.ds_points = [POINT(), POINT(), POINT(), POINT()]
@@ -438,22 +452,35 @@ class EDIT(QMainWindow):
         self.ds_value = compute_discoidal_shift(im.point1, im.point2, im.ds_points)
         # im.customize()
         # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
+
+        try:
+            for filename in os.listdir(f"{self.path}{self.out}"):
+                file_path = f"{self.path}{self.out}" + os.sep + filename
+                os.unlink(file_path)
+                print(f"suppression du fichier {file_path}")
+        except:
+            pass
+        
         plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
         self.add_infos()
         # self.write_results()
         
         pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
+        
         self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
 
         self.close()
-        print(self.num, self.ci_value, self.ds_value)
-        write_line(f"{self.path}{os.sep}out{os.sep}results.txt", self.num, clean(self.ci_value), clean(self.ds_value))
 
+        # write_line(f"{self.path}{os.sep}out{os.sep}results.txt", self.num, clean(self.ci_value), clean(self.ds_value))
 
         ci, ds = get_ci_ds(self.ci_value, self.ds_value)
 
         self.LAB_RES[self.NUM-1].setText(f"     Ci : {ci}\n     Ds : {ds}°")
+
+        self.RES[self.num] = (clean(self.ci_value), clean(self.ds_value))
+
+        save_results_txt(f"{self.path}{os.sep}out{os.sep}", self.RES)
 
         return 0
 
@@ -838,13 +865,6 @@ class MainWindow(QMainWindow):
         self.tmp = os.path.abspath(os.getcwd()) + os.sep + "tmp"
         self.path = os.path.abspath(os.getcwd())
 
-
-        with open(self.path + os.sep + "results.txt", "w") as f:
-            line = f"num indice_cubital angle_discoidal\n"
-            f.write(line)
-            f.close
-
-
         # for filename in os.listdir(self.path):
         #     file_path = self.path + os.sep + filename
         #     try:
@@ -880,7 +900,12 @@ class MainWindow(QMainWindow):
                     print(f"suppression du dossier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
-        
+
+        with open(self.out + os.sep + "results.txt", "w") as f:
+            line = f"num indice_cubital angle_discoidal\n"
+            f.write(line)
+            f.close
+
         self.tab_widget = Tab(self, self.path)
         self.setCentralWidget(self.tab_widget)
     
@@ -913,12 +938,12 @@ class Tab(QWidget):
     def __init__(self, parent, path): 
         super(QWidget, self).__init__(parent)
 
-        self.num = 0
         self.path = path
         self.in_ = path + os.sep + "in"
         self.out = path + os.sep + "out"
         self.tmp = path + os.sep + "tmp"
 
+        self.RES = {}
         self.analyse_name = str(date.today())
 
         self.fileName1 = "im1.png"
@@ -961,6 +986,27 @@ class Tab(QWidget):
         self.fileName38 = "im38.png"
         self.fileName39 = "im39.png"
         self.fileName40 = "im40.png"
+        self.fileName41 = "im41.png"
+        self.fileName42 = "im42.png"
+        self.fileName43 = "im43.png"
+        self.fileName44 = "im44.png"
+        self.fileName45 = "im45.png"
+        self.fileName46 = "im46.png"
+        self.fileName47 = "im47.png"
+        self.fileName48 = "im48.png"
+        self.fileName49 = "im49.png"
+        self.fileName50 = "im50.png"
+
+        # self.fileNames = [self.fileName1, self.fileName2, self.fileName3, self.fileName4, self.fileName5,
+        #                   self.fileName6, self.fileName7, self.fileName8, self.fileName9, self.fileName10,
+        #                   self.fileName11, self.fileName12, self.fileName13, self.fileName14, self.fileName15,
+        #                   self.fileName16, self.fileName17, self.fileName18, self.fileName19, self.fileName20,
+        #                   self.fileName21, self.fileName22, self.fileName23, self.fileName24, self.fileName25,
+        #                   self.fileName26, self.fileName27, self.fileName28, self.fileName29, self.fileName30,
+        #                   self.fileName31, self.fileName32, self.fileName33, self.fileName34, self.fileName35,
+        #                   self.fileName36, self.fileName37, self.fileName38, self.fileName39, self.fileName40,
+        #                   self.fileName41, self.fileName42, self.fileName43, self.fileName44, self.fileName45,
+        #                   self.fileName46, self.fileName47, self.fileName48, self.fileName49, self.fileName50]
 
 
         self.layout = QVBoxLayout(self)
@@ -1225,8 +1271,8 @@ class Tab(QWidget):
         if okPressed and text != '':
             self.analyse_name = text
             self.label00.setText(text)
-            self.btn2.setText(f"Sauvegarder \nl'analyse \n{self.analyse_name}")
-            self.btn3.setText(f"Lancer \nl'analyse \n{self.analyse_name}")
+            self.btn2.setText(f"Sauvegarder\nl'analyse\n{self.analyse_name}")
+            self.btn3.setText(f"Lancer\nl'analyse\n{self.analyse_name}")
         return 0
 
 
@@ -1259,17 +1305,20 @@ class Tab(QWidget):
 
             self.analyse_name = get_file_name(project_file)
             self.label00.setText(self.analyse_name)
-            self.btn2.setText(f"Sauvegarder \nl'analyse\n{self.analyse_name}")
-            self.btn3.setText(f"Lancer l'analyse\n{self.analyse_name}")
+            self.btn2.setText(f"Sauvegarder\nl'analyse\n{self.analyse_name}")
+            self.btn3.setText(f"Lancer\nl'analyse\n{self.analyse_name}")
             
             shutil.unpack_archive(filename=project_file, extract_dir=self.tmp)
+            copytree(src=self.tmp + os.sep + "out", dst=self.out)
 
-            res = load_results(self.tmp + os.sep + "out" + os.sep + "results.txt")
+            self.RES = load_results(self.tmp + os.sep + "out" + os.sep + "results.txt")
+            print("results already computed:")
+            print(self.RES)
                     
             for file in os.listdir(self.tmp + os.sep + "in"):
                 num_abeille = int(file.split(".")[0])
                 print(num_abeille)
-                if num_abeille not in res.keys():
+                if num_abeille not in self.RES.keys():
                     print(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
                 else:
                     ff_in = self.tmp + os.sep + "in" + os.sep + file
@@ -1288,6 +1337,9 @@ class Tab(QWidget):
                     pixmap_out = pixmap_out.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.label_right[num_abeille-1].setPixmap(pixmap_out)
                     self.grids[0].addWidget(self.label_right[num_abeille-1], num_abeille-1, 4, 1, 1)
+
+                    # self.fileNames[num_abeille-1] = file
+
         else:
             pass
         return 0
