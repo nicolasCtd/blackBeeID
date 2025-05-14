@@ -9,7 +9,7 @@ def browseFile1(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName1, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName1, TAB.in_ + os.sep + "1.png")
+        shutil.copyfile(TAB.fileName1, TAB.in_ + os.sep + "1_in.png")
     except Exception as e:
         print(e)
     if TAB.fileName1 != "":
@@ -27,7 +27,7 @@ def browseFile2(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName2, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName2, TAB.in_ + os.sep + "2.png")
+        shutil.copyfile(TAB.fileName2, TAB.in_ + os.sep + "2_in.png")
     except Exception as e:
         print(e)
     if TAB.fileName2 != "":
@@ -45,7 +45,7 @@ def browseFile3(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName3, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName3, TAB.in_ + os.sep + "3.png")
+        shutil.copyfile(TAB.fileName3, TAB.in_ + os.sep + "3_in.png")
     except Exception as e:
         print(e)
     if TAB.fileName3 != "":
@@ -63,7 +63,7 @@ def browseFile4(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName4, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName4, TAB.in_ + os.sep + "4.png")
+        shutil.copyfile(TAB.fileName4, TAB.in_ + os.sep + "4_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName4 != "":
@@ -81,7 +81,7 @@ def browseFile5(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName5, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName5, TAB.in_ + os.sep + "5.png")
+        shutil.copyfile(TAB.fileName5, TAB.in_ + os.sep + "5_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName5 != "":
@@ -99,7 +99,7 @@ def browseFile6(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName6, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName6, TAB.in_ + os.sep + "6.png")
+        shutil.copyfile(TAB.fileName6, TAB.in_ + os.sep + "6_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName6 != "":
@@ -115,7 +115,7 @@ def browseFile7(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName7, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName7, TAB.in_ + os.sep + "7.png")
+        shutil.copyfile(TAB.fileName7, TAB.in_ + os.sep + "7_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName7 != "":
@@ -131,7 +131,7 @@ def browseFile8(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName8, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName8, TAB.in_ + os.sep + "8.png")
+        shutil.copyfile(TAB.fileName8, TAB.in_ + os.sep + "8_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName8 != "":
@@ -147,7 +147,7 @@ def browseFile9(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName9, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName9, TAB.in_ + os.sep + "9.png")
+        shutil.copyfile(TAB.fileName9, TAB.in_ + os.sep + "9_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName9 != "":
@@ -163,7 +163,7 @@ def browseFile10(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName10, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName10, TAB.in_ + os.sep + "10.png")
+        shutil.copyfile(TAB.fileName10, TAB.in_ + os.sep + "10_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName10 != "":
@@ -179,7 +179,7 @@ def browseFile11(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName11, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName11, TAB.in_ + os.sep + "11.png")
+        shutil.copyfile(TAB.fileName11, TAB.in_ + os.sep + "11_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName11 != "":
@@ -195,7 +195,7 @@ def browseFile12(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName12, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName12, TAB.in_ + os.sep + "12.png")
+        shutil.copyfile(TAB.fileName12, TAB.in_ + os.sep + "12_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName12 != "":
@@ -211,7 +211,7 @@ def browseFile13(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName13, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName13, TAB.in_ + os.sep + "13.png")
+        shutil.copyfile(TAB.fileName13, TAB.in_ + os.sep + "13_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName13 != "":
@@ -227,7 +227,7 @@ def browseFile14(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName14, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName14, TAB.in_ + os.sep + "14.png")
+        shutil.copyfile(TAB.fileName14, TAB.in_ + os.sep + "14_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName14 != "":
@@ -243,7 +243,7 @@ def browseFile15(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName15, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName15, TAB.in_ + os.sep + "15.png")
+        shutil.copyfile(TAB.fileName15, TAB.in_ + os.sep + "15_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName15 != "":
@@ -259,7 +259,7 @@ def browseFile16(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName16, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName16, TAB.in_ + os.sep + "16.png")
+        shutil.copyfile(TAB.fileName16, TAB.in_ + os.sep + "16_in.png")
     except Exception as e:
         print(e)        
     if TAB.fileName16 != "":
@@ -275,7 +275,7 @@ def browseFile17(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName17, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName17, TAB.in_ + os.sep + "17.png")
+        shutil.copyfile(TAB.fileName17, TAB.in_ + os.sep + "17_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName18 != "":
@@ -291,7 +291,7 @@ def browseFile18(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName18, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName18, TAB.in_ + os.sep + "18.png")
+        shutil.copyfile(TAB.fileName18, TAB.in_ + os.sep + "18_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName18 != "":
@@ -307,7 +307,7 @@ def browseFile19(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName19, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName19, TAB.in_ + os.sep + "19.png")
+        shutil.copyfile(TAB.fileName19, TAB.in_ + os.sep + "19_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName19 != "":
@@ -323,7 +323,7 @@ def browseFile20(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName20, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName20, TAB.in_ + os.sep + "20.png")
+        shutil.copyfile(TAB.fileName20, TAB.in_ + os.sep + "20_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName20 != "":
@@ -339,7 +339,7 @@ def browseFile21(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName21, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName21, TAB.in_ + os.sep + "21.png")
+        shutil.copyfile(TAB.fileName21, TAB.in_ + os.sep + "21_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName21 != "":
@@ -355,7 +355,7 @@ def browseFile22(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName22, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName22, TAB.in_ + os.sep + "22.png")
+        shutil.copyfile(TAB.fileName22, TAB.in_ + os.sep + "22_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName22 != "":
@@ -371,7 +371,7 @@ def browseFile23(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName23, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName23, TAB.in_ + os.sep + "23.png")
+        shutil.copyfile(TAB.fileName23, TAB.in_ + os.sep + "23_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName23 != "":
@@ -387,7 +387,7 @@ def browseFile24(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName24, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName24, TAB.in_ + os.sep + "24.png")
+        shutil.copyfile(TAB.fileName24, TAB.in_ + os.sep + "24_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName24 != "":
@@ -403,7 +403,7 @@ def browseFile25(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName25, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName25, TAB.in_ + os.sep + "25.png")
+        shutil.copyfile(TAB.fileName25, TAB.in_ + os.sep + "25_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName26 != "":
@@ -419,7 +419,7 @@ def browseFile26(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName26, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName26, TAB.in_ + os.sep + "26.png")
+        shutil.copyfile(TAB.fileName26, TAB.in_ + os.sep + "26_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName26 != "":
@@ -435,7 +435,7 @@ def browseFile27(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName27, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName27, TAB.in_ + os.sep + "27.png")
+        shutil.copyfile(TAB.fileName27, TAB.in_ + os.sep + "27_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName27 != "":
@@ -451,7 +451,7 @@ def browseFile28(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName28, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName28, TAB.in_ + os.sep + "28.png")
+        shutil.copyfile(TAB.fileName28, TAB.in_ + os.sep + "28_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName28 != "":
@@ -467,7 +467,7 @@ def browseFile29(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName29, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName29, TAB.in_ + os.sep + "29.png")
+        shutil.copyfile(TAB.fileName29, TAB.in_ + os.sep + "29_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName29 != "":
@@ -483,7 +483,7 @@ def browseFile30(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName30, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName30, TAB.in_ + os.sep + "30.png")
+        shutil.copyfile(TAB.fileName30, TAB.in_ + os.sep + "30_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName30 != "":
@@ -499,7 +499,7 @@ def browseFile31(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName31, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName31, TAB.in_ + os.sep + "31.png")
+        shutil.copyfile(TAB.fileName31, TAB.in_ + os.sep + "31_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName31 != "":
@@ -515,7 +515,7 @@ def browseFile32(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName32, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName32, TAB.in_ + os.sep + "32.png")
+        shutil.copyfile(TAB.fileName32, TAB.in_ + os.sep + "32_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName32 != "":
@@ -531,7 +531,7 @@ def browseFile33(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName33, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName33, TAB.in_ + os.sep + "33.png")
+        shutil.copyfile(TAB.fileName33, TAB.in_ + os.sep + "33_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName33 != "":
@@ -547,7 +547,7 @@ def browseFile34(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName34, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName34, TAB.in_ + os.sep + "34.png")
+        shutil.copyfile(TAB.fileName34, TAB.in_ + os.sep + "34_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName34 != "":
@@ -563,7 +563,7 @@ def browseFile35(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName35, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName35, TAB.in_ + os.sep + "35.png")
+        shutil.copyfile(TAB.fileName35, TAB.in_ + os.sep + "35_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName35 != "":
@@ -579,7 +579,7 @@ def browseFile36(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName36, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName36, TAB.in_ + os.sep + "36.png")
+        shutil.copyfile(TAB.fileName36, TAB.in_ + os.sep + "36_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName36 != "":
@@ -595,7 +595,7 @@ def browseFile37(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName37, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName37, TAB.in_ + os.sep + "37.png")
+        shutil.copyfile(TAB.fileName37, TAB.in_ + os.sep + "37_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName37 != "":
@@ -611,7 +611,7 @@ def browseFile38(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName38, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName38, TAB.in_ + os.sep + "38.png")
+        shutil.copyfile(TAB.fileName38, TAB.in_ + os.sep + "38_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName38 != "":
@@ -627,7 +627,7 @@ def browseFile39(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName39, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName39, TAB.in_ + os.sep + "39.png")
+        shutil.copyfile(TAB.fileName39, TAB.in_ + os.sep + "39_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName39 != "":
@@ -643,7 +643,7 @@ def browseFile40(TAB):
     options |= QFileDialog.DontUseNativeDialog
     TAB.fileName40, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
     try:
-        shutil.copyfile(TAB.fileName40, TAB.in_ + os.sep + "40.png")
+        shutil.copyfile(TAB.fileName40, TAB.in_ + os.sep + "40_in.png")
     except Exception as e:
         print(e) 
     if TAB.fileName40 != "":

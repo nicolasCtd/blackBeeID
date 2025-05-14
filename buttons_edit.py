@@ -6,7 +6,7 @@ def editFile1(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=1)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName1)
     
 def editFile2(TAB):
@@ -16,7 +16,7 @@ def editFile2(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=2)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName2)
     
 def editFile3(TAB):
@@ -26,7 +26,7 @@ def editFile3(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=3)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName3)
     
 
@@ -37,7 +37,7 @@ def editFile4(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=4)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName4)
     
 def editFile5(TAB):
@@ -47,7 +47,7 @@ def editFile5(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=5)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName5)
     
 def editFile6(TAB):
@@ -57,7 +57,7 @@ def editFile6(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=6)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName6)
     
 def editFile7(TAB):
@@ -67,7 +67,7 @@ def editFile7(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=7)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName7)
     
 def editFile8(TAB):
@@ -77,7 +77,7 @@ def editFile8(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=8)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName8)
     
 def editFile9(TAB):
@@ -87,7 +87,7 @@ def editFile9(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=9)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName9)
     
 def editFile10(TAB):
@@ -97,7 +97,7 @@ def editFile10(TAB):
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur1()
     else:
-        TAB.dialog = EDIT(TAB, num=10)
+        TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName10)
 
 def editFile11(TAB):

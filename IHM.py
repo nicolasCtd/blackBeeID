@@ -99,7 +99,8 @@ def load_results(file):
 
 def save_results_txt(path, res):
     with open(path + "results.txt", "w") as f:
-        for num in sorted(list(res.keys())):
+        liste_abeilles = [int(key) for key in res.keys()]
+        for num in sorted(liste_abeilles):
             line = f"{num} {clean(res[num][0])} {res[num][1]}\n"
             f.write(line)
         f.close()
@@ -209,6 +210,7 @@ class VISU(QMainWindow):
         super(VISU, self).__init__()
 
     def display(self, path_to_image):
+        self.setWindowTitle(' ')
         self.label = QLabel(self)
         pixmap = QPixmap(path_to_image)
 
@@ -233,7 +235,7 @@ class MESSAGE(QMainWindow):
         self.error2 = "Veuillez d'abord éditer \nune image..."
 
     def message_erreur1(self):
-        self.setWindowTitle('message')
+        self.setWindowTitle(' ')
         layout = QVBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
@@ -248,7 +250,7 @@ class MESSAGE(QMainWindow):
         self.show()
 
     def message_erreur2(self):
-        self.setWindowTitle('message')
+        self.setWindowTitle(' ')
         layout = QVBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
@@ -264,7 +266,7 @@ class MESSAGE(QMainWindow):
 
     def message(self, msg):
         self.move(100, 200)
-        self.setWindowTitle('message')
+        self.setWindowTitle(' ')
         layout = QHBoxLayout()
         pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
         label = QLabel()
@@ -279,9 +281,9 @@ class MESSAGE(QMainWindow):
         self.show()
 
 class EDIT(QMainWindow):
-    def __init__(self, tab, num, type='Echec', parent=None):
+    def __init__(self, tab, num, title=' ', parent=None):
         super(EDIT, self).__init__(parent)
-        self.setWindowTitle(type)
+        self.setWindowTitle(title)
         self.num = str(num)
         self.move(50, 100)
 
@@ -324,8 +326,11 @@ class EDIT(QMainWindow):
         self.extension = "." + fileName.split(".")[-1]
         self.path = get_path(fileName)
 
-        self.tmp = "tmp" + os.sep + self.num + os.sep
-        self.out = "out" + os.sep + self.num + os.sep
+        # self.tmp = "tmp" + os.sep + self.num + os.sep
+        # self.out = "out" + os.sep + self.num + os.sep
+
+        self.tmp = self.path + os.sep + "tmp" + os.sep + self.num + os.sep
+        self.out = self.path + os.sep + "out" + os.sep
 
         self.last_name[self.ZOOM] = insertnow(self.name + self.extension)
 
@@ -340,7 +345,7 @@ class EDIT(QMainWindow):
             pass
 
         try:
-            shutil.copyfile(fileName, self.path + self.tmp + self.last_name[self.ZOOM])
+            shutil.copyfile(fileName, self.tmp + self.last_name[self.ZOOM])
             
         except:
             pass
@@ -442,7 +447,7 @@ class EDIT(QMainWindow):
     def validate_editing(self):
         file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
         im = IMAGE()
-        im.load(f"{self.path}{self.tmp}{file_wo_zoom}")
+        im.load(f"{self.tmp}{file_wo_zoom}")
         im.ci_points = sort_ci_points(self.ci_points)
         im.ds_points = sort_ds_points(self.ds_points)
         im.draw_ci_lines(self.color_ci)
@@ -453,19 +458,19 @@ class EDIT(QMainWindow):
         # im.customize()
         # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
 
-        try:
-            for filename in os.listdir(f"{self.path}{self.out}"):
-                file_path = f"{self.path}{self.out}" + os.sep + filename
-                os.unlink(file_path)
-                print(f"suppression du fichier {file_path}")
-        except:
-            pass
+        # try:
+        #     for filename in os.listdir(f"{self.out}"):
+        #         file_path = self.out + os.sep + filename
+        #         os.unlink(file_path)
+        #         print(f"suppression du fichier {file_path}")
+        # except:
+        #     pass
         
-        plt.imsave(fname=f"{self.path}{self.out}{self.name}_out{self.extension}", arr=im.data)
+        plt.imsave(fname=f"{self.out}{self.NUM}_out{self.extension}", arr=im.data)
         self.add_infos()
         # self.write_results()
         
-        pixmap = QPixmap(f"{self.path}{self.out}{self.name}_out{self.extension}")
+        pixmap = QPixmap(f"{self.out}{self.NUM}_out{self.extension}")
         pixmap = pixmap.scaled(self.WIDTH, self.HEIGHT, Qt.KeepAspectRatio, Qt.FastTransformation)
         
         self.LAB_RIGHT[self.NUM-1].setPixmap(pixmap)
@@ -478,14 +483,14 @@ class EDIT(QMainWindow):
 
         self.LAB_RES[self.NUM-1].setText(f"     Ci : {ci}\n     Ds : {ds}°")
 
-        self.RES[self.num] = (clean(self.ci_value), clean(self.ds_value))
+        self.RES[int(self.NUM)] = (clean(self.ci_value), clean(self.ds_value))
 
         save_results_txt(f"{self.path}{os.sep}out{os.sep}", self.RES)
 
         return 0
 
     def add_infos(self):
-        img = Image.open(f"{self.path}{self.out}{self.name}_out{self.extension}")
+        img = Image.open(f"{self.out}{self.NUM}_out{self.extension}")
         # Create a drawing object
         draw = ImageDraw.Draw(img)
 
@@ -507,7 +512,7 @@ class EDIT(QMainWindow):
         draw.text(position, text, fill=text_color, font=font)
 
         # Save or display the image
-        img.save(f"{self.path}{self.out}{self.name}_out{self.extension}")
+        img.save(f"{self.out}{self.NUM}_out{self.extension}")
 
     # def write_results(self):
     #     with open(self.path + os.sep + "out" + os.sep + "results.txt", "a") as f:
@@ -638,9 +643,9 @@ class EDIT(QMainWindow):
 
     def cancel(self):
         last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
-        os.remove(self.path + self.tmp + last_file_wo_zoom)
+        os.remove(self.tmp + last_file_wo_zoom)
         try:
-            os.remove(self.path + self.tmp + last_file_w_zoom)
+            os.remove(self.tmp + last_file_w_zoom)
         except:
             pass
         last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
@@ -739,7 +744,6 @@ class EDIT(QMainWindow):
                     file_w_zoom = file
                 else:
                     continue
-
         return file_wo_zoom, file_w_zoom
 
     def zoom_out(self):
@@ -755,24 +759,6 @@ class EDIT(QMainWindow):
         self.last_name[0] = last_file_wo_zoom
         self.last_name[1] = last_file_w_zoom
         return 0
-    
-
-    # def display_success_message(self, success_msg, nom_analyse, dossier):
-    #     self.move(600, 300)
-    #     layout = QVBoxLayout()
-    #     pixmap = QPixmap(f"images" + os.sep + "aspicot.png")
-    #     label = QLabel()
-    #     label.setPixmap(pixmap)
-    #     layout.addWidget(label)
-    #     # txt = QLabel("Veuillez d'abord charger une image \navant de l'éditer...")
-    #     txt = QLabel(success_msg.replace('r1', nom_analyse).replace('r2', dossier))
-    #     txt.setFont(QFont('Times', 13))
-    #     layout.addWidget(txt)
-    #     widget = QWidget()
-    #     widget.setLayout(layout)
-    #     self.setCentralWidget(widget)
-    #     # self.setFixedWidth(380)
-    #     # self.setFixedHeight(300)
 
     def get_pos_in_widget(self, event):
         pos = event.pos()
@@ -887,7 +873,21 @@ class MainWindow(QMainWindow):
                     print(f"suppression du dossier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
-        
+
+        print(f"nettoyage du dossier 'in' : {self.in_}")
+        for filename in os.listdir(self.in_):
+            file_path = self.in_ + os.sep + filename
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+                    print(f"suppression du fichier {file_path}")
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+                    print(f"suppression du dossier {file_path}")
+            except Exception as e:
+                print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+
         print(f"nettoyage du dossier 'out' : {self.out}")
         for filename in os.listdir(self.out):
             file_path = self.out + os.sep + filename
@@ -1315,30 +1315,24 @@ class Tab(QWidget):
             print("results already computed:")
             print(self.RES)
                     
-            for file in os.listdir(self.tmp + os.sep + "in"):
+            for file in os.listdir(self.in_):
                 num_abeille = int(file.split(".")[0])
                 print(num_abeille)
                 if num_abeille not in self.RES.keys():
                     print(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
                 else:
-                    ff_in = self.tmp + os.sep + "in" + os.sep + file
-                    print(ff_in)
-                    # image in
+                    ff_in = self.in_ + os.sep + file
                     pixmap = QPixmap(ff_in)
                     pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.label_left[num_abeille-1].setPixmap(pixmap)
-                    self.grids[0].addWidget(self.label_left[num_abeille-1], num_abeille-1, 2, 1, 1)
-                
-                    #image out
-                    # !!! Attention : mieux gérer les extensions des fichiers (.jpeg, .png)
-                    ff_out = self.tmp + os.sep + "out" + os.sep + str(num_abeille) + os.sep + str(num_abeille) + "_out.jpg" 
-                    print(ff_out)
+                    # attention mieux gérer l'extension du fichier qui n'est pas forcément en .jpg
+                    ff_out = self.out + os.sep + str(num_abeille) + os.sep + file.replace(".png", "_out.jpg") 
+                    self.label_left[num_abeille-1].setPixmap(pixmap)
                     pixmap_out = QPixmap(ff_out)
                     pixmap_out = pixmap_out.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.label_right[num_abeille-1].setPixmap(pixmap_out)
-                    self.grids[0].addWidget(self.label_right[num_abeille-1], num_abeille-1, 4, 1, 1)
-
                     # self.fileNames[num_abeille-1] = file
+                    print(ff_in, ff_out)
 
         else:
             pass
