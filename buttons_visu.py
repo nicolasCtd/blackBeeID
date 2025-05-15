@@ -3,12 +3,14 @@ import os
 def visu1(TAB):
     from IHM import VISU, MESSAGE
     file_exists = 0
+    name = ""
     for file in os.listdir(TAB.out):
         if "1_out" in file:
-            file_exists = 1
+            file_exists = True
+            name = file
     if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(TAB.out + os.sep + file)
+        TAB.dialog.display(TAB.out + os.sep + name)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()

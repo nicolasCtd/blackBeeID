@@ -1,1 +1,1 @@
-num indice_cubital angle_discoidal
+1 1.9926172580742993 113.02071939
