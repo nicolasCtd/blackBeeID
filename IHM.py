@@ -1,16 +1,7 @@
-from images import *
-from analyses import *
-import matplotlib.pyplot as plt
-
 import sys
 import os
-
-from datetime import datetime, date
-
 import shutil
-
 import zipfile
-
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtWidgets import (
     QApplication,
@@ -39,6 +30,9 @@ from PIL import Image, ImageDraw, ImageFont
 from buttons_edit import *
 from buttons_visu import *
 from buttons_browse import *
+from ci_and_ds_tools import *
+from utile import *
+from analyses import *
 
 
 connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFile5,
@@ -69,125 +63,6 @@ connections_load = {1:browseFile1, 2:browseFile2, 3:browseFile3, 4:browseFile4, 
                        26:browseFile26, 27:browseFile27, 28:browseFile28, 29:browseFile29, 30:browseFile30,
                        31:browseFile31, 32:browseFile32, 33:browseFile33, 34:browseFile34, 35:browseFile35,
                        36:browseFile36, 37:browseFile37, 38:browseFile38, 39:browseFile39, 40:browseFile40}
-
-def copytree(src, dst):
-    if os.path.exists(dst):
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst)
-
-def clean(value):
-    return str(value).replace("[", "").replace("]", "")
-
-def get_ci_ds(ci_value, ds_value):
-    ci = int(ci_value * 100)/100
-    ds_ = clean(ds_value)
-    
-    tt = "+"
-    if float(ds_) < 0:
-        tt = "-"
-
-    return str(ci), tt + str(np.abs(int(float(ds_)*100)/100))
-
-def load_results(file):
-    res = {}
-    with open(file, "r") as f:
-        a = f.readlines()
-    for i in range(len(a)):
-        line = a[i].replace("\n", "").split(" ")
-        res[int(line[0])] = (line[1], line[2])
-    return res
-
-def save_results_txt(path, res):
-    with open(path + "results.txt", "w") as f:
-        liste_abeilles = [int(key) for key in res.keys()]
-        for num in sorted(liste_abeilles):
-            line = f"{num} {clean(res[num][0])} {res[num][1]}\n"
-            f.write(line)
-        f.close()
-
-def write_line(file, num, ci_value, ds_value):
-    line = f"{num} {ci_value} {ds_value}\n"
-    with open(file, "a") as f:
-        f.write(line)
-    f.close()
-    return 0
-
-def insertnow(file):       
-    now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S").replace("/", "_").replace(" ", "___").replace(":", "_")
-    tmp = file.split(".")
-    return tmp[0] + "___" + dt_string + "." + tmp[-1]
-
-def get_file_name(path):
-    path_split = path.replace(os.sep, "/").split("/")
-    name = path_split[-1].replace(".zip","")
-    return name.split("_")[0]
-
-def get_path(path2file):
-    path_split = path2file.replace(os.sep, "/").split("/")
-    return os.sep.join(path_split[:-1]) + os.sep
-
-def get_zoom_center(file):
-    xmin, xmax, ymin, ymax = 0, 0, 0, 0
-    if "zoom" not in file:
-        print("Erreur : cette image n'est pas un zoom")
-    else:
-        a = file.find("xmin")
-        b = file.find("xmax")
-        c = file.find("ymin")
-        d = file.find("ymax")
-        e = file.find("end")
-
-        xmin=int(file[a+4:b])
-        xmax=int(file[b+4:c])
-        ymin=int(file[c+4:d])
-        ymax=int(file[d+4:e])
-    return xmin, xmax, ymin, ymax
-
-def sort_ci_points(nodes):
-    nodes_ordered = list()
-    if len(nodes) != 3:
-        print("Erreur : le nombre de points CI devrait être égal à 3")
-    else:
-        # sort the 3 points from left to right 
-        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
-        for i in range(3):
-            nodes_ordered.append(nodes[order[i]])
-    return nodes_ordered
-
-def sort_ds_points(nodes):
-    nodes_ordered = list()
-    if len(nodes) != 4:
-        print("Erreur : le nombre de points DS devrait être égal à 4")
-    else:
-        idx = np.argmax([nodes[0].i, nodes[1].i, nodes[2].i, nodes[3].i])
-        DS = nodes[idx]
-        nodes.remove(nodes[idx])
-        # sort the 3 points from left to right 
-        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
-        for i in range(3):
-            nodes_ordered.append(nodes[order[i]])
-        nodes_ordered.append(DS)
-    print(nodes_ordered)
-    return nodes_ordered
-
-def compute_cubital_index(ci_points):
-    n0 = ci_points[0]
-    n1 = ci_points[1]
-    n2 = ci_points[2]
-    a = DROITE(n0, n1).distance
-    b = DROITE(n1, n2).distance
-    cubital_index = a/b
-    return cubital_index
-
-def compute_discoidal_shift(perp_02_point1, perp_02_point2, ds_points):
-    U = DROITE(perp_02_point1, perp_02_point2)
-    V = DROITE(ds_points[1], ds_points[3])
-    dot = U.nX * V.nX + U.nY * V.nY
-    delta = ds_points[3].j - U.get_x(ds_points[3].i)
-    discoidal_shift = np.sign(delta) *  np.arccos(dot/(U.distance * V.distance)) * 180/np.pi
-    return discoidal_shift
-
 
 class FolderSelector(QWidget):
     def __init__(self):
@@ -702,9 +577,8 @@ class EDIT(QMainWindow):
         
         return 0
 
-
     def zoom_in(self, ZOOM=True):
-        file_wo_zoom, file_w_zoom = self.get_last_file(self.path + self.tmp)
+        file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
         self.ZOOM = ZOOM
         pixmap = QPixmap(f"images{os.sep}search.png")
         pixmap = pixmap.scaled(32, 32)
@@ -748,7 +622,7 @@ class EDIT(QMainWindow):
 
     def zoom_out(self):
         last_file_wo_zoom, last_file_w_zoom = self.get_last_file(path=self.tmp)
-        pixmap = QPixmap(self.path + self.tmp + last_file_wo_zoom)
+        pixmap = QPixmap(self.tmp + last_file_wo_zoom)
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
         self.switch_button_zoom_in = True
@@ -788,7 +662,7 @@ class EDIT(QMainWindow):
             file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
 
             A = IMAGE()
-            A.load(self.path + self.tmp + file_wo_zoom)
+            A.load(self.tmp + file_wo_zoom)
             
             j_min = max(x-zoom_x//2, 0)
             j_max = min(x+zoom_x//2, A.data.shape[1])
@@ -1145,7 +1019,6 @@ class Tab(QWidget):
         deco2 = QLabel()
         deco2.setPixmap(pixmap)
 
-        
         # deco.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         layout_main.addWidget(label0, 0, 0, 1, 2)

@@ -1,16 +1,67 @@
-# coding: utf-8
-
+from images import *
 import numpy as np
-import os
-from fonctions import *
-import matplotlib as mpl
 import matplotlib.pyplot as plt
-import warnings
-from datetime import datetime
-import yaml
 
-warnings.filterwarnings('ignore') 
+def get_zoom_center(file):
+    xmin, xmax, ymin, ymax = 0, 0, 0, 0
+    if "zoom" not in file:
+        print("Erreur : cette image n'est pas un zoom")
+    else:
+        a = file.find("xmin")
+        b = file.find("xmax")
+        c = file.find("ymin")
+        d = file.find("ymax")
+        e = file.find("end")
 
+        xmin=int(file[a+4:b])
+        xmax=int(file[b+4:c])
+        ymin=int(file[c+4:d])
+        ymax=int(file[d+4:e])
+    return xmin, xmax, ymin, ymax
+
+def sort_ci_points(nodes):
+    nodes_ordered = list()
+    if len(nodes) != 3:
+        print("Erreur : le nombre de points CI devrait être égal à 3")
+    else:
+        # sort the 3 points from left to right 
+        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
+        for i in range(3):
+            nodes_ordered.append(nodes[order[i]])
+    return nodes_ordered
+
+def sort_ds_points(nodes):
+    nodes_ordered = list()
+    if len(nodes) != 4:
+        print("Erreur : le nombre de points DS devrait être égal à 4")
+    else:
+        idx = np.argmax([nodes[0].i, nodes[1].i, nodes[2].i, nodes[3].i])
+        DS = nodes[idx]
+        nodes.remove(nodes[idx])
+        # sort the 3 points from left to right 
+        order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
+        for i in range(3):
+            nodes_ordered.append(nodes[order[i]])
+        nodes_ordered.append(DS)
+    print(nodes_ordered)
+    return nodes_ordered
+
+def compute_cubital_index(ci_points):
+    n0 = ci_points[0]
+    n1 = ci_points[1]
+    n2 = ci_points[2]
+    a = DROITE(n0, n1).distance
+    b = DROITE(n1, n2).distance
+    cubital_index = a/b
+    return cubital_index
+
+def compute_discoidal_shift(perp_02_point1, perp_02_point2, ds_points):
+    U = DROITE(perp_02_point1, perp_02_point2)
+    V = DROITE(ds_points[1], ds_points[3])
+    dot = U.nX * V.nX + U.nY * V.nY
+    delta = ds_points[3].j - U.get_x(ds_points[3].i)
+    discoidal_shift = np.sign(delta) *  np.arccos(dot/(U.distance * V.distance)) * 180/np.pi
+    return discoidal_shift
 
 class IMAGE():
     def __init__(self):

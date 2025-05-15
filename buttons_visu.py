@@ -2,147 +2,138 @@ import os
 
 def visu1(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "1"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "1_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu2(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "2"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "2_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
+
 def visu3(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "3"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "3_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu4(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "4"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "4_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu5(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "5"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "5_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu6(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "6"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "6_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu7(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "7"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "7_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu8(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "8"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "8_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu9(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "9"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "9_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu10(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "10"
-    try:
-        fileName = os.listdir(path)[0]
-    except:
-        fileName = ""
-    if fileName != "":
+    file_exists = 0
+    for file in os.listdir(TAB.out):
+        if "10_out" in file:
+            file_exists = 1
+    if file_exists:
         TAB.dialog = VISU()
-        TAB.dialog.display(path + os.sep + fileName)
+        TAB.dialog.display(TAB.out + os.sep + file)
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
 
 def visu11(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "11"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -156,7 +147,7 @@ def visu11(TAB):
 
 def visu12(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "12"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -170,7 +161,7 @@ def visu12(TAB):
 
 def visu13(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "13"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -184,7 +175,7 @@ def visu13(TAB):
 
 def visu14(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "14"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -198,7 +189,7 @@ def visu14(TAB):
 
 def visu15(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "15"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -212,7 +203,7 @@ def visu15(TAB):
 
 def visu16(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "16"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -226,7 +217,7 @@ def visu16(TAB):
 
 def visu17(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "17"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -240,7 +231,7 @@ def visu17(TAB):
 
 def visu18(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "18"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -254,7 +245,7 @@ def visu18(TAB):
 
 def visu19(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "19"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -268,7 +259,7 @@ def visu19(TAB):
 
 def visu20(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "20"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -282,7 +273,7 @@ def visu20(TAB):
 
 def visu21(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "21"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -296,7 +287,7 @@ def visu21(TAB):
 
 def visu22(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "22"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -310,7 +301,7 @@ def visu22(TAB):
 
 def visu23(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "23"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -324,7 +315,7 @@ def visu23(TAB):
 
 def visu24(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "24"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -338,7 +329,7 @@ def visu24(TAB):
 
 def visu25(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "25"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -352,7 +343,7 @@ def visu25(TAB):
 
 def visu26(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "26"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -366,7 +357,7 @@ def visu26(TAB):
 
 def visu27(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "27"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -380,7 +371,7 @@ def visu27(TAB):
 
 def visu28(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "28"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -394,7 +385,7 @@ def visu28(TAB):
 
 def visu29(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "29"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -408,7 +399,7 @@ def visu29(TAB):
 
 def visu30(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "30"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -422,7 +413,7 @@ def visu30(TAB):
 
 def visu31(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "31"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -436,7 +427,7 @@ def visu31(TAB):
 
 def visu32(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "32"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -450,7 +441,7 @@ def visu32(TAB):
 
 def visu33(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "33"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -464,7 +455,7 @@ def visu33(TAB):
 
 def visu34(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "34"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
@@ -478,7 +469,7 @@ def visu34(TAB):
 
 def visu35(TAB):
     from IHM import VISU, MESSAGE
-    path = TAB.out + os.sep + "35"
+    path = TAB.out
     try:
         fileName = os.listdir(path)[0]
     except:
