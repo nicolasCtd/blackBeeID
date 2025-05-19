@@ -724,16 +724,6 @@ class MainWindow(QMainWindow):
         self.in_ = os.path.abspath(os.getcwd()) + os.sep + "in"
         self.tmp = os.path.abspath(os.getcwd()) + os.sep + "tmp"
         self.path = os.path.abspath(os.getcwd())
-
-        # for filename in os.listdir(self.path):
-        #     file_path = self.path + os.sep + filename
-        #     try:
-        #         if os.path.isfile(file_path):
-        #             os.unlink(file_path)
-        #         elif os.path.isdir(file_path):
-        #             shutil.rmtree(file_path)
-        #     except Exception as e:
-        #         print('Failed to delete %s. Reason: %s' % (file_path, e))
         
         print(f"nettoyage du dossier 'tmp' : {self.tmp}")
         for filename in os.listdir(self.tmp):
@@ -871,18 +861,6 @@ class Tab(QWidget):
         self.fileName49 = "im49.png"
         self.fileName50 = "im50.png"
 
-        # self.fileNames = [self.fileName1, self.fileName2, self.fileName3, self.fileName4, self.fileName5,
-        #                   self.fileName6, self.fileName7, self.fileName8, self.fileName9, self.fileName10,
-        #                   self.fileName11, self.fileName12, self.fileName13, self.fileName14, self.fileName15,
-        #                   self.fileName16, self.fileName17, self.fileName18, self.fileName19, self.fileName20,
-        #                   self.fileName21, self.fileName22, self.fileName23, self.fileName24, self.fileName25,
-        #                   self.fileName26, self.fileName27, self.fileName28, self.fileName29, self.fileName30,
-        #                   self.fileName31, self.fileName32, self.fileName33, self.fileName34, self.fileName35,
-        #                   self.fileName36, self.fileName37, self.fileName38, self.fileName39, self.fileName40,
-        #                   self.fileName41, self.fileName42, self.fileName43, self.fileName44, self.fileName45,
-        #                   self.fileName46, self.fileName47, self.fileName48, self.fileName49, self.fileName50]
-
-
         self.layout = QVBoxLayout(self)
   
         # Initialize tab screen 
@@ -900,9 +878,6 @@ class Tab(QWidget):
         self.tab9 = QWidget()
         self.tab10 = QWidget()
 
-
-        # Add tabs
-
         mf = QFont("Times New Roman", 14)
 
         self.tabs.addTab(self.tab0, "Main")
@@ -918,6 +893,7 @@ class Tab(QWidget):
         self.tabs.addTab(self.tab10, "46-50")
 
         self.tabs.setFont(QFont('Times', 13))
+        self.tabs.setCurrentIndex(1)
 
         self.width = 413
         self.height = 307
@@ -1022,7 +998,6 @@ class Tab(QWidget):
         # deco.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         layout_main.addWidget(label0, 0, 0, 1, 2)
-        # layout_main.addWidget(self.edit_analyse_name, 0, 1, 1, 2)
         layout_main.addWidget(self.label00, 0, 1, 1, 2)
         layout_main.addWidget(self.pb, 0, 2, 1, 1)
         layout_main.addWidget(btn1, 1, 0, 2, 2)
@@ -1148,7 +1123,6 @@ class Tab(QWidget):
             self.btn3.setText(f"Lancer\nl'analyse\n{self.analyse_name}")
         return 0
 
-
     def save_project(self):
         DIR = str(QFileDialog.getExistingDirectory(self, "Select Directory"))
         if DIR != "":
@@ -1169,6 +1143,7 @@ class Tab(QWidget):
             self.dialog.show()
         else:
             pass
+        self.tabs.setCurrentIndex(1)
         return 0
     
     def load_project(self):
@@ -1182,15 +1157,17 @@ class Tab(QWidget):
             self.btn3.setText(f"Lancer\nl'analyse\n{self.analyse_name}")
             
             shutil.unpack_archive(filename=project_file, extract_dir=self.tmp)
+            copytree(src=self.tmp + os.sep + "in", dst=self.in_)
             copytree(src=self.tmp + os.sep + "out", dst=self.out)
 
             self.RES = load_results(self.tmp + os.sep + "out" + os.sep + "results.txt")
             print("results already computed:")
             print(self.RES)
-                    
+
+            extension = os.listdir(self.out)[0].split(".")[1]
+
             for file in os.listdir(self.in_):
-                num_abeille = int(file.split(".")[0])
-                print(num_abeille)
+                num_abeille = int(file.split("_")[0])
                 if num_abeille not in self.RES.keys():
                     print(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
                 else:
@@ -1198,15 +1175,11 @@ class Tab(QWidget):
                     pixmap = QPixmap(ff_in)
                     pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.label_left[num_abeille-1].setPixmap(pixmap)
-                    # attention mieux gérer l'extension du fichier qui n'est pas forcément en .jpg
-                    ff_out = self.out + os.sep + str(num_abeille) + os.sep + file.replace(".png", "_out.jpg") 
+                    ff_out = self.out + os.sep + str(num_abeille) + "_out." + extension
                     self.label_left[num_abeille-1].setPixmap(pixmap)
                     pixmap_out = QPixmap(ff_out)
                     pixmap_out = pixmap_out.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
                     self.label_right[num_abeille-1].setPixmap(pixmap_out)
-                    # self.fileNames[num_abeille-1] = file
-                    print(ff_in, ff_out)
-
         else:
             pass
         return 0
