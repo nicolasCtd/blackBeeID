@@ -1143,7 +1143,6 @@ class Tab(QWidget):
             self.dialog.show()
         else:
             pass
-        self.tabs.setCurrentIndex(1)
         return 0
     
     def load_project(self):
@@ -1165,6 +1164,10 @@ class Tab(QWidget):
             print(self.RES)
 
             extension = os.listdir(self.out)[0].split(".")[1]
+            for num_abeille in self.RES.keys():
+                ci, ds = get_ci_ds(float(self.RES[num_abeille][0]), float(self.RES[num_abeille][1]))
+                print(ci, ds)
+                self.label_results[num_abeille-1].setText(f"     Ci : {ci}\n     Ds : {ds}°")
 
             for file in os.listdir(self.in_):
                 num_abeille = int(file.split("_")[0])
@@ -1182,6 +1185,7 @@ class Tab(QWidget):
                     self.label_right[num_abeille-1].setPixmap(pixmap_out)
         else:
             pass
+        self.tabs.setCurrentIndex(1)
         return 0
 
 if __name__ == '__main__':
