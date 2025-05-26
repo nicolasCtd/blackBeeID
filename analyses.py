@@ -13,461 +13,370 @@ warnings.filterwarnings('ignore')
 
 mpl.use('TkAgg')
 
-# class IMAGE():
-#     def __init__(self, log):
-#         self.name = ''
-#         self.data = np.array([])
-#         self.nb_lignes = 0
-#         self.nb_col = 0
-#         self.c1 = np.array([])  # composante 1 (R)
-#         self.c2 = np.array([])  # composante 2 (G)
-#         self.c3 = np.array([])  # composante 3 (B)
-#         self.ci_points = list()
-#         self.ds_points = list()
-#         self.DS_i = 0
-#         self.DS_j = 0
-#         self.discoidal_shift = 90
-#         self.log = log
+
+class HISTOGRAM():
+    def __init__(self, indices, path, visu="RUTTNER"):
+        self.path=path
+        self.visu = visu
+        self.indices = indices
+        self.classes = self.get_classes(indices)
+        self.limits = {'carnica':[2.3, 3.2],
+                       'ligustica':[2, 2.8],
+                       'caucasica': [1.7, 2.3],
+                       'mellifera':[1.4, 2.1]}
+        self.mclc = {'carnica':0,
+                       'ligustica':0,
+                       'caucasica': 0,
+                       'mellifera':0}
+        self.save_abacus()
+
     
-#     def load(self, file):
-#         self.name = file
-#         self.data = np.copy(plt.imread(file))
-#         self.data_copy = np.copy(self.data)
-#         self.nb_lignes = self.data.shape[0]
-#         self.nb_col = self.data.shape[1]
-#         self.c1 = self.data[:, :, 0]
-#         self.c2 = self.data[:, :, 1]
-#         self.c3 = self.data[:, :, 2]
-
-#     def show(self):
-#         plt.imshow(image.data)
-#         plt.show()
-
-#     def customize(self, save, show, out=''):
-#         try:
-#             self.compute_cubital_index()
-#         except:
-#             print("Erreur dans le calcul de l'indice cubital", file=self.log)
+    def save_abacus(self):
+        classes, indices = self.compute_abacus()
+        with open(os.sep.join([self.path, "abacus.txt"]), "w") as f:
+            for classe, indice in zip(classes, indices):
+                f.write(str(indice) + " " + str(classe) + "\n")
+        return 0
         
-#         try:
-#             self.compute_discoidal_shift()
-#         except:
-#             print("Erreur dans le calcul de l'angle discoidal", file=self.log)
+    def histogram(self):
+        y = list()
+        x = list()
+        for i in range(1, 25):
+            y.append(self.classes.count(i))
+            x.append(i)
+        self.x = x
+        self.y = y
+        return x, y
 
-#         fig = plt.imshow(self.data[:, self.nb_col//2:])
-#         fig.axes.get_xaxis().set_visible(False)
-#         fig.axes.get_yaxis().set_visible(False)
+    def compute_abacus(self):
+        if self.visu == "DREHER":
+            delta = 100 / 50
+        elif self.visu == "RUTTNER":
+            delta = 100 / 60
+
+        CLASSES = list()
+        INDICES = list()
+        for i in range(-5, 18):
+            a = 50 + i * delta 
+            b = 50 - i * delta 
+            CLASSES.append(6 + i)
+            INDICES.append(int(a/b*1000)/1000)
+
+        return CLASSES, INDICES
+
+    def get_classes(self, indices):
+        CLASSES, INDICES = self.compute_abacus()
+        CL = CLASSES[:-1]
+        CI_min = INDICES[:-1]
+        CI_max = INDICES[1:]
+
+        classes = list()
+        for indice in indices:
+            for i in range(len(CL)):
+                if (indice >= CI_min[i]) and (indice < CI_max[i]):
+                    classes.append(CL[i])
+                    break
+        return classes
+
+    def MCLC(self):
+        X = np.array(self.x)
+        Y = np.array(self.y)
         
-#         if self.a != 0:
-#             ci = int(self.cubital_index*100)/100
-#         else:
-#             ci = "erreur"
+        E = Y.sum()
 
-#         tt = ""
-#         if self.discoidal_shift != 90:
-#             ds = int(self.discoidal_shift*100)/100
-#             if np.sign(ds) == 1:
-#                 tt = "+"
-#         else:
-#             ds = "erreur"
+        coeffs = dict()
+        somme = 0
 
-#         plt.title(f"Abeille #{num}             Indice cubital : {ci}             Angle discoïdal : {tt}{ds}°", color='white', fontweight='bold', fontsize=15)
+        for espece in self.limits.keys():
 
-#         if save:
-#             plt.gcf().set_size_inches(18.5, 10.5)
-#             plt.gcf().set_facecolor("grey")
-#             plt.gcf().savefig(f"{out}{os.sep}{num}.png")
-#             print(f"Image successfully saved: {out}{num}.png", file=self.log)
-            
-#         if show:
-#             plt.show()
+            classes = self.get_classes(self.limits[espece])
+            cmin, cmax = classes[0], classes[1]
+            select = (X >= cmin) & (X <=cmax)
 
-#         plt.close()
+            Xnorm = X[select]
+            Ynorm = Y[select] / Y[select].sum()
+            Ynorm[0] = 0
+            Ynorm[-1] = 0
+            sigma = (cmax - cmin )/6
+            mu = (cmax + cmin)/2
 
+            normal = gauss(Xnorm, mu, sigma)
+            coeff, _ = pearsonr(normal, Ynorm)
+            coeff = coeff * Y[select].sum() / E
 
-#     def highlight_ci_points(self):
-#         """Find the 3 cubital index points (in orange) and paint them in blue on final image"""
-#         nodes = list()
-#         for i in range(3):
-#             t1 = self.data_copy[:,:,0]
-#             t2 = self.data_copy[:,:,1]
-#             t3 = self.data_copy[:,:,2]
-#             node = POINT()
-#             coloured_pixels = np.where((t1 > 250) & (t2 > 100) & (t3 < 10))    # orange pixels (t1 is strong)
-#             idx_max = int(np.argmax(t1[coloured_pixels]))
-#             node.i = coloured_pixels[0][idx_max]
-#             node.j = coloured_pixels[1][idx_max]
-#             self.highlight(node, color=(0, 0, 255))
-#             nodes.append(node)
-#         # sort the 3 points from left to right 
-#         order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
-#         for i in range(3):
-#             self.ci_points.append(nodes[order[i]])
-#         return 0
-    
-#     def draw_ci_lines(self):
-#         # draw lines between cubital index points
-#         DROITE(self.ci_points[0], self.ci_points[1]).draw(self, 2, 2, color=(0, 0, 255))
-#         DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=(0, 0, 255))
-#         return 0
+            if coeff < 0:
+                coeff = 0
+            coeffs[espece] = coeff
+            somme += coeff
 
-#     def highlight_ds_points(self):
-#         """Find the 4 discoidal shift points (in green) and paint them in yellow on final image"""
-#         nodes = list()
-#         pos_y = list()
-#         for i in range(4):
-#             t1 = self.data_copy[:,:,0]
-#             t2 = self.data_copy[:,:,1]
-#             t3 = self.data_copy[:,:,2]
-#             node = POINT()
-#             coloured_pixels = np.where((t1 < 100) & (t2 > 250) & (t3 < 50))    # green pixels (t2 is strong)
-#             idx_max = int(np.argmax(t1[coloured_pixels]))
-#             node.i = coloured_pixels[0][idx_max]
-#             node.j = coloured_pixels[1][idx_max]
-#             pos_y.append(node.i)
-#             node.color = (255, 255, 0)
-#             self.highlight(node, color=(255, 255, 0))
-#             nodes.append(node)
-#         idx = np.argmax(pos_y)
-#         self.DS = nodes[idx]
-#         nodes.remove(nodes[idx])
-#         # sort the 3 points from left to right 
-#         order = np.array(np.argsort(np.array([nodes[0].j, nodes[1].j, nodes[2].j])), dtype=int)
-#         for i in range(3):
-#             self.ds_points.append(nodes[order[i]])
-#         return 0
+            try:
+                COEF = int(coeff*100)/100
+            except:
+                COEF="NaN"
 
-#     def draw_ds_line_02(self):
-#         DROITE(self.ds_points[0], self.ds_points[2]).draw(self, 2, 2, color=(0, 0, 0))
-#         return 0
-
-#     def draw_ds_line_02_perpendicular(self):
-#         point1 = POINT()
-#         point2 = POINT()
-#         x, y = DROITE(self.ds_points[0], self.ds_points[2]).xy
-#         dot_product = np.ones(x.size)
-#         for pixel in range(x.size):
-#             u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
-#             v = (x[pixel] - self.ds_points[1].j, y[pixel] - self.ds_points[1].i)
-#             dot_product[pixel] = u[0] * v[0] + u[1] * v[1]
-#         idx = int(np.argmin(np.abs(dot_product)))
-#         Pyy, Pxx = y[idx], x[idx]
-
-#         # look for another pixel (point1) in this area that minimizes the dot product
-#         square = 20
-#         dot_product = np.ones((self.nb_lignes, self.nb_col)) * 1000
-#         for dY in np.arange(0, int(1.5*square)):
-#             for dX in np.arange(-square, +square+1):
-#                 Py_test, Px_test = Pyy - dY, Pxx - dX
-#                 u = (self.ds_points[2].j - self.ds_points[0].j, self.ds_points[2].i - self.ds_points[0].i)
-#                 v = (Px_test - self.ds_points[1].j, Py_test - self.ds_points[1].i)
-#                 dot_product[Py_test, Px_test] = u[0] * v[0] + u[1] * v[1]
-#         Py, Px = np.where(np.abs(dot_product) == np.min(np.abs(dot_product)))
-
-
-#         if len(Py)>1:
-#             txt = "draw_ds_line_02_perpendicular(): la recherche + précise d'un autre pixel "
-#             txt += "appartenant à la droite perpendiculaire à la première n'a pas marché"
-#             print(txt, file=self.log)
-#             Py, Px = Pyy, Pxx
-
-#         point1.i = Py
-#         point1.j = Px
-#         point1.color = self.ds_points[0].color
-#         # Now find another point far from the second DS point but in the same alignment
-#         distance_ref = 0.8 * DROITE(self.ds_points[0], self.ds_points[2]).distance
-#         small_line = DROITE(point1, self.ds_points[1])
-#         x = np.arange(self.nb_col)
-#         y = small_line.get_y(x)
-#         x = x[y>0]
-#         y = y[y>0]
-#         distance = np.sqrt((x - point1.j) **2 + (y - point1.i) ** 2)
-#         delta = np.abs(distance - distance_ref)
-#         idx = int(np.where(delta == np.min(delta))[0][0])
-#         point2.i = int(y[idx])
-#         point2.j = int(x[idx])
-#         DROITE(point1, point2).draw(self, 2, 5, color=(0, 0, 0))
-#         self.point1 = point1
-#         self.point2 = point2
-#         return 0
-    
-#     def draw_ds_line_02_angle(self):
-#         P = POINT()
-#         X1, Y1 = DROITE(self.point1, self.point2).xy
-#         X2, Y2 = DROITE(self.ds_points[0], self.ds_points[2]).xy
-#         x = list()
-#         y = list()
-#         d = list()
-#         for x1, y1 in zip(X1, Y1):
-#             for x2, y2 in zip(X2, Y2):
-#                 d.append((x1 - x2) ** 2 + (y1 - y2)**2)
-#                 x.append(x1)
-#                 y.append(y1)
-#         P.j, P.i = x[np.argmin(d)], y[np.argmin(d)]
-#         P.color = self.DS.color
-#         # Find a point with more distance
-#         D = DROITE(P, self.DS)
-#         y = D.get_x(self.point2.i - 10)
-#         Q = POINT()
-#         Q.i = self.point2.i - 10
-#         Q.j = y
-#         DROITE(P, Q).draw(self, 2, 4, color=(0, 0, 0))
-#         return 0
-
-#     def highlight(self, node, color, rayon=5):
-#         y, x = np.meshgrid(np.arange(self.nb_col), np.arange(self.nb_lignes))
-#         for i in range(3):
-#             dot_ci = (np.sqrt(np.abs(node.i - x)**2 + np.abs(node.j-y)**2) <= rayon) * 1
-#             idx_ci_i, idx_ci_j = np.where(dot_ci == 1)
-#             # Color in blue point that has been identified
-#             for i, j in zip(idx_ci_i, idx_ci_j):
-#                 self.data[i, j][0] = color[0]
-#                 self.data[i, j][1] = color[1]
-#                 self.data[i, j][2] = color[2]
-#                 # "discard" these pixels
-#                 self.data_copy[i, j][0] = 0
-#                 self.data_copy[i, j][1] = 0
-#                 self.data_copy[i, j][2] = 0
-#         return 0
-
-#     def compute_cubital_index(self):
-#         n0 = self.ci_points[0]
-#         n1 = self.ci_points[1]
-#         n2 = self.ci_points[2]
-#         a = DROITE(n0, n1).distance
-#         b = DROITE(n1, n2).distance
-#         self.cubital_index = a/b
-#         self.a = a
-#         self.b = b
-#         return a/b
-    
-#     def compute_discoidal_shift(self):
-#         U = DROITE(self.point1, self.point2)
-#         V = DROITE(self.ds_points[1], self.DS)
-#         dot = U.nX * V.nX + U.nY * V.nY
-#         delta = self.DS.j - U.get_x(self.DS.i)
-#         self.discoidal_shift = np.sign(delta) *  np.arccos(dot/(U.distance * V.distance)) * 180/np.pi
-
-#     def fill_image(self):
-#         try:
-#             self.highlight_ci_points()
-#             self.draw_ci_lines()
-#         except:
-#             print("Pas réussi à trouver les points Ci", file=self.log)
-#         # self.show()
-#         try:
-#             self.highlight_ds_points()
-#         except:
-#             print("Pas réussi à trouver les points Ds", file=self.log)
+            f = plt.figure()
+            plt.plot(Xnorm, Ynorm, "-*", label="mesures")
+            plt.plot(Xnorm, normal, "-*", label="fit gauss")
+            plt.title(f"{espece}. Coeff correlation: {COEF}")
+            # plt.savefig(f"{self.path}debug_coeff_correlation_{espece}.png")
+            plt.close()
         
-#         try:
-#             self.draw_ds_line_02()
-#             self.draw_ds_line_02_perpendicular()
-#             # self.draw_ds_line_02_angle()
-#         except:
-#             print("Pas réussi à tracer les droites Ds", file=self.log)
-
-# class POINT():
-#     def __init__(self):
-#         self.i = 0
-#         self.j = 0
-#         self.color = (0, 0, 255)
-    
-#     def __str__(self) -> str:
-#         print(f"i : {self.i}")
-#         print(f"j : {self.j}")
-
-# class DROITE(IMAGE):
-#     def __init__(self, P1, P2):
-#         self.coefficients(P1, P2)
-#         self.coords_xy(P1, P2)
-#         self.color = P1.color
-#         self.distance(P1, P2)
-#         self.vect(P1, P2)
-    
-#     def __str__(self) -> str:
-#         print(f"a : {self.slope}")
-#         print(f"b : {self.offset}")
-#         return super().__str__()
-
-#     def coefficients(self, P1, P2):
-#         if np.abs(P2.j - P1.j)>0:
-#             slope = (P2.i - P1.i) / (P2.j - P1.j)
-#         else:
-#             slope = (P2.i - P1.i) / (P2.j+1 - P1.j)
-#         offset = P1.i - slope * P1.j
-#         self.slope = slope 
-#         self.offset = offset
-#         self.coeffs = (slope, offset)
-#         return slope, offset
-
-#     def coords_xy(self, P1, P2):
-#         if np.abs(P1.j - P2.j) > np.abs(P1.i - P2.i):
-#             x = np.arange(P1.j, P2.j+1, step=np.sign(P2.j - P1.j))
-#             y = self.get_y(x)
-#         else:
-#             y = np.arange(P1.i, P2.i+1)
-#             x = self.get_x(y)
-#         self.x = x 
-#         self.y = y
-#         self.xy = x, y
-#         return x, y
-
-#     def draw(self, image, dx, dy, color):
-#         for i in range(self.x.size):
-#             for g in range(-dy//2, +dy//2+1):
-#                 for h in range(-dx//2, +dx//2+1):
-#                     image.data[self.y[i]+g, self.x[i]+h][0] = color[0]
-#                     image.data[self.y[i]+g, self.x[i]+h][1] = color[1]
-#                     image.data[self.y[i]+g, self.x[i]+h][2] = color[2]
-
-
-#     def distance(self, P1, P2):
-#         distance = np.sqrt(np.abs(P2.i - P1.i) ** 2 + np.abs(P2.j - P1.j) ** 2)
-#         self.distance = distance
-#         return distance
-
-#     def get_y(self, x):
-#         return np.int32(self.slope * x + self.offset)
-    
-#     def get_x(self, y):
-#         return np.int32((y - self.offset) / self.slope)
-    
-#     def vect(self, P1, P2):
-#         self.nX = P2.j - P1.j
-#         self.nY = P2.i - P1.i
-#         return 0
-
-###########################################################################################################################
-###########################################################################################################################
-###########################################################################################################################
-
-
-def analyse(path):
-
-    # path = os.path.dirname(__file__)
-
-    with open(f"{path}{os.sep}config.yml", 'r') as f:
-        conf = yaml.load(f, Loader=yaml.SafeLoader)
-
-    path_in_raw = os.sep.join([conf["in"], "raw"]) + os.sep
-    path_in = os.sep.join([conf["in"], "denoise"]) + os.sep
-    path_out = conf["out"] + os.sep
-    path_out_images = path_out + "images" + os.sep
-
-    log = open(os.sep.join([path_out, "log.txt"]), "w")
-
-    # read parameters
-    visu = conf["visu"]
-    RESTART = conf["RESTART"]
-
-    dt_string = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-    print(f"{dt_string}", file=log)
-    print(f"Visualisation : {visu}")
-    print(f"Running program...", file=log)
-
-    # 1) check fort new photo in ./INPUT/raw that have to be denoised
-    print("------------------------------------------------", file=log)
-    print(f"Start preprocessing (denoising).", file=log)
-    print(f"Exploration of {path_in_raw} and {path_in}", file=log)
-    to_be_denoised, already_denoised = check_new_files(path_in_raw, path_in)
-    print(f"Following images have already been denoised: {already_denoised}", file=log)
-    if len(to_be_denoised)>0:
-        print(f"New images have been found: {to_be_denoised}", log)
-        print(f"Start denoising the new images: {to_be_denoised}", file=log)
-        for file in to_be_denoised:
-            file2 = '{:0>2}'.format(file)
-            photo_in = os.sep.join([path_in_raw, str(file)]) + ".jpg"
-            photo_out = os.sep.join([path_in, file2]) + "_denoise.jpg"
-            _, txt = denoise(photo_in, photo_out, save=True)
-            print(txt, file=log)
-        print("Orange and Green markers have to be put on the new images.", file=log)
-        print("END OF PROCESSING", file=log)
-        exit()
-    else:
-        print(f"All images have already been denoised.", file=log)
-
-    print("------------------------------------------------", file=log)
-    # 2) get results that have already been computed
-    ID_read = []
-    a_read = []
-    b_read = []
-    indices_read = []
-    DS_read = []
-    to_be_processed = np.arange(1, len(files(path_in))+1)
-    already_processed = []
-    fail_read = []
-    reject_read = []
-    if RESTART:
-        print(f"RESTART=1  => All images in {path_in} will be analysed.", file=log)
-    else:
-        print(f"RESTART=0  => Only new images that will be detected will be analysed.", file=log)
-        print(f"Exploration of {path_in} and {path_out_images}", file=log)
-        to_be_processed, already_processed = check_new_files(path_in, path_out_images)
-        if len(to_be_processed)>0:
-            print(f"New images have been found in {path_in}: {to_be_processed}.", file=log)
-        else:
-            print("No new images have been found.", file=log)
         try:
-            ID_read, a_read, b_read, indices_read, DS_read, fail_read, reject_read = read_measures(f"{path_out}results.csv")
-            print("Get data from results.csv: OK", file=log)
+            C1 = int(coeffs['mellifera'] / somme * 100)
+            C2 = int(coeffs['caucasica'] / somme * 100)
+            C3 = int(coeffs['ligustica'] / somme * 100)
+            C4 = int(coeffs['carnica'] / somme * 100)
         except:
-            print(f"Error loading file: results.csv", file=log)
-            print(f"Processing has to start from scratch.", file=log)
-            print(f"All images in {path_in} will be processed.", file=log)
+            C1 = 0
+            C2 = 0
+            C3 = 0
+            C4 = 0
 
-    reject = conf["reject"]
+        MELLIFERA = C1
+        CAUCASICA = C2
+        LIGUSTICA = C3
+        CARNICA = C4
 
-    subset = os.listdir(path_in)
+        if MELLIFERA>0:
+            MELLIFERA+=1
+        else:
+            if CAUCASICA>0:
+                CAUCASICA += 1
 
-    print(f"Images that are manually rejected from processing: {reject}", file=log)
+        if LIGUSTICA>0:
+            LIGUSTICA+=1
+        else:
+            if CARNICA>0:
+                CARNICA += 1
 
-    discoidal_shift = list()
-    indices = list()
+        self.mclc = {'mellifera':min(100, MELLIFERA), 'caucasica':min(100, CAUCASICA), 'ligustica':min(100, LIGUSTICA), 'carnica':min(100, CARNICA)}
+        print(self.mclc)
+
+        return 0
+
+    def reset_ticks(self, ax):
+        tck_label = list()
+        position = list()
+        for tick in ax.get_yticklabels():
+            
+            if "−" in tick.get_text():
+                tck_label.append("")
+                position.append(tick.get_position()[1])
+            else:
+                if tick.get_position()[1] == int(tick.get_position()[1]):
+                    tck_label.append(tick.get_text())
+                    position.append(int(tick.get_position()[1]))
+
+        ax.set_yticks(position, tck_label)
+        cl, idx = self.compute_abacus()
+        xticks = []
+        for i in range(len(idx)):
+            xticks.append(str(int(idx[i]*100)/100))
+        
+        ax.set_xticks(np.arange(1, 24), xticks, fontsize=8)
+
+        ax.xaxis.set_major_locator(MultipleLocator(1))
+        # ax.xaxis.set_minor_locator(MultipleLocator(0.5))
+
+        return tck_label, position
+
+
+    def plot_histogram(self, show=True, save=True):
+
+        x, y = self.histogram()
+
+        self.MCLC()
+
+        mean_of_classes = np.sum((np.array(x)+0.5) * np.array(y)) / np.sum(np.array(y))
+
+        print(f"indice cubital moyen : {int(np.mean(self.indices) * 100)/100}")
+        print(f"moyenne des classes : {int(mean_of_classes * 100)/100}")
+        print("\n")
+
+        alpha = 0.5
+        colors = ['aquamarine', 'khaki', 'silver', 'thistle']
+
+        figures_out = list()
+
+        for espece, m in zip(self.limits.keys(), range(4)):
+
+            plt.figure(m)
+
+            fig = plt.gcf()
+            ax = plt.gca()
+            fig.set_size_inches((16*0.9, 9*0.9))
+
+            plt.plot(np.array(x)+0.5, y, label=f"Mesures {len(self.indices)} abeilles", linewidth=3.5, zorder=5)
+
+            tck_label, positions = self.reset_ticks(ax)
+            plt.ylim(0, max(positions))
+
+            for i in range(0, 24):
+                ax.axvline(i, color='black', linewidth=0.5, zorder=0)
+            
+            for classe in np.arange(1, 24):
+                plt.text(classe+0.4, 0.15, str(classe), color='black', fontsize=7, fontweight='bold', zorder=30)
+
+            plt.vlines(mean_of_classes+0.5, 0, max(positions), color='black', linewidth=1.5, linestyle="--", zorder=6)
+
+            cmin = int(self.get_classes([self.limits[espece][0]])[0])
+            cmax = int(self.get_classes([self.limits[espece][1]])[0])
+            xx = range(cmin, cmax +1)
+            yy1 = np.zeros(cmax - cmin + 1)
+            yy2 = float(plt.gca().get_yticks()[-1])
+
+            plt.fill_between(xx, yy1, yy2, color=colors[m], alpha=alpha, zorder=2)
+            plt.text(cmin + (cmax - cmin)/3, max(positions)-1.5, espece + f"\n     {self.mclc[espece]}%", fontsize=12, style='italic', zorder=10)
+            plt.text(mean_of_classes+0., 0.8, f'Moyenne indices : {int(np.mean(self.indices) * 100)/100}', 
+                     fontstyle='italic', fontweight='bold', fontsize=8, zorder=20)
+        
+            plt.title(f"Histogramme de l'indice cubital (classification {self.visu})", fontweight='bold', fontsize='xx-large')
+            plt.xlabel("Indice", fontsize='x-large', fontweight='light')
+            plt.ylabel("Nombre d'abeilles", fontsize='x-large', fontweight='light')
+            plt.legend(loc='upper left', fontsize=14)
+            plt.grid()
+            PATH = f"{self.path}{os.sep}{3-m}_histogramme_{self.visu}_{espece}.png"
+            figures_out.append(PATH)
+            if save:
+                plt.savefig(PATH)
+            if show:
+                plt.show()
+        return figures_out
+
+    
+    def add_plot(self, x, y, indices, mclc, show=True, save=True):
+
+        mean_of_classes = np.sum((np.array(x)+0.5) * np.array(y)) / np.sum(np.array(y)) 
+
+        print(f"indice cubital moyen : {int(np.mean(indices) * 100)/100}")
+        print(f"moyenne des classes : {int(mean_of_classes * 100)/100}")
+
+        for espece, m in zip(self.limits.keys(), range(4)):
+        
+            plt.figure(m)
+
+            fig = plt.gcf()
+            ax = plt.gca()
+
+            ax.plot(np.array(x)+0.5, y, label=f"Deepwings {len(self.indices)} abeilles", color='red', linewidth=3.5, zorder=3)
+
+            tck_label, positions = self.reset_ticks(ax)
+            plt.ylim(0, max(max(positions), max(y)))
+
+            plt.vlines(mean_of_classes+0.5, 0, max(positions), color='red', linewidth=1.5, linestyle="--", zorder=5.5)
+
+            cmin = int(self.get_classes([self.limits[espece][0]])[0])
+            cmax = int(self.get_classes([self.limits[espece][1]])[0])
+
+            plt.text(cmin + (cmax - cmin)/3, max(positions)-2, f"\n     {mclc[espece]}%", fontsize=12, style='italic', color='red', zorder=10)
+            plt.text(mean_of_classes-0.5, 1.2, f'Moyenne indices : {int(np.mean(indices) * 100)/100}', 
+                        fontstyle='italic', fontweight='bold', fontsize=8, color='red', zorder=20)
+            plt.legend(loc='upper left', fontsize=14)
+        
+            if save:
+                fig.savefig(f"{self.path}{3-m}_histogramme_{self.visu}_{espece}.png")
+            if show:
+                fig.show()
+
+def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title="", legends=["BEE ID"]):
+    fig, ax = plt.subplots()
+    fig.set_size_inches((16*0.5, 9*0.7))
+
+    colors = ["blue", "red", "black"]
+
+    for INDICES, SHIFTS, COL, LEG in zip(indices, shifts, colors, legends):
+        plt.plot(INDICES, SHIFTS, "*", color=COL, label=LEG, markersize=10)
+        
+    plt.ylim([-np.max(np.abs(SHIFTS)), +np.max(np.abs(SHIFTS))])
+
+    # mean = np.mean(indices)
+    # std = np.std(indices)
+    plt.xlim([1, 3])
+    plt.axhline(0, color="darkgrey", linewidth=5, zorder=0)
+    plt.axvline(2, color="darkgrey", linewidth=5, zorder=0)
+    plt.grid()
+    plt.ylabel("Transgression discoïdale (°)", fontweight='bold', fontsize=14)
+    plt.xlabel("Indice cubital (-)", fontweight='bold', fontsize=14)
+    plt.title(title)
+    plt.legend()
+    if name_fig != "":
+        name_fig = "_" + name_fig
+    plt.savefig(f"{path}scatter_plot{name_fig}.png")
+    plt.show()
+
+def write_results(path, a, b, indices, classes, discoidal_shift, ID, fail, reject):
+    
+    order = np.argsort(np.array(ID))
+    ID = np.array(ID)[order]
+    indices = np.array(indices)[order]
+    discoidal_shift = np.array(discoidal_shift)[order]
+    classes = np.array(classes)[order]
+    a = np.array(a)[order]
+    b = np.array(b)[order]
+
+    with open(f"{path}results.csv", 'w', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(["num", "a", "b", "indice_cubital", "classe", "discoidal_shift"])
+        
+        min_ID = np.min(np.concatenate([ID, fail, reject]))
+        max_ID = np.max(np.concatenate([ID, fail, reject]))
+        
+        for num in np.arange(min_ID, max_ID+1):
+            if num in ID:
+                idx = int(np.where(num == ID)[0])
+                line = [ID[idx], int(a[idx]*100)/100, int(b[idx]*100)/100, int(indices[idx]*100)/100, classes[idx], int(discoidal_shift[idx]*100)/100]
+            elif num in fail:
+                idx = int(np.where(num == fail)[0])
+                line = [fail[idx], "FAIL", "FAIL", "FAIL", "FAIL", "FAIL"]
+            elif num in reject:
+                idx = int(np.where(num == reject)[0])
+                line = [reject[idx], "REJECTED", "REJECTED", "REJECTED", "REJECTED", "REJECTED"]
+            else:
+                continue
+            writer.writerow(line)
+        f.close()
+        return 0
+
+
+
+
+
+def read_measures(path_to_results):
+    ID = list()
     a = list()
     b = list()
-    ID = list()
+    DS = list()
+    indices = list()
+    rejected = list()
     fail = list()
-
-    for file in subset:
-        num = int(file.split("_")[0])
-        if num in reject:
-            print(f"Image number {num}: REJECTED", file=log)
-        else:
-            if num in to_be_processed:
-                print(f"Processing of image {file}", file=log)
-                print(file)
-                image = IMAGE(log)
-                image.load(path_in + file)
-                image.fill_image()
-                image.customize(save=True, show=False, out=path_out_images)
-                if (image.a != 0) and (image.discoidal_shift != 90):
-                    a.append(image.a)
-                    b.append(image.b)
-                    discoidal_shift.append(float(image.discoidal_shift))
-                    ID.append(num)
-                    indices.append(image.cubital_index)
-                else:
-                    print(f"Processing for image {file}: FAILED")
-                    fail.append(num)
-                    continue
+    with open(f'{path_to_results}', mode ='r') as file:
+        csvFile = csv.reader(file)
+        for line in csvFile:
+            if line[1] == 'a':
+                continue
+            elif line[1] == 'FAIL':
+                fail.append(int(line[0]))
+            elif line[1] == 'REJECTED':
+                rejected.append(int(line[0]))
             else:
-                print(f"Image {file} has already been processed.", file=log)
+                ID.append(int(line[0]))
+                a.append(float(line[1]))
+                b.append(float(line[2]))
+                indices.append(float(line[3]))
+                DS.append(float(line[5]))
+    return ID, a, b, indices, DS, fail, rejected
 
-    # gather all results (results already computed + newly computed)
-    ID = ID + ID_read
-    a = a + a_read
-    b = b + b_read
-    indices = indices + indices_read
-    discoidal_shift = discoidal_shift + DS_read
-    rejected = reject + reject_read
-    fail = fail + fail_read
+
+
+def analyse(indices, visu="RUTTNER", path_out=""):
+
 
     H = HISTOGRAM(indices=indices, visu=visu, path=path_out)
-    H.plot_histogram(show=False)
+    print(path_out)
+    H.plot_histogram(show=True, save=True)
 
-    scatter_plot(path=path_out, indices=[indices], shifts=[discoidal_shift])
+    # scatter_plot(path=path_out, indices=[indices], shifts=[discoidal_shift])
 
-    write_results(path=path_out, a=a, b=b, indices=indices, classes=H.classes, discoidal_shift=discoidal_shift, ID=ID, fail=fail, reject=reject)
+    # write_results(path=path_out, a=a, b=b, indices=indices, classes=H.classes, discoidal_shift=discoidal_shift, ID=ID, fail=fail, reject=reject)
 
     return 0

@@ -926,11 +926,13 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
+        
+        self.label_analyses = [QLabel(self), QLabel(self)]
 
         layout_main = QGridLayout()
-        btn1 = QPushButton("Charger \nune analyse")
-        self.btn2 = QPushButton(f"Sauvegarder \nl'analyse\n{self.analyse_name}")
-        self.btn3 = QPushButton(f"Lancer \nl'analyse\n{self.analyse_name}")
+        btn1 = QPushButton("Charger\nune analyse")
+        self.btn2 = QPushButton(f"Sauvegarder\nl'analyse\n{self.analyse_name}")
+        self.btn3 = QPushButton(f"Lancer\nl'analyse\n{self.analyse_name}")
         label0 = QLabel("Nom de l'analyse : ")
         self.label00 = QLabel(self.analyse_name)
         label1 = QLabel("<u>Histogramme de l'Indice Cubital<u>")
@@ -1013,6 +1015,7 @@ class Tab(QWidget):
 
         btn1.clicked.connect(self.load_project)
         self.btn2.clicked.connect(self.save_project)
+        self.btn3.clicked.connect(self.lancer_analyse)
 
         self.grids = list()
 
@@ -1186,6 +1189,24 @@ class Tab(QWidget):
         else:
             pass
         self.tabs.setCurrentIndex(1)
+        return 0
+    
+    def lancer_analyse(self):
+        if len(self.RES) <= 3:
+            self.dialog = MESSAGE()
+            msg = f"Le nombre d'ailes analysées ({len(self.RES)}) est trop faible"
+            self.dialog.message(msg)
+            self.dialog.show()
+        else:
+            print("calcul de l'histogramme de l'indice cubital")
+            indices = []
+            for abeille in self.RES.keys():
+                indices.append(float(self.RES[abeille][0]))
+            paths = analyse(indices, path_out=self.out)
+            pixmap = QPixmap(paths[0])
+            figure1 = QLabel()
+            figure1.setPixmap(pixmap)
+            self.tab0.
         return 0
 
 if __name__ == '__main__':
