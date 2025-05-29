@@ -2,7 +2,7 @@
 
 import numpy as np
 import os
-from fonctions import *
+from utile import *
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import warnings
@@ -13,6 +13,9 @@ warnings.filterwarnings('ignore')
 
 mpl.use('TkAgg')
 
+dpi = 160
+HEIGHT = 1060
+WIDTH = 750
 
 class HISTOGRAM():
     def __init__(self, indices, path, visu="RUTTNER"):
@@ -200,11 +203,11 @@ class HISTOGRAM():
 
         for espece, m in zip(self.limits.keys(), range(4)):
 
-            plt.figure(m)
+            plt.figure(m, figsize=(HEIGHT/dpi, WIDTH/dpi), dpi=dpi)
 
             fig = plt.gcf()
             ax = plt.gca()
-            fig.set_size_inches((16*0.9, 9*0.9))
+            # fig.set_size_inches((16*0.9, 9*0.9))
 
             plt.plot(np.array(x)+0.5, y, label=f"Mesures {len(self.indices)} abeilles", linewidth=3.5, zorder=5)
 
@@ -230,17 +233,19 @@ class HISTOGRAM():
             plt.text(mean_of_classes+0., 0.8, f'Moyenne indices : {int(np.mean(self.indices) * 100)/100}', 
                      fontstyle='italic', fontweight='bold', fontsize=8, zorder=20)
         
-            plt.title(f"Histogramme de l'indice cubital (classification {self.visu})", fontweight='bold', fontsize='xx-large')
+            # plt.title(f"Histogramme de l'indice cubital (classification {self.visu})", fontweight='bold', fontsize='xx-large')
             plt.xlabel("Indice", fontsize='x-large', fontweight='light')
             plt.ylabel("Nombre d'abeilles", fontsize='x-large', fontweight='light')
             plt.legend(loc='upper left', fontsize=14)
+            plt.tight_layout()
             plt.grid()
             PATH = f"{self.path}{os.sep}{3-m}_histogramme_{self.visu}_{espece}.png"
             figures_out.append(PATH)
             if save:
-                plt.savefig(PATH)
+                plt.savefig(PATH, dpi=dpi)
             if show:
                 plt.show()
+            plt.close()
         return figures_out
 
     
@@ -278,16 +283,26 @@ class HISTOGRAM():
             if show:
                 fig.show()
 
-def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title="", legends=["BEE ID"]):
-    fig, ax = plt.subplots()
-    fig.set_size_inches((16*0.5, 9*0.7))
+def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title=""):
+    
+    fig, ax = plt.subplots(figsize=(HEIGHT/dpi, WIDTH/dpi), dpi=dpi)
+    # fig.set_size_inches((16*0.5, 9*0.7))
+#
+    # colors = ["blue", "red", "black"]
 
-    colors = ["blue", "red", "black"]
+    # for INDICES, SHIFTS, COL, LEG in zip(indices, shifts, colors, legends):
+    #     plt.plot(INDICES, SHIFTS, "*", color=COL, label=LEG, markersize=10)
 
-    for INDICES, SHIFTS, COL, LEG in zip(indices, shifts, colors, legends):
-        plt.plot(INDICES, SHIFTS, "*", color=COL, label=LEG, markersize=10)
-        
-    plt.ylim([-np.max(np.abs(SHIFTS)), +np.max(np.abs(SHIFTS))])
+    indices = np.array(indices)
+    shifts = np.array(shifts)
+
+    abeilles_noires = (indices < 2.05) & (shifts < 0)
+    autres_abeilles = ~(abeilles_noires)
+
+    plt.plot(indices[abeilles_noires], shifts[abeilles_noires], "*", color="red", markersize=10)
+    plt.plot(indices[autres_abeilles], shifts[autres_abeilles], "*", color="blue", markersize=10)
+
+    plt.ylim([-np.max(np.abs(shifts)), +np.max(np.abs(shifts))])
 
     # mean = np.mean(indices)
     # std = np.std(indices)
@@ -297,12 +312,15 @@ def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title="", leg
     plt.grid()
     plt.ylabel("Transgression discoïdale (°)", fontweight='bold', fontsize=14)
     plt.xlabel("Indice cubital (-)", fontweight='bold', fontsize=14)
-    plt.title(title)
-    plt.legend()
+    plt.tight_layout()
+    # plt.title(title)
+    # plt.legend()
     if name_fig != "":
         name_fig = "_" + name_fig
-    plt.savefig(f"{path}scatter_plot{name_fig}.png")
-    plt.show()
+    ds_image = f"{path}{os.sep}scatter_plot{name_fig}.png"
+    plt.savefig(ds_image, dpi=dpi)
+    # plt.show()
+    return ds_image
 
 def write_results(path, a, b, indices, classes, discoidal_shift, ID, fail, reject):
     
@@ -338,45 +356,19 @@ def write_results(path, a, b, indices, classes, discoidal_shift, ID, fail, rejec
         return 0
 
 
-
-
-
-def read_measures(path_to_results):
-    ID = list()
-    a = list()
-    b = list()
-    DS = list()
-    indices = list()
-    rejected = list()
-    fail = list()
-    with open(f'{path_to_results}', mode ='r') as file:
-        csvFile = csv.reader(file)
-        for line in csvFile:
-            if line[1] == 'a':
-                continue
-            elif line[1] == 'FAIL':
-                fail.append(int(line[0]))
-            elif line[1] == 'REJECTED':
-                rejected.append(int(line[0]))
-            else:
-                ID.append(int(line[0]))
-                a.append(float(line[1]))
-                b.append(float(line[2]))
-                indices.append(float(line[3]))
-                DS.append(float(line[5]))
-    return ID, a, b, indices, DS, fail, rejected
-
-
-
-def analyse(indices, visu="RUTTNER", path_out=""):
-
+def analyse(indices, shifts, visu="RUTTNER", path_out=""):
 
     H = HISTOGRAM(indices=indices, visu=visu, path=path_out)
-    print(path_out)
-    H.plot_histogram(show=True, save=True)
 
-    # scatter_plot(path=path_out, indices=[indices], shifts=[discoidal_shift])
+    list_of_ci_images = H.plot_histogram(show=False, save=True)
+
+    ds_image = scatter_plot(path=path_out, indices=[indices], shifts=[shifts])
 
     # write_results(path=path_out, a=a, b=b, indices=indices, classes=H.classes, discoidal_shift=discoidal_shift, ID=ID, fail=fail, reject=reject)
 
-    return 0
+    return list_of_ci_images, ds_image
+
+if __name__ == '__main__':
+    with open('config.yml', 'r') as file:
+        data = yaml.safe_load(file)
+    

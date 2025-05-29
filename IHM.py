@@ -3,6 +3,7 @@ import os
 import shutil
 import zipfile
 from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import (
     QApplication,
     QLabel,
@@ -17,7 +18,8 @@ from PyQt5.QtWidgets import (
     QDockWidget,
     QLineEdit,
     QFileDialog,
-    QInputDialog
+    QInputDialog,
+    QMessageBox,
 )
 from PyQt5.QtGui import QPixmap, QCursor, QFont
 
@@ -34,6 +36,10 @@ from ci_and_ds_tools import *
 from utile import *
 from analyses import *
 
+with open('config.yml', 'r') as file:
+    config = yaml.safe_load(file)
+
+classif = config['visu']
 
 connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFile5,
                     6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
@@ -785,17 +791,18 @@ class MainWindow(QMainWindow):
         for w in win_list:
             w.close()
 
-    # def closeEvent(self, event: QCloseEvent) -> None:
-    #     close = QMessageBox()
-    #     close.setText("Voulez vous vraiment quitter l'application ?")
-    #     close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
-    #     close = close.exec()
+    def closeEvent(self, event: QCloseEvent) -> None:
+        close = QMessageBox()
+        close.setText("Voulez vous vraiment quitter l'application ?")
+        close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        close.setWindowTitle(" ")
+        close = close.exec()
 
-        # if close == QMessageBox.Yes:
-        #     event.accept()
-        #     self.close_all_windows()
-        # else:
-        #     event.ignore()
+        if close == QMessageBox.Yes:
+            event.accept()
+            self.close_all_windows()
+        else:
+            event.ignore()
 
 
 class Tab(QWidget): 
@@ -928,6 +935,11 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
         
         self.label_analyses = [QLabel(self), QLabel(self)]
+        self.label_analyses[0].setFixedWidth(900)
+        self.label_analyses[0].setFixedHeight(850)
+
+        self.label_analyses[1].setFixedWidth(900)
+        self.label_analyses[1].setFixedHeight(850)
 
         layout_main = QGridLayout()
         btn1 = QPushButton("Charger\nune analyse")
@@ -935,8 +947,8 @@ class Tab(QWidget):
         self.btn3 = QPushButton(f"Lancer\nl'analyse\n{self.analyse_name}")
         label0 = QLabel("Nom de l'analyse : ")
         self.label00 = QLabel(self.analyse_name)
-        label1 = QLabel("<u>Histogramme de l'Indice Cubital<u>")
-        label2 = QLabel("<u>Indice Cubital vs Discoidal shift<u>")
+        label1 = QLabel(f">>  <u> Histogramme de l'Indice Cubital (classification {classif.upper()})<u>")
+        label2 = QLabel(">>  <u> Indice Cubital vs Discoidal shift<u>")
         # self.edit_analyse_name = QLineEdit()
 
         self.pb = QPushButton("Editer")
@@ -971,28 +983,31 @@ class Tab(QWidget):
 
         pixmap = QPixmap(f"images{os.sep}empty1.png")
         # pixmap = QPixmap(f"images{os.sep}carte_dardagnan.png")
-        image_empty1 = QLabel()
+        image_empty1 = self.label_analyses[0]
         image_empty1.setPixmap(pixmap)
 
         pixmap = QPixmap(f"images{os.sep}empty2.png")
         # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
-        image_empty2 = QLabel()
+        image_empty2 = self.label_analyses[1]
         image_empty2.setPixmap(pixmap)
 
         pixmap = QPixmap(f"images{os.sep}carte_dardagnan2.png")
-        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = pixmap.scaled(400, 200)
         # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
         deco0 = QLabel()
         deco0.setPixmap(pixmap)
 
         pixmap = QPixmap(f"images{os.sep}carte_dardagnan1.png")
-        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = pixmap.scaled(400, 200)
         # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
         deco1 = QLabel()
         deco1.setPixmap(pixmap)
 
         pixmap = QPixmap(f"images{os.sep}carte_dardagnan3.png")
-        pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
+        # pixmap = pixmap.scaled(400, 200)
+        # pixmap = pixmap.scaled(200, 200, QtCore.Qt.KeepAspectRatio)
         # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
         deco2 = QLabel()
         deco2.setPixmap(pixmap)
@@ -1012,6 +1027,22 @@ class Tab(QWidget):
         layout_main.addWidget(deco0, 0, 4, 2, 2)
         layout_main.addWidget(deco1, 0, 8, 2, 2)
         layout_main.addWidget(deco2, 0, 10, 2, 2)
+
+        # width = deco0.geometry().width()
+        # height = deco0.geometry().height()
+        # print(width, height)
+
+        # width = image_empty2.geometry().width()
+        # height = image_empty2.geometry().height()
+        # print(width, height)
+
+        # width = label1.geometry().width()
+        # height = label1.geometry().height()
+        # print(width, height)
+
+        # width = image_empty2.sizeHint().width()
+        # height = image_empty2.sizeHint().height()
+        # print(width, height)
 
         btn1.clicked.connect(self.load_project)
         self.btn2.clicked.connect(self.save_project)
@@ -1188,7 +1219,7 @@ class Tab(QWidget):
                     self.label_right[num_abeille-1].setPixmap(pixmap_out)
         else:
             pass
-        self.tabs.setCurrentIndex(1)
+        # self.tabs.setCurrentIndex(1)
         return 0
     
     def lancer_analyse(self):
@@ -1200,18 +1231,26 @@ class Tab(QWidget):
         else:
             print("calcul de l'histogramme de l'indice cubital")
             indices = []
+            shifts = []
             for abeille in self.RES.keys():
                 indices.append(float(self.RES[abeille][0]))
-            paths = analyse(indices, path_out=self.out)
-            pixmap = QPixmap(paths[0])
-            figure1 = QLabel()
-            figure1.setPixmap(pixmap)
-            self.tab0.
-        return 0
+                shifts.append(float(self.RES[abeille][1]))
+            ci_images, ds_image = analyse(indices, shifts, path_out=self.out)
+            pixmap = QPixmap(ci_images[0])
+            self.label_analyses[0].setPixmap(pixmap)
+            pixmap = QPixmap(ds_image)
+            self.label_analyses[1].setPixmap(pixmap)
+            # self.setFixedSize(self.tab0.layout.sizeHint())()
+            self.resize(self.tab0.sizeHint().width(), self.tab0.sizeHint().height())
+        return 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
 
+    app = QApplication(sys.argv)
+    
+    screen = app.screens()[0]
+    dpi = screen.physicalDotsPerInch()
+    
     window = MainWindow()
     window.show()
 
