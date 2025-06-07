@@ -1,25 +1,16 @@
 import sys
 import os
 import shutil
-import zipfile
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import (
-    QApplication,
     QLabel,
     QMainWindow,
     QPushButton,
     QVBoxLayout,
     QHBoxLayout,
     QWidget,
-    QGridLayout,
-    QSizePolicy,
-    QTabWidget,
     QDockWidget,
-    QLineEdit,
-    QFileDialog,
-    QInputDialog,
-    QMessageBox,
 )
 from PyQt5.QtGui import QPixmap, QCursor, QFont
 
@@ -30,6 +21,7 @@ from functools import partial
 from PIL import Image, ImageDraw, ImageFont
 from modules.ci_and_ds_tools import *
 from modules.utile import *
+import logging
 
 def resource_path(relative_path):
     """Retourne le chemin absolu, même si l'app est empaquetée avec PyInstaller"""
@@ -181,38 +173,6 @@ class EDIT(QMainWindow):
 
         self.set_dock()
         self.show()
-
-
-    # def display_error_message(self, error_msg):
-    #     print("display error message")
-    #     self.move(600, 300)
-    #     # self.w = QVBoxLayout()
-    #     pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
-    #     self.label = QLabel()
-    #     self.label.setPixmap(pixmap)
-    #     # self.w.addWidget(self.label)
-    #     # txt = QLabel(error_msg)
-    #     # txt.setFont(QFont('Times', 13))
-    #     # self.w.addWidget(txt)
-    #     # self.w.setLayout(self.layout)
-
-    #     self.label.setFixedSize(300, 300)
-    #     self.setCentralWidget(self.label)
-    #     # self.setFixedWidth(300)
-    #     # self.setFixedHeight(300)
-    #     # self.label.setScaledContents(True)
-
-    #     # self.set_dock()
-
-    #     self.show()
-
-    # def show(self, fileName):
-    #     self.label = QLabel(self)
-    #     pixmap = QPixmap(fileName)
-
-    #     self.label.setPixmap(pixmap)
-    #     self.setCentralWidget(self.label)
-    #     return
     
     def set_dock(self):
         zm1 = resource_path(f"search.png")
@@ -274,20 +234,17 @@ class EDIT(QMainWindow):
         im.draw_ds_line_02_perpendicular(self.color_ds)
         self.ci_value = compute_cubital_index(self.ci_points)
         self.ds_value = compute_discoidal_shift(im.point1, im.point2, im.ds_points)
-        # im.customize()
-        # shutil.copyfile(f"{self.path}{self.tmp}{file_wo_zoom}", f"{self.path}{self.out}{file_wo_zoom}")
 
-        # try:
-        #     for filename in os.listdir(f"{self.out}"):
-        #         file_path = self.out + os.sep + filename
-        #         os.unlink(file_path)
-        #         print(f"suppression du fichier {file_path}")
-        # except:
-        #     pass
+        logging.info("Enregistrement de l'image éditée : " + f"{self.out}{self.NUM}_out{self.extension}")
+        logging.info(f"Indice cubital (abeille {self.NUM}) : {self.ci_value}")
+        logging.info(f"Shift discoidal (abeille {self.NUM}) : {self.ds_value}°")
         
         plt.imsave(fname=f"{self.out}{self.NUM}_out{self.extension}", arr=im.data)
+        logging.info(f"Image sauvegardée : {self.out}{self.NUM}_out{self.extension}")
+
         self.add_infos()
         # self.write_results()
+        logging.info(f"Les infos ont été ajoutées sur l'image.")
         
         img = resource_path(f"{self.out}{self.NUM}_out{self.extension}")
         pixmap = QPixmap(img)
@@ -310,10 +267,11 @@ class EDIT(QMainWindow):
         return 0
 
     def add_infos(self):
-        img = Image.open(f"{self.out}{self.NUM}_out{self.extension}")
+        img_path = resource_path(f"{self.out}{self.NUM}_out{self.extension}")
+        img = Image.open(img_path)
         # Create a drawing object
         draw = ImageDraw.Draw(img)
-
+        logging.info("L'image a été chargée")
         # Define text attributes
         num = self.num
         ci = int(self.ci_value*100)/100
@@ -323,9 +281,12 @@ class EDIT(QMainWindow):
             tt = "+"
         text = f"Abeille #{num}             Indice cubital : {ci}             Angle discoïdal : {tt}{ds}°"
         print(self.path)
-        print(f"{self.path}font{os.sep}Paul-le1V.ttf")
-        font = ImageFont.truetype(f"{self.path}font{os.sep}Paul-le1V.ttf", size=40)
+        font_path = resource_path(f"core{os.sep}Paul-le1V.ttf")
+        logging.info(font_path)
+        font = ImageFont.truetype(font_path, size=40)
         text_color = (255, 0, 0)  # Red color
+
+        logging.info("aaaaa")
 
         # Position of the text
         position = (50, 25)
@@ -527,8 +488,8 @@ class EDIT(QMainWindow):
     def zoom_in(self, ZOOM=True):
         file_wo_zoom, file_w_zoom = self.get_last_file(self.tmp)
         self.ZOOM = ZOOM
-        zm1 = resource_path(f"search.png")
-        pixmap = QPixmap(f"images{os.sep}search.png")
+        zm = resource_path(f"search.png")
+        pixmap = QPixmap(zm)
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
         self.setCursor(cursor)

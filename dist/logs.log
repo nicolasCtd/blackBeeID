@@ -1,0 +1,128 @@
+2025-06-06 23:00:45,623 - INFO - Démarrage du programme
+2025-06-06 23:00:45,623 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-06 23:00:45,631 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-06 23:00:45,631 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-06 23:00:45,631 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-06 23:00:45,631 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-06 23:00:45,633 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-06 23:00:45,633 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:00:45,633 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:01:22,660 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:01:22,660 - INFO - Indice cubital (abeille 1) : 0.8134539428100221
+2025-06-06 23:01:22,660 - INFO - Shift discoidal (abeille 1) : 0.8134539428100221°
+2025-06-06 23:10:39,921 - INFO - Démarrage du programme
+2025-06-06 23:10:39,921 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-06 23:10:39,921 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-06 23:10:39,921 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-06 23:10:39,921 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-06 23:10:39,921 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-06 23:10:39,921 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-06 23:10:39,921 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:10:39,921 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:11:54,891 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:11:54,891 - INFO - Indice cubital (abeille 1) : 0.29910514531941707
+2025-06-06 23:11:54,891 - INFO - Shift discoidal (abeille 1) : [-46.82408983]°
+2025-06-06 23:11:54,912 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:15:33,625 - INFO - Démarrage du programme
+2025-06-06 23:15:33,625 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-06 23:15:33,625 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-06 23:15:33,625 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-06 23:15:33,625 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-06 23:15:33,625 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-06 23:15:33,625 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-06 23:15:33,625 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:15:33,625 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:16:05,834 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:16:05,834 - INFO - Indice cubital (abeille 1) : 1.516358883079821
+2025-06-06 23:16:05,834 - INFO - Shift discoidal (abeille 1) : [38.00844102]°
+2025-06-06 23:16:05,850 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:16:05,860 - INFO - L'image a été chargée
+2025-06-06 23:19:59,510 - INFO - Démarrage du programme
+2025-06-06 23:19:59,510 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-06 23:19:59,510 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-06 23:19:59,510 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-06 23:19:59,510 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-06 23:19:59,510 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-06 23:19:59,510 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-06 23:19:59,510 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:19:59,510 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-06 23:21:00,149 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:21:00,149 - INFO - Indice cubital (abeille 1) : 1.41628040117255
+2025-06-06 23:21:00,149 - INFO - Shift discoidal (abeille 1) : [-32.28827844]°
+2025-06-06 23:21:00,163 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-06 23:21:00,163 - INFO - L'image a été chargée
+2025-06-06 23:21:00,163 - INFO - C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\font\Paul-le1V.ttf
+2025-06-07 19:28:48,166 - INFO - Démarrage du programme
+2025-06-07 19:28:48,166 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-07 19:28:48,166 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-07 19:28:48,166 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-07 19:28:48,166 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-07 19:28:48,166 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-07 19:28:48,166 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-07 19:28:48,166 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:28:48,166 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:29:08,505 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-07 19:29:08,505 - INFO - Indice cubital (abeille 1) : 0.7560449728186187
+2025-06-07 19:29:08,505 - INFO - Shift discoidal (abeille 1) : [-6.4554916]°
+2025-06-07 19:29:08,522 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-07 19:29:08,533 - INFO - L'image a été chargée
+2025-06-07 19:29:08,533 - INFO - C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\core\Paul-le1V.ttf
+2025-06-07 19:40:01,578 - INFO - Démarrage du programme
+2025-06-07 19:40:01,578 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-07 19:40:01,580 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-07 19:40:01,580 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-07 19:40:01,580 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-07 19:40:01,580 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-07 19:40:01,580 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\1_out.jpg
+2025-06-07 19:40:01,582 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:40:01,582 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:40:01,590 - INFO - path empty1.png : C:\Users\nicol\AppData\Local\Temp\_MEI309722\images\empty1.png
+2025-06-07 19:40:23,214 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\2_out.jpg
+2025-06-07 19:40:23,214 - INFO - Indice cubital (abeille 2) : 1.8908699433658536
+2025-06-07 19:40:23,214 - INFO - Shift discoidal (abeille 2) : [-14.97646179]°
+2025-06-07 19:40:23,227 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\2_out.jpg
+2025-06-07 19:40:23,239 - INFO - L'image a été chargée
+2025-06-07 19:40:23,239 - INFO - C:\Users\nicol\AppData\Local\Temp\_MEI309722\core\Paul-le1V.ttf
+2025-06-07 19:41:58,778 - INFO - Démarrage du programme
+2025-06-07 19:41:58,778 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-07 19:41:58,778 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\2
+2025-06-07 19:41:58,778 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-07 19:41:58,778 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\2_in.png
+2025-06-07 19:41:58,778 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-07 19:41:58,778 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\2_out.jpg
+2025-06-07 19:41:58,778 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:41:58,778 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:41:58,793 - INFO - path empty1.png : C:\Users\nicol\AppData\Local\Temp\_MEI305242\images\empty1.png
+2025-06-07 19:48:46,435 - INFO - Démarrage du programme
+2025-06-07 19:48:46,435 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-06-07 19:48:46,435 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp\1
+2025-06-07 19:48:46,435 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-06-07 19:48:46,435 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in\1_in.png
+2025-06-07 19:48:46,435 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-06-07 19:48:46,435 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:48:46,435 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-06-07 19:48:46,449 - INFO - path empty1.png : C:\Users\nicol\AppData\Local\Temp\_MEI82882\images\empty1.png
+2025-06-07 19:49:04,055 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-07 19:49:04,055 - INFO - Indice cubital (abeille 1) : 1.2089619661319098
+2025-06-07 19:49:04,055 - INFO - Shift discoidal (abeille 1) : [-22.7564402]°
+2025-06-07 19:49:04,068 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\1_out.jpg
+2025-06-07 19:49:04,079 - INFO - L'image a été chargée
+2025-06-07 19:49:04,079 - INFO - C:\Users\nicol\AppData\Local\Temp\_MEI82882\core\Paul-le1V.ttf
+2025-06-07 19:49:04,079 - INFO - aaaaa
+2025-06-07 19:49:04,084 - INFO - Les infos ont été ajoutées sur l'image.
+2025-06-07 19:49:22,826 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\2_out.jpg
+2025-06-07 19:49:22,826 - INFO - Indice cubital (abeille 2) : 1.8196359611444897
+2025-06-07 19:49:22,826 - INFO - Shift discoidal (abeille 2) : [-36.74961277]°
+2025-06-07 19:49:22,839 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\2_out.jpg
+2025-06-07 19:49:22,850 - INFO - L'image a été chargée
+2025-06-07 19:49:22,850 - INFO - C:\Users\nicol\AppData\Local\Temp\_MEI82882\core\Paul-le1V.ttf
+2025-06-07 19:49:22,850 - INFO - aaaaa
+2025-06-07 19:49:22,855 - INFO - Les infos ont été ajoutées sur l'image.
+2025-06-07 19:49:41,705 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\3_out.jpg
+2025-06-07 19:49:41,705 - INFO - Indice cubital (abeille 3) : 0.9560283787543914
+2025-06-07 19:49:41,705 - INFO - Shift discoidal (abeille 3) : [-25.43400598]°
+2025-06-07 19:49:41,722 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\\out\3_out.jpg
+2025-06-07 19:49:41,733 - INFO - L'image a été chargée
+2025-06-07 19:49:41,734 - INFO - C:\Users\nicol\AppData\Local\Temp\_MEI82882\core\Paul-le1V.ttf
+2025-06-07 19:49:41,734 - INFO - aaaaa
+2025-06-07 19:49:41,739 - INFO - Les infos ont été ajoutées sur l'image.

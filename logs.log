@@ -1,0 +1,102 @@
+2025-06-03 22:35:36,615 - INFO - Démarrage du programme
+2025-06-03 22:35:36,616 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-03 22:35:36,616 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-03 22:35:36,617 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-03 22:35:36,618 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 22:35:36,619 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 23:08:28,997 - INFO - Démarrage du programme
+2025-06-03 23:08:28,997 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-03 23:08:28,998 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-03 23:08:28,998 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-03 23:08:28,998 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 23:08:28,999 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 23:08:56,459 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-03 23:08:56,459 - INFO - Indice cubital : 1.6818463195822702
+2025-06-03 23:08:56,459 - INFO - Shift discoidal : 1.6818463195822702°
+2025-06-03 23:35:55,619 - INFO - Démarrage du programme
+2025-06-03 23:35:55,619 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-03 23:35:55,621 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\1
+2025-06-03 23:35:55,621 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-03 23:35:55,622 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
+2025-06-03 23:35:55,622 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-03 23:35:55,622 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\1_out.jpg
+2025-06-03 23:35:55,623 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 23:35:55,623 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-03 23:36:14,233 - INFO - Chargement du projet 'C:/Users/nicol/Documents/ABEILLES/logiciel/projects/validation.zip'
+2025-06-06 22:48:56,987 - INFO - Démarrage du programme
+2025-06-06 22:48:56,987 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\in
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\out
+2025-06-06 22:48:56,991 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\2_in.png
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\3_in.png
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\4_in.png
+2025-06-06 22:48:56,991 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\1_out.jpg
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\2_out.jpg
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\3_out.jpg
+2025-06-06 22:48:56,991 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\4_out.jpg
+2025-06-06 22:48:56,996 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-06 22:48:56,996 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-06 23:09:19,283 - INFO - Démarrage du programme
+2025-06-06 23:09:19,283 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-06 23:09:19,283 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-06 23:09:19,283 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-06 23:09:19,283 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-06 23:09:19,283 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:26:39,516 - INFO - Démarrage du programme
+2025-06-07 19:26:39,516 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-07 19:26:39,516 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-07 19:26:39,516 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-07 19:26:39,516 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:26:39,516 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:26:57,259 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-07 19:26:57,259 - INFO - Indice cubital (abeille 1) : 0.187223354501512
+2025-06-07 19:26:57,259 - INFO - Shift discoidal (abeille 1) : [-143.63756389]°
+2025-06-07 19:26:57,273 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-07 19:26:57,284 - INFO - L'image a été chargée
+2025-06-07 19:26:57,284 - INFO - C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\core\Paul-le1V.ttf
+2025-06-07 19:26:57,287 - INFO - aaaaa
+2025-06-07 19:26:57,295 - INFO - Les infos ont été ajoutées sur l'image.
+2025-06-07 19:32:35,811 - INFO - Démarrage du programme
+2025-06-07 19:32:35,811 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-07 19:32:35,811 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\1
+2025-06-07 19:32:35,811 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-07 19:32:35,811 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
+2025-06-07 19:32:35,811 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-07 19:32:35,811 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\1_out.jpg
+2025-06-07 19:32:35,811 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:32:35,811 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:32:52,028 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-07 19:32:52,028 - INFO - Indice cubital (abeille 1) : 0.38175605911965754
+2025-06-07 19:32:52,028 - INFO - Shift discoidal (abeille 1) : -148.6316204374765°
+2025-06-07 19:32:52,041 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-07 19:32:52,051 - INFO - L'image a été chargée
+2025-06-07 19:32:52,052 - INFO - C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\core\Paul-le1V.ttf
+2025-06-07 19:32:52,052 - INFO - aaaaa
+2025-06-07 19:32:52,057 - INFO - Les infos ont été ajoutées sur l'image.
+2025-06-07 19:36:27,805 - INFO - Démarrage du programme
+2025-06-07 19:36:27,805 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-07 19:36:27,805 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\1
+2025-06-07 19:36:27,805 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-07 19:36:27,805 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
+2025-06-07 19:36:27,805 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-07 19:36:27,805 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\1_out.jpg
+2025-06-07 19:36:27,805 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:36:27,813 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:36:27,814 - INFO - path empty1.png : c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\images\empty1.png
+2025-06-07 19:45:29,939 - INFO - Démarrage du programme
+2025-06-07 19:45:29,939 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-07 19:45:29,939 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-07 19:45:29,939 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-07 19:45:29,939 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:45:29,942 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:45:29,949 - INFO - path empty1.png : c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\images\empty1.png
+2025-06-07 19:46:37,982 - INFO - Démarrage du programme
+2025-06-07 19:46:37,998 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-07 19:46:37,998 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-07 19:46:37,998 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-07 19:46:37,998 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:46:37,998 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-07 19:46:38,014 - INFO - path empty1.png : c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\images\empty1.png

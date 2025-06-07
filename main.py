@@ -38,6 +38,8 @@ from modules.analyses import *
 
 import sys
 
+import logging
+
 def resource_path(relative_path):
     """Retourne le chemin absolu, même si l'app est empaquetée avec PyInstaller"""
     if getattr(sys, 'frozen', False):
@@ -102,7 +104,6 @@ class FolderSelector(QWidget):
         print('Selected Folder:', folder_path)
 
 
-
 class MainWindow(QMainWindow):
     
     def __init__(self):
@@ -129,48 +130,71 @@ class MainWindow(QMainWindow):
         self.in_ = os.path.abspath(os.getcwd()) + os.sep + "in"
         self.tmp = os.path.abspath(os.getcwd()) + os.sep + "tmp"
         self.path = os.path.abspath(os.getcwd())
-        
+
+        logging.basicConfig(
+            filename='logs.log',
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s')
+
+        # Utilisation
+        logging.info("Démarrage du programme")
+            
         print(f"nettoyage du dossier 'tmp' : {self.tmp}")
+        logging.info(f"nettoyage du dossier 'tmp' : {self.tmp}")
         for filename in os.listdir(self.tmp):
             file_path = self.tmp + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
                     print(f"suppression du fichier {file_path}")
+                    logging.info(f"suppression du fichier {file_path}")
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
                     print(f"suppression du dossier {file_path}")
+                    logging.info(f"suppression du fichier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
+                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
 
         print(f"nettoyage du dossier 'in' : {self.in_}")
+        logging.info(f"nettoyage du dossier 'in' : {self.in_}")
         for filename in os.listdir(self.in_):
             file_path = self.in_ + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
                     print(f"suppression du fichier {file_path}")
+                    logging.info(f"suppression du fichier {file_path}")
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
                     print(f"suppression du dossier {file_path}")
+                    logging.info(f"suppression du dossier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
+                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
 
 
         print(f"nettoyage du dossier 'out' : {self.out}")
+        logging.info(f"nettoyage du dossier 'out' : {self.out}")
         for filename in os.listdir(self.out):
             file_path = self.out + os.sep + filename
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
                     print(f"suppression du fichier {file_path}")
+                    logging.info(f"suppression du fichier {file_path}")
                 elif os.path.isdir(file_path):
                     shutil.rmtree(file_path)
                     print(f"suppression du dossier {file_path}")
+                    logging.info(f"suppression du dossier {file_path}")
             except Exception as e:
                 print('Failed to delete %s. Reason: %s' % (file_path, e))
+                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
 
         with open(self.out + os.sep + "results.txt", "w") as f:
+            p = self.out + os.sep + "results.txt"
+            print(f"Génération du fichier de résultats {p}")
+            logging.info(f"Génération du fichier de résultats {p}")
             line = f"num indice_cubital angle_discoidal\n"
             f.write(line)
             f.close
@@ -192,7 +216,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event: QCloseEvent) -> None:
         close = QMessageBox()
-        close.setText("Voulez vous vraiment quitter l'application ?")
+        close.setText("Voulez vous quitter l'application ?")
         close.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
         close.setWindowTitle(" ")
         close = close.exec()
@@ -381,6 +405,7 @@ class Tab(QWidget):
         self.pb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         empty1 = resource_path(f"images{os.sep}empty1.png")
+        logging.info(f"path empty1.png : {empty1}")
         pixmap = QPixmap(empty1)
         # pixmap = QPixmap(f"images{os.sep}carte_dardagnan.png")
         image_empty1 = self.label_analyses[0]
@@ -569,6 +594,7 @@ class Tab(QWidget):
                         zf.write(name, name)
             self.dialog = MESSAGE()
             msg = f"L'analyse '{self.analyse_name}' a bien été enregistrée dans {DIR}"
+            logging.info(msg)
             self.dialog.message(msg)
             self.dialog.show()
         else:
@@ -579,6 +605,7 @@ class Tab(QWidget):
         DIR = QFileDialog.getOpenFileName(self, "Select a .zip project file")
         if DIR[0] != "":
             project_file = str(DIR[0])
+            logging.info(f"Chargement du projet '{project_file}'")
 
             self.analyse_name = get_file_name(project_file)
             self.label00.setText(self.analyse_name)
@@ -603,6 +630,7 @@ class Tab(QWidget):
                 num_abeille = int(file.split("_")[0])
                 if num_abeille not in self.RES.keys():
                     print(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
+                    logging.info(f"Attention : l'abeille {num_abeille} n'a pas été trouvée dans le fichier de résultats")
                 else:
                     ff_in = self.in_ + os.sep + file
                     pixmap = QPixmap(ff_in)
@@ -624,8 +652,10 @@ class Tab(QWidget):
             msg = f"Le nombre d'ailes analysées ({len(self.RES)}) est trop faible"
             self.dialog.message(msg)
             self.dialog.show()
+            logging.info(msg)
         else:
             print("calcul de l'histogramme de l'indice cubital")
+            logging.info("calcul de l'histogramme de l'indice cubital")
             indices = []
             shifts = []
             for abeille in self.RES.keys():
