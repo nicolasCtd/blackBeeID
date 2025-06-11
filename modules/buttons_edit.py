@@ -1,4 +1,4 @@
-from core.common import *
+from kore.common import *
 # from modules.ci_and_ds_tools import POINT
 
 def editFile1(TAB):

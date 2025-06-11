@@ -1,5 +1,5 @@
 import os 
-from core.common import *
+from kore.common import *
 
 def visu1(TAB):
     file_exists = 0
@@ -59,7 +59,6 @@ def visu4(TAB):
         TAB.dialog.message_erreur2()
 
 def visu5(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -74,7 +73,6 @@ def visu5(TAB):
         TAB.dialog.message_erreur2()
 
 def visu6(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -89,7 +87,6 @@ def visu6(TAB):
         TAB.dialog.message_erreur2()
 
 def visu7(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -104,8 +101,6 @@ def visu7(TAB):
         TAB.dialog.message_erreur2()
 
 def visu8(TAB):
-    from IHM import VISU, MESSAGE
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -120,7 +115,6 @@ def visu8(TAB):
         TAB.dialog.message_erreur2()
 
 def visu9(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -135,7 +129,6 @@ def visu9(TAB):
         TAB.dialog.message_erreur2()
 
 def visu10(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -150,7 +143,6 @@ def visu10(TAB):
         TAB.dialog.message_erreur2()
 
 def visu11(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -165,7 +157,6 @@ def visu11(TAB):
         TAB.dialog.message_erreur2()
 
 def visu12(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -180,7 +171,6 @@ def visu12(TAB):
         TAB.dialog.message_erreur2()
 
 def visu13(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -195,7 +185,6 @@ def visu13(TAB):
         TAB.dialog.message_erreur2()
 
 def visu14(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -210,7 +199,6 @@ def visu14(TAB):
         TAB.dialog.message_erreur2()
 
 def visu15(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -225,7 +213,6 @@ def visu15(TAB):
         TAB.dialog.message_erreur2()
 
 def visu16(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -240,7 +227,6 @@ def visu16(TAB):
         TAB.dialog.message_erreur2()
 
 def visu17(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -255,7 +241,6 @@ def visu17(TAB):
         TAB.dialog.message_erreur2()
 
 def visu18(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -270,7 +255,6 @@ def visu18(TAB):
         TAB.dialog.message_erreur2()
 
 def visu19(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -285,7 +269,6 @@ def visu19(TAB):
         TAB.dialog.message_erreur2()
 
 def visu20(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -300,7 +283,6 @@ def visu20(TAB):
         TAB.dialog.message_erreur2()
 
 def visu21(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -315,7 +297,6 @@ def visu21(TAB):
         TAB.dialog.message_erreur2()
 
 def visu22(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -330,7 +311,6 @@ def visu22(TAB):
         TAB.dialog.message_erreur2()
 
 def visu23(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -345,7 +325,6 @@ def visu23(TAB):
         TAB.dialog.message_erreur2()
 
 def visu24(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -360,7 +339,6 @@ def visu24(TAB):
         TAB.dialog.message_erreur2()
 
 def visu25(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -375,7 +353,6 @@ def visu25(TAB):
         TAB.dialog.message_erreur2()
 
 def visu26(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -390,7 +367,6 @@ def visu26(TAB):
         TAB.dialog.message_erreur2()
 
 def visu27(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -405,7 +381,6 @@ def visu27(TAB):
         TAB.dialog.message_erreur2()
 
 def visu28(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -420,7 +395,6 @@ def visu28(TAB):
         TAB.dialog.message_erreur2()
 
 def visu29(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -435,7 +409,6 @@ def visu29(TAB):
         TAB.dialog.message_erreur2()
 
 def visu30(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -450,7 +423,6 @@ def visu30(TAB):
         TAB.dialog.message_erreur2()
 
 def visu31(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -465,7 +437,6 @@ def visu31(TAB):
         TAB.dialog.message_erreur2()
 
 def visu32(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -480,7 +451,6 @@ def visu32(TAB):
         TAB.dialog.message_erreur2()
 
 def visu33(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -495,7 +465,6 @@ def visu33(TAB):
         TAB.dialog.message_erreur2()
 
 def visu34(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -510,7 +479,6 @@ def visu34(TAB):
         TAB.dialog.message_erreur2()
 
 def visu35(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -525,7 +493,6 @@ def visu35(TAB):
         TAB.dialog.message_erreur2()
 
 def visu36(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -540,7 +507,6 @@ def visu36(TAB):
         TAB.dialog.message_erreur2()
 
 def visu37(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -555,7 +521,6 @@ def visu37(TAB):
         TAB.dialog.message_erreur2()
 
 def visu38(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -570,7 +535,6 @@ def visu38(TAB):
         TAB.dialog.message_erreur2()
 
 def visu39(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):
@@ -585,7 +549,6 @@ def visu39(TAB):
         TAB.dialog.message_erreur2()
 
 def visu40(TAB):
-    from IHM import VISU, MESSAGE
     file_exists = 0
     name = ""
     for file in os.listdir(TAB.out):

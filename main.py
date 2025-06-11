@@ -40,6 +40,18 @@ import sys
 
 import logging
 
+# Définir une fonction pour attraper toutes les exceptions non gérées
+def log_exception(exc_type, exc_value, exc_traceback):
+    if issubclass(exc_type, KeyboardInterrupt):
+        # Laisse le Ctrl+C s'afficher normalement
+        sys._excepthook_(exc_type, exc_value, exc_traceback)
+        return
+    # Log complet de l'erreur avec stack trace
+    logging.error("Exception non gérée :", exc_info=(exc_type, exc_value, exc_traceback))
+
+# Remplacer le hook d'exception
+sys.excepthook = log_exception
+
 def resource_path(relative_path):
     """Retourne le chemin absolu, même si l'app est empaquetée avec PyInstaller"""
     if getattr(sys, 'frozen', False):
@@ -109,22 +121,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Analyse des ailes d'abeilles")
-
-        try:
-            os.makedirs("out")
-        except:
-            print("Le dossier 'out' existe déjà")
-
-        try:
-            os.makedirs("in")
-        except:
-            print("Le dossier 'in' existe déjà")
-
-        try:
-            os.makedirs("tmp")
-        except:
-            print("Le dossier 'tmp' existe déjà")
+        self.setWindowTitle("Abeille noire?")
 
         self.out = os.path.abspath(os.getcwd()) + os.sep + "out"
         self.in_ = os.path.abspath(os.getcwd()) + os.sep + "in"
@@ -132,68 +129,79 @@ class MainWindow(QMainWindow):
         self.path = os.path.abspath(os.getcwd())
 
         logging.basicConfig(
-            filename='logs.log',
+            filename= self.out + os.sep + 'logs.log',
+            filemode="w",
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s')
 
-        # Utilisation
         logging.info("Démarrage du programme")
-            
-        print(f"nettoyage du dossier 'tmp' : {self.tmp}")
-        logging.info(f"nettoyage du dossier 'tmp' : {self.tmp}")
-        for filename in os.listdir(self.tmp):
-            file_path = self.tmp + os.sep + filename
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-                    print(f"suppression du fichier {file_path}")
-                    logging.info(f"suppression du fichier {file_path}")
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-                    print(f"suppression du dossier {file_path}")
-                    logging.info(f"suppression du fichier {file_path}")
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
-                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
 
-        print(f"nettoyage du dossier 'in' : {self.in_}")
-        logging.info(f"nettoyage du dossier 'in' : {self.in_}")
-        for filename in os.listdir(self.in_):
-            file_path = self.in_ + os.sep + filename
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-                    print(f"suppression du fichier {file_path}")
-                    logging.info(f"suppression du fichier {file_path}")
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-                    print(f"suppression du dossier {file_path}")
-                    logging.info(f"suppression du dossier {file_path}")
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
-                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
+        if os.path.isdir(self.out):
+            print(f"nettoyage du dossier 'out' : {self.out}")
+            logging.info(f"nettoyage du dossier 'out' : {self.out}")
+            for filename in os.listdir(self.out):
+                file_path = self.out + os.sep + filename
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                        print(f"suppression du fichier {file_path}")
+                        logging.info(f"suppression du fichier {file_path}")
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                        print(f"suppression du dossier {file_path}")
+                        logging.info(f"suppression du dossier {file_path}")
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+                    logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
+        else:
+            logging.info(f"Création du répertoire de sortie : {self.out}")
+            os.makedirs("out")
 
+        if os.path.isdir(self.in_):
+            print(f"nettoyage du dossier 'in' : {self.in_}")
+            logging.info(f"nettoyage du dossier 'in' : {self.in_}")
+            for filename in os.listdir(self.in_):
+                file_path = self.in_ + os.sep + filename
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                        print(f"suppression du fichier {file_path}")
+                        logging.info(f"suppression du fichier {file_path}")
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                        print(f"suppression du dossier {file_path}")
+                        logging.info(f"suppression du dossier {file_path}")
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+                    logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
+        else:
+            logging.info(f"Création du répertoire d'entrée : {self.in_}")
+            os.makedirs("in")
 
-        print(f"nettoyage du dossier 'out' : {self.out}")
-        logging.info(f"nettoyage du dossier 'out' : {self.out}")
-        for filename in os.listdir(self.out):
-            file_path = self.out + os.sep + filename
-            try:
-                if os.path.isfile(file_path):
-                    os.unlink(file_path)
-                    print(f"suppression du fichier {file_path}")
-                    logging.info(f"suppression du fichier {file_path}")
-                elif os.path.isdir(file_path):
-                    shutil.rmtree(file_path)
-                    print(f"suppression du dossier {file_path}")
-                    logging.info(f"suppression du dossier {file_path}")
-            except Exception as e:
-                print('Failed to delete %s. Reason: %s' % (file_path, e))
-                logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
+        if os.path.isdir(self.tmp):
+            print(f"nettoyage du dossier 'tmp' : {self.tmp}")
+            logging.info(f"nettoyage du dossier 'tmp' : {self.tmp}")
+            for filename in os.listdir(self.tmp):
+                file_path = self.tmp + os.sep + filename
+                try:
+                    if os.path.isfile(file_path):
+                        os.unlink(file_path)
+                        print(f"suppression du fichier {file_path}")
+                        logging.info(f"suppression du fichier {file_path}")
+                    elif os.path.isdir(file_path):
+                        shutil.rmtree(file_path)
+                        print(f"suppression du dossier {file_path}")
+                        logging.info(f"suppression du fichier {file_path}")
+                except Exception as e:
+                    print('Failed to delete %s. Reason: %s' % (file_path, e))
+                    logging.info('Failed to delete %s. Reason: %s' % (file_path, e))
+        else:
+            logging.info(f"Création du répertoire où sont stockés les fichiers temporaires : {self.tmp}")
+            os.makedirs("tmp")
 
         with open(self.out + os.sep + "results.txt", "w") as f:
             p = self.out + os.sep + "results.txt"
-            print(f"Génération du fichier de résultats {p}")
+            print(f"Les résultats seront écrits dans {p}")
             logging.info(f"Génération du fichier de résultats {p}")
             line = f"num indice_cubital angle_discoidal\n"
             f.write(line)
@@ -204,10 +212,10 @@ class MainWindow(QMainWindow):
     
         self.showMaximized()
 
-        QTimer.singleShot(100, self.calculate)
+    #     QTimer.singleShot(100, self.calculate)
 
-    def calculate(self):
-        return self.frameGeometry().height()
+    # def calculate(self):
+    #     return self.frameGeometry().height()
 
     def close_all_windows(self):
         win_list = QApplication.allWindows()
@@ -405,7 +413,6 @@ class Tab(QWidget):
         self.pb.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         empty1 = resource_path(f"images{os.sep}empty1.png")
-        logging.info(f"path empty1.png : {empty1}")
         pixmap = QPixmap(empty1)
         # pixmap = QPixmap(f"images{os.sep}carte_dardagnan.png")
         image_empty1 = self.label_analyses[0]

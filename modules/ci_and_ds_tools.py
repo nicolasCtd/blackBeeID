@@ -1,6 +1,7 @@
 from images import *
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
 def get_zoom_center(file):
     xmin, xmax, ymin, ymax = 0, 0, 0, 0
@@ -105,6 +106,7 @@ class IMAGE():
         return 0
     
     def draw_ci_lines(self, clr):
+        logging.info("Dessin sur l'image des deux segements qui relient les points Ci")
         # draw lines between cubital index points
         DROITE(self.ci_points[0], self.ci_points[1]).draw(self, 2, 2, color=clr)
         DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=clr)
@@ -115,6 +117,7 @@ class IMAGE():
         return 0
     
     def draw_ds_line_02_perpendicular(self, clr):
+        logging.info("Dessin sur l'image de la droite verticale qui passe par le points Ds au centre")
         point1 = POINT()
         point2 = POINT()
         x, y = DROITE(self.ds_points[0], self.ds_points[2]).xy
@@ -140,6 +143,7 @@ class IMAGE():
         if len(Py)>1:
             txt = "draw_ds_line_02_perpendicular(): la recherche + précise d'un autre pixel "
             txt += "appartenant à la droite perpendiculaire à la première n'a pas marché"
+            logging.info(txt)
             # print(txt, file=self.log)
             print(txt)
             Py, Px = Pyy, Pxx

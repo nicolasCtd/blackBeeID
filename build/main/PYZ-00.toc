@@ -521,12 +521,6 @@
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\copy.py',
    'PYMODULE'),
-  ('core',
-   'C:\\Users\\nicol\\Documents\\ABEILLES\\logiciel\\blackBeeID\\core\\__init__.py',
-   'PYMODULE'),
-  ('core.common',
-   'C:\\Users\\nicol\\Documents\\ABEILLES\\logiciel\\blackBeeID\\core\\common.py',
-   'PYMODULE'),
   ('csv',
    'C:\\Program '
    'Files\\WindowsApps\\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\\Lib\\csv.py',
@@ -885,6 +879,12 @@
    'PYMODULE'),
   ('kiwisolver.exceptions',
    'c:\\Users\\nicol\\Documents\\ABEILLES\\logiciel\\blackBeeID\\.venv\\Lib\\site-packages\\kiwisolver\\exceptions.py',
+   'PYMODULE'),
+  ('kore',
+   'C:\\Users\\nicol\\Documents\\ABEILLES\\logiciel\\blackBeeID\\kore\\__init__.py',
+   'PYMODULE'),
+  ('kore.common',
+   'C:\\Users\\nicol\\Documents\\ABEILLES\\logiciel\\blackBeeID\\kore\\common.py',
    'PYMODULE'),
   ('logging',
    'C:\\Program '

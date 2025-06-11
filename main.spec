@@ -9,7 +9,7 @@ a = Analysis(
 	       ('images/', 'images'),
 		   ('tmp/', '.'),
 		   ('out/', '.'),
-		   ('core/', 'core')],
+		   ('kore/', '.')],
     hiddenimports=['PIL'],
     hookspath=[],
     hooksconfig={},
