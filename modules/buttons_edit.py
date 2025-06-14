@@ -1,4 +1,5 @@
 from kore.common import *
+import logging
 # from modules.ci_and_ds_tools import POINT
 
 def editFile1(TAB):
@@ -9,6 +10,8 @@ def editFile1(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName1)
+        logging.info("Edition de l'image n°1")
+        logging.info("----------------------")
     
 def editFile2(TAB):
     TAB.num = 2
@@ -18,6 +21,8 @@ def editFile2(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName2)
+        logging.info("Edition de l'image n°2")
+        logging.info("----------------------")
     
 def editFile3(TAB):
     TAB.num = 3
@@ -27,8 +32,9 @@ def editFile3(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName3)
+        logging.info("Edition de l'image n°3")
+        logging.info("----------------------")
     
-
 def editFile4(TAB):
     TAB.num = 4
     if TAB.fileName4 == "im4.png":
@@ -37,6 +43,8 @@ def editFile4(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName4)
+        logging.info("Edition de l'image n°4")
+        logging.info("----------------------")
     
 def editFile5(TAB):
     TAB.num = 5
@@ -46,6 +54,8 @@ def editFile5(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName5)
+        logging.info("Edition de l'image n°5")
+        logging.info("----------------------")
     
 def editFile6(TAB):
     TAB.num = 6
@@ -55,6 +65,8 @@ def editFile6(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName6)
+        logging.info("Edition de l'image n°6")
+        logging.info("----------------------")
     
 def editFile7(TAB):
     TAB.num = 7
@@ -64,6 +76,8 @@ def editFile7(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName7)
+        logging.info("Edition de l'image n°7")
+        logging.info("----------------------")
     
 def editFile8(TAB):
     TAB.num = 8
@@ -73,6 +87,8 @@ def editFile8(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName8)
+        logging.info("Edition de l'image n°8")
+        logging.info("----------------------")
     
 def editFile9(TAB):
     TAB.num = 9
@@ -82,6 +98,8 @@ def editFile9(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName9)
+        logging.info("Edition de l'image n°9")
+        logging.info("----------------------")
     
 def editFile10(TAB):
     TAB.num = 10
@@ -91,6 +109,8 @@ def editFile10(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=TAB.num)
         TAB.dialog.display(TAB.fileName10)
+        logging.info("Edition de l'image n°10")
+        logging.info("----------------------")
 
 def editFile11(TAB):
     TAB.num = 11
@@ -100,6 +120,8 @@ def editFile11(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=11)
         TAB.dialog.display(TAB.fileName11)
+        logging.info("Edition de l'image n°11")
+        logging.info("----------------------")
     
 def editFile12(TAB):
     TAB.num = 12
@@ -109,6 +131,8 @@ def editFile12(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=12)
         TAB.dialog.display(TAB.fileName12)
+        logging.info("Edition de l'image n°12")
+        logging.info("----------------------")
     
 def editFile13(TAB):
     TAB.num = 13
@@ -119,6 +143,8 @@ def editFile13(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=13)
         TAB.dialog.display(TAB.fileName13)
+        logging.info("Edition de l'image n°13")
+        logging.info("----------------------")
     
 def editFile14(TAB):
     TAB.num = 14
@@ -129,6 +155,8 @@ def editFile14(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=14)
         TAB.dialog.display(TAB.fileName14)
+        logging.info("Edition de l'image n°14")
+        logging.info("----------------------")
 
 def editFile15(TAB):
     TAB.num = 15
@@ -139,6 +167,8 @@ def editFile15(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=15)
         TAB.dialog.display(TAB.fileName15)
+        logging.info("Edition de l'image n°15")
+        logging.info("----------------------")
     
 def editFile16(TAB):
     TAB.num = 16
@@ -149,6 +179,8 @@ def editFile16(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=16)
         TAB.dialog.display(TAB.fileName16)
+        logging.info("Edition de l'image n°16")
+        logging.info("----------------------")
 
 def editFile17(TAB):
     TAB.num = 17
@@ -159,6 +191,8 @@ def editFile17(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=17)
         TAB.dialog.display(TAB.fileName17)
+        logging.info("Edition de l'image n°17")
+        logging.info("----------------------")
     
 def editFile18(TAB):
     TAB.num = 18
@@ -169,6 +203,8 @@ def editFile18(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=18)
         TAB.dialog.display(TAB.fileName18)
+        logging.info("Edition de l'image n°18")
+        logging.info("----------------------")
     
 def editFile19(TAB):
     TAB.num = 19
@@ -179,7 +215,8 @@ def editFile19(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=19)
         TAB.dialog.display(TAB.fileName19)
-    
+        logging.info("Edition de l'image n°19")
+        logging.info("----------------------") 
 
 def editFile20(TAB):
     TAB.num = 20
@@ -190,6 +227,8 @@ def editFile20(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=20)
         TAB.dialog.display(TAB.fileName20)
+        logging.info("Edition de l'image n°20")
+        logging.info("----------------------")
     
 def editFile21(TAB):
     TAB.num = 21
@@ -200,6 +239,8 @@ def editFile21(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=21)
         TAB.dialog.display(TAB.fileName21)
+        logging.info("Edition de l'image n°21")
+        logging.info("----------------------")
     
 def editFile22(TAB):
     TAB.num = 22
@@ -210,6 +251,8 @@ def editFile22(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=22)
         TAB.dialog.display(TAB.fileName22)
+        logging.info("Edition de l'image n°22")
+        logging.info("----------------------")
 
 def editFile23(TAB):
     TAB.num = 23
@@ -219,6 +262,8 @@ def editFile23(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=23)
         TAB.dialog.display(TAB.fileName23)
+        logging.info("Edition de l'image n°23")
+        logging.info("----------------------")
 
 def editFile24(TAB):
     TAB.num = 24
@@ -229,6 +274,8 @@ def editFile24(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=24)
         TAB.dialog.display(TAB.fileName24)
+        logging.info("Edition de l'image n°24")
+        logging.info("----------------------")
     
 def editFile25(TAB):
     TAB.num = 25
@@ -239,6 +286,8 @@ def editFile25(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=25)
         TAB.dialog.display(TAB.fileName25)
+        logging.info("Edition de l'image n°25")
+        logging.info("----------------------")
 
 def editFile26(TAB):
     TAB.num = 26
@@ -249,6 +298,8 @@ def editFile26(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=26)
         TAB.dialog.display(TAB.fileName26)
+        logging.info("Edition de l'image n°26")
+        logging.info("----------------------")
 
 def editFile27(TAB):
     TAB.num = 27
@@ -259,6 +310,8 @@ def editFile27(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=27)
         TAB.dialog.display(TAB.fileName27)
+        logging.info("Edition de l'image n°27")
+        logging.info("----------------------")
     
 def editFile28(TAB):
     TAB.num = 28
@@ -269,6 +322,8 @@ def editFile28(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=28)
         TAB.dialog.display(TAB.fileName28)
+        logging.info("Edition de l'image n°28")
+        logging.info("----------------------")
     
 def editFile29(TAB):
     TAB.num = 29
@@ -279,6 +334,8 @@ def editFile29(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=29)
         TAB.dialog.display(TAB.fileName29)
+        logging.info("Edition de l'image n°29")
+        logging.info("----------------------")
     
 def editFile30(TAB):
     TAB.num = 30
@@ -289,6 +346,8 @@ def editFile30(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=30)
         TAB.dialog.display(TAB.fileName30)
+        logging.info("Edition de l'image n°30")
+        logging.info("----------------------")
     
 def editFile31(TAB):
     TAB.num = 31
@@ -299,6 +358,8 @@ def editFile31(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=31)
         TAB.dialog.display(TAB.fileName31)
+        logging.info("Edition de l'image n°31")
+        logging.info("----------------------")
     
 def editFile32(TAB):
     TAB.num = 32
@@ -309,6 +370,8 @@ def editFile32(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=32)
         TAB.dialog.display(TAB.fileName32)
+        logging.info("Edition de l'image n°32")
+        logging.info("----------------------")
     
 def editFile33(TAB):
     TAB.num = 33
@@ -319,6 +382,8 @@ def editFile33(TAB):
     else:
         TAB.dialog = EDIT(TAB, num=33)
         TAB.dialog.display(TAB.fileName33)
+        logging.info("Edition de l'image n°33")
+        logging.info("----------------------")
     
 def editFile34(TAB):
     TAB.num = 34
@@ -328,6 +393,8 @@ def editFile34(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName34)
+        logging.info("Edition de l'image n°34")
+        logging.info("----------------------")
     
 
 def editFile35(TAB):
@@ -338,6 +405,8 @@ def editFile35(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName35)
+        logging.info("Edition de l'image n°35")
+        logging.info("----------------------")
 
 def editFile36(TAB):
     TAB.num = 36
@@ -347,6 +416,8 @@ def editFile36(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName36)
+        logging.info("Edition de l'image n°36")
+        logging.info("----------------------")
 
 def editFile37(TAB):
     TAB.num = 37
@@ -356,6 +427,8 @@ def editFile37(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName37)
+        logging.info("Edition de l'image n°37")
+        logging.info("----------------------")
 
 def editFile38(TAB):
     TAB.num = 38
@@ -365,6 +438,8 @@ def editFile38(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName38)
+        logging.info("Edition de l'image n°38")
+        logging.info("----------------------")
     
 def editFile39(TAB):
     TAB.num = 39
@@ -374,6 +449,8 @@ def editFile39(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName39)
+        logging.info("Edition de l'image n°39")
+        logging.info("----------------------")
 
 def editFile40(TAB):
     TAB.num = 40
@@ -383,6 +460,8 @@ def editFile40(TAB):
         TAB.dialog.message_erreur1()
     else:
         TAB.dialog.display(TAB.fileName40)
+        logging.info("Edition de l'image n°40")
+        logging.info("----------------------")
 
 def editFile41(TAB):
     TAB.num = 41
@@ -392,6 +471,8 @@ def editFile41(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName41)
+        logging.info("Edition de l'image n°41")
+        logging.info("----------------------")
 
 def editFile42(TAB):
     TAB.dialog = EDIT(TAB, num=42)
@@ -400,7 +481,8 @@ def editFile42(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName42)
-    
+        logging.info("Edition de l'image n°42")
+        logging.info("----------------------")   
 
 def editFile43(TAB):
     TAB.dialog = EDIT(TAB, num=43)
@@ -409,6 +491,8 @@ def editFile43(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName43)
+        logging.info("Edition de l'image n°43")
+        logging.info("----------------------")
     
 def editFile44(TAB):
     TAB.dialog = EDIT(TAB, num=44)
@@ -417,6 +501,8 @@ def editFile44(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName44)
+        logging.info("Edition de l'image n°44")
+        logging.info("----------------------")
     
 def editFile45(TAB):
     TAB.dialog = EDIT(TAB, num=45)
@@ -425,6 +511,8 @@ def editFile45(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName45)
+        logging.info("Edition de l'image n°45")
+        logging.info("----------------------")
 
 def editFile46(TAB):
     TAB.dialog = EDIT(TAB, num=46)
@@ -433,6 +521,8 @@ def editFile46(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName46)
+        logging.info("Edition de l'image n°46")
+        logging.info("----------------------")
     
 def editFile47(TAB):
     TAB.dialog = EDIT(TAB, num=47)
@@ -441,6 +531,8 @@ def editFile47(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName47)
+        logging.info("Edition de l'image n°47")
+        logging.info("----------------------")
     
 def editFile48(TAB):
     TAB.dialog = EDIT(TAB, num=48)
@@ -449,6 +541,8 @@ def editFile48(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName48)
+        logging.info("Edition de l'image n°48")
+        logging.info("----------------------")
     
 def editFile49(TAB):
     TAB.dialog = EDIT(TAB, num=49)
@@ -457,6 +551,8 @@ def editFile49(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName49)
+        logging.info("Edition de l'image n°49")
+        logging.info("----------------------")
     
 def editFile50(TAB):
     TAB.dialog = EDIT(TAB, num=50)
@@ -465,4 +561,6 @@ def editFile50(TAB):
         TAB.dialog.message()
     else:
         TAB.dialog.display(TAB.fileName50)
+        logging.info("Edition de l'image n°50")
+        logging.info("----------------------")
     

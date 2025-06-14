@@ -129,7 +129,7 @@ class EDIT(QMainWindow):
 
 
     def display(self, fileName):
-        logging.info(f"--- Edition de l'image : {fileName}")
+        logging.info(f"Edition de l'image : {fileName}")
         self.name = get_file_name(fileName).replace(".jpg", "").replace("png", "")
         self.extension = "." + fileName.split(".")[-1]
 
@@ -170,14 +170,12 @@ class EDIT(QMainWindow):
     
     def set_dock(self):
         search = resource_path(f"search.png")
-        print(search)
         self.btn_zoom_1 = QPushButton("  ZOOM IN ")
         self.btn_zoom_1.setIcon(QtGui.QIcon(search))
         self.btn_zoom_1.setFont(QFont('Times', 14))
         self.btn_zoom_1.clicked.connect(partial(self.zoom_in, True))
 
         fusee = resource_path(f"fusee.webp")
-        print(fusee)
         self.btn_zoom_2 = QPushButton("  ZOOM OUT")
         self.btn_zoom_2.setIcon(QtGui.QIcon(fusee))
         self.btn_zoom_2.setFont(QFont('Times', 14))
@@ -188,7 +186,6 @@ class EDIT(QMainWindow):
 
         back = resource_path(f"back.png")
         self.btn_cancel = QPushButton("")
-        print(back)
         self.btn_cancel.setIcon(QtGui.QIcon(back))
         self.btn_cancel.clicked.connect(self.cancel)
 
@@ -203,7 +200,6 @@ class EDIT(QMainWindow):
         self.btn_ds_points.clicked.connect(partial(self.set_ds_points, switch=self.switch_ds))
 
         done = resource_path(f"done.jpg")
-        print(done)
         self.btn_done = QPushButton("  Done")
         self.btn_done.setIcon(QtGui.QIcon(done))
         self.btn_done.setFont(QFont('Times', 14))
@@ -226,16 +222,25 @@ class EDIT(QMainWindow):
         img = resource_path(f"{self.TMP}{file_wo_zoom}")
         im.load(img)
         im.ci_points = sort_ci_points(self.ci_points)
+        logging.info(f"Point Ci n°1 : (i,j)=({im.ci_points[0].i}, {im.ci_points[0].j})")
+        logging.info(f"Point Ci n°2 : (i,j)=({im.ci_points[1].i}, {im.ci_points[1].j})")
+        logging.info(f"Point Ci n°3 : (i,j)=({im.ci_points[2].i}, {im.ci_points[2].j})")
+        logging.info("----------------------")
+
         im.ds_points = sort_ds_points(self.ds_points)
+        logging.info(f"Point Ds n°1 : (i,j)=({im.ds_points[0].i}, {im.ds_points[0].j})")
+        logging.info(f"Point Ds n°2 : (i,j)=({im.ds_points[1].i}, {im.ds_points[1].j})")
+        logging.info(f"Point Ds n°3 : (i,j)=({im.ds_points[2].i}, {im.ds_points[2].j})")
+        logging.info(f"Point Ds n°4 : (i,j)=({im.ds_points[3].i}, {im.ds_points[3].j})")
+
         im.draw_ci_lines(self.color_ci)
         im.draw_ds_line_02(self.color_ds)
         im.draw_ds_line_02_perpendicular(self.color_ds)
         self.ci_value = compute_cubital_index(self.ci_points)
         self.ds_value = compute_discoidal_shift(im.point1, im.point2, im.ds_points)
 
-        logging.info("Enregistrement de l'image éditée : " + f"{self.OUT}{self.NUM}_out{self.extension}")
-        logging.info(f"Indice cubital (abeille {self.NUM}) : {self.ci_value}")
-        logging.info(f"Shift discoidal (abeille {self.NUM}) : {self.ds_value}°")
+        logging.info(f"Indice cubital Abeille #{self.NUM}) : {self.ci_value}")
+        logging.info(f"Shift discoidal Abeille #{self.NUM}) : {clean(self.ds_value)}°")
         
         plt.imsave(fname=f"{self.OUT}{self.NUM}_out{self.extension}", arr=im.data)
         logging.info(f"Image sauvegardée : {self.OUT}{self.NUM}_out{self.extension}")
@@ -269,7 +274,6 @@ class EDIT(QMainWindow):
         img = Image.open(img_path)
         # Create a drawing object
         draw = ImageDraw.Draw(img)
-        logging.info("L'image a été chargée")
         # Define text attributes
         num = self.num
         ci = int(self.ci_value*100)/100
@@ -278,10 +282,7 @@ class EDIT(QMainWindow):
         if np.sign(ds) == 1:
             tt = "+"
         text = f"Abeille #{num}             Indice cubital : {ci}             Angle discoïdal : {tt}{ds}°"
-        print(self.path)
         font_path = resource_path(f"Paul.ttf")
-        logging.info(font_path)
-        print(font_path)
         font = ImageFont.truetype(font_path, size=40)
         text_color = (255, 0, 0)  # Red color
 
@@ -332,6 +333,7 @@ class EDIT(QMainWindow):
             node_zoom.j, node_zoom.i = x, y
             node.j, node.i = x+xmin, y+ymin
             self.ci_points[self.count_ci_points-1] = node
+            # logging.info(f"coordonnées (ligne, col) du point Ci : ({node.i}, {node.j})")
             if self.ZOOM:
                 A.highlight(node_zoom, self.color_ci)
             else:
@@ -382,6 +384,7 @@ class EDIT(QMainWindow):
             node, node_zoom = POINT(), POINT()
             node_zoom.j, node_zoom.i = x, y
             node.j, node.i = x+xmin, y+ymin
+            # logging.info(f"coordonnées (ligne, col) du point Ds : ({node.i}, {node.j})")
             self.ds_points[self.count_ds_points-1] = node
             if self.ZOOM:
                 A.highlight(node_zoom, self.color_ds)

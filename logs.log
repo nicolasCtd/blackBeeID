@@ -1,0 +1,29 @@
+2025-06-13 00:38:17,089 - INFO - Démarrage du programme
+2025-06-13 00:38:17,089 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-06-13 00:38:17,089 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-13 00:38:17,089 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-06-13 00:38:17,089 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
+2025-06-13 00:38:17,089 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\2_in.png
+2025-06-13 00:38:17,089 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-06-13 00:38:17,089 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\1
+2025-06-13 00:38:17,089 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\2
+2025-06-13 00:38:17,106 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-06-13 00:38:27,366 - INFO - --- Edition de l'image : C:/Users/nicol/Documents/ABEILLES/logiciel/2.jpg
+2025-06-13 00:38:27,366 - INFO - Création du répertoire : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\1\
+2025-06-13 00:38:27,367 - INFO - Copie du fichier : C:/Users/nicol/Documents/ABEILLES/logiciel/2.jpg >> C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\1\2___13_06_2025___00_38_27.jpg
+2025-06-13 00:38:27,387 - INFO - Edition de l'image n°1
+2025-06-13 00:38:29,573 - INFO - coordonnées (ligne, col) du point Ci : (279, 944)
+2025-06-13 00:38:32,152 - INFO - coordonnées (ligne, col) du point Ci : (309, 1055)
+2025-06-13 00:38:34,546 - INFO - coordonnées (ligne, col) du point Ci : (295, 1116)
+2025-06-13 00:38:36,832 - INFO - coordonnées (ligne, col) du point Ds : (126, 812)
+2025-06-13 00:38:38,940 - INFO - coordonnées (ligne, col) du point Ds : (147, 1205)
+2025-06-13 00:38:41,106 - INFO - coordonnées (ligne, col) du point Ds : (227, 1011)
+2025-06-13 00:38:43,534 - INFO - coordonnées (ligne, col) du point Ds : (421, 943)
+2025-06-13 00:38:44,797 - INFO - Dessin sur l'image des deux segements qui relient les points Ci
+2025-06-13 00:38:44,802 - INFO - Dessin sur l'image de la droite verticale qui passe par le points Ds au centre
+2025-06-13 00:38:44,828 - INFO - Enregistrement de l'image éditée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-13 00:38:44,828 - INFO - Indice cubital (abeille 1) : 1.8371954739763494
+2025-06-13 00:38:44,829 - INFO - Shift discoidal (abeille 1) : [-16.246649]°
+2025-06-13 00:38:44,842 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
+2025-06-13 00:38:44,851 - INFO - L'image a été chargée
+2025-06-13 00:38:44,856 - INFO - Les infos ont été ajoutées sur l'image.

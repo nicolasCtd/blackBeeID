@@ -10,34 +10,26 @@ from PyQt5.QtWidgets import (
     QMainWindow,
     QPushButton,
     QVBoxLayout,
-    QHBoxLayout,
     QWidget,
     QGridLayout,
     QSizePolicy,
     QTabWidget,
-    QDockWidget,
     QLineEdit,
     QFileDialog,
     QInputDialog,
     QMessageBox,
 )
 from PyQt5.QtGui import QPixmap, QCursor, QFont
-
 from PyQt5 import QtCore, QtGui
-
 from functools import partial
-
 from PIL import Image, ImageDraw, ImageFont
-
 from modules.buttons_edit import *
 from modules.buttons_visu import *
 from modules.buttons_browse import *
 from modules.ci_and_ds_tools import *
 from modules.utile import *
 from modules.analyses import *
-
 import sys
-
 import logging
 
 # Définir une fonction pour attraper toutes les exceptions non gérées
@@ -127,9 +119,13 @@ class MainWindow(QMainWindow):
         self.in_ = os.path.abspath(os.getcwd()) + os.sep + "in"
         self.tmp = os.path.abspath(os.getcwd()) + os.sep + "tmp"
         self.path = os.path.abspath(os.getcwd())
+        self.logs = os.path.abspath(os.getcwd()) + os.sep + "logs"
+
+        if not(os.path.isdir(self.path + os.sep + "logs")):
+            os.makedirs("logs")
 
         logging.basicConfig(
-            filename= self.out + os.sep + 'logs.log',
+            filename= self.logs + os.sep + 'logs.log',
             filemode="w",
             level=logging.INFO,
             format='%(asctime)s - %(levelname)s - %(message)s')
@@ -599,6 +595,7 @@ class Tab(QWidget):
                         name = os.path.join(root, name)
                         name = os.path.normpath(name)
                         zf.write(name, name)
+                zf.write(os.path.normpath(self.path + os.sep + "logs.log"), "logs.log")
             self.dialog = MESSAGE()
             msg = f"L'analyse '{self.analyse_name}' a bien été enregistrée dans {DIR}"
             logging.info(msg)
@@ -622,7 +619,7 @@ class Tab(QWidget):
             shutil.unpack_archive(filename=project_file, extract_dir=self.tmp)
             copytree(src=self.tmp + os.sep + "in", dst=self.in_)
             copytree(src=self.tmp + os.sep + "out", dst=self.out)
-
+            shutil.copyfile(src=self.tmp + os.sep + "logs.log", dst=self.path + os.sep + "logs.log")
             self.RES = load_results(self.tmp + os.sep + "out" + os.sep + "results.txt")
             print("results already computed:")
             print(self.RES)
@@ -654,6 +651,7 @@ class Tab(QWidget):
         return 0
     
     def lancer_analyse(self):
+        logging.info(f"Lancement de l'analyse : calcul de l'histogramme des indices + scatter plots DS vs CI")
         if len(self.RES) <= 3:
             self.dialog = MESSAGE()
             msg = f"Le nombre d'ailes analysées ({len(self.RES)}) est trop faible"
@@ -688,10 +686,3 @@ if __name__ == '__main__':
     window.show()
 
     app.exec()
-
-    # for file in os.listdir(self.dialog.path + "out" + os.sep + self.dialog.name):
-    #     filename = file
-    # pixmap = QPixmap(self.dialog.path + "out" + os.sep + self.dialog.name + os.sep + filename)
-    # print(self.dialog.path + "out" + os.sep + self.dialog.name + os.sep + filename)
-    # pixmap = pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-    # self.label_right[0].setPixmap(pixmap)

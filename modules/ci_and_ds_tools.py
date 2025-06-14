@@ -44,7 +44,6 @@ def sort_ds_points(nodes):
         for i in range(3):
             nodes_ordered.append(nodes[order[i]])
         nodes_ordered.append(DS)
-    print(nodes_ordered)
     return nodes_ordered
 
 def compute_cubital_index(ci_points):
@@ -106,7 +105,6 @@ class IMAGE():
         return 0
     
     def draw_ci_lines(self, clr):
-        logging.info("Dessin sur l'image des deux segements qui relient les points Ci")
         # draw lines between cubital index points
         DROITE(self.ci_points[0], self.ci_points[1]).draw(self, 2, 2, color=clr)
         DROITE(self.ci_points[1], self.ci_points[2]).draw(self, 2, 2, color=clr)
@@ -117,7 +115,6 @@ class IMAGE():
         return 0
     
     def draw_ds_line_02_perpendicular(self, clr):
-        logging.info("Dessin sur l'image de la droite verticale qui passe par le points Ds au centre")
         point1 = POINT()
         point2 = POINT()
         x, y = DROITE(self.ds_points[0], self.ds_points[2]).xy
