@@ -1,34 +1,8 @@
-2025-06-14 15:15:15,060 - INFO - Démarrage du programme
-2025-06-14 15:15:15,061 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
-2025-06-14 15:15:15,061 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-06-14 15:15:15,061 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
-2025-06-14 15:15:15,062 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\1_in.png
-2025-06-14 15:15:15,062 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
-2025-06-14 15:15:15,121 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp\1
-2025-06-14 15:15:15,122 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-06-14 15:16:06,646 - INFO - Edition de l'image : C:/Users/nicol/Documents/ABEILLES/logiciel/3.jpg
-2025-06-14 15:16:06,647 - INFO - Création du répertoire : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\1\
-2025-06-14 15:16:06,648 - INFO - Copie du fichier : C:/Users/nicol/Documents/ABEILLES/logiciel/3.jpg >> C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\1\3___14_06_2025___15_16_06.jpg
-2025-06-14 15:16:06,696 - INFO - Edition de l'image n°1
-2025-06-14 15:16:06,696 - INFO - ----------------------
-2025-06-14 15:16:57,688 - INFO - Point Ci n°1 : (i,j)=(340, 1461)
-2025-06-14 15:16:57,688 - INFO - Point Ci n°2 : (i,j)=(369, 1601)
-2025-06-14 15:16:57,688 - INFO - Point Ci n°3 : (i,j)=(352, 1648)
-2025-06-14 15:16:57,688 - INFO - ----------------------
-2025-06-14 15:16:57,689 - INFO - Point Ds n°1 : (i,j)=(236, 1172)
-2025-06-14 15:16:57,689 - INFO - Point Ds n°2 : (i,j)=(229, 1456)
-2025-06-14 15:16:57,689 - INFO - Point Ds n°3 : (i,j)=(126, 1866)
-2025-06-14 15:16:57,689 - INFO - Point Ds n°4 : (i,j)=(524, 1520)
-2025-06-14 15:16:57,732 - INFO - Indice cubital Abeille #1) : 2.860584967639603
-2025-06-14 15:16:57,732 - INFO - Shift discoidal Abeille #1) : 3.21485387°
-2025-06-14 15:16:57,748 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\1_out.jpg
-2025-06-14 15:16:57,778 - INFO - Les infos ont été ajoutées sur l'image.
-2025-06-14 15:18:16,651 - INFO - Lancement de l'analyse : calcul de l'histogramme des indices + scatter plots DS vs CI
-2025-06-14 15:18:16,661 - INFO - Le nombre d'ailes analysées (1) est trop faible
-2025-06-14 15:19:34,825 - ERROR - Exception non gérée :
-Traceback (most recent call last):
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 230, in closeEvent
-    self.close_all_windows()
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 219, in close_all_windows
-    w.close()
-RuntimeError: wrapped C/C++ object of type QWindow has been deleted
+2025-07-12 15:41:32,918 - INFO - Démarrage du programme
+2025-07-12 15:41:32,918 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-07-12 15:41:32,919 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-12 15:41:32,919 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-07-12 15:41:32,919 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-07-12 15:41:32,919 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-12 15:41:37,041 - INFO - Lancement de l'analyse : calcul de l'histogramme des indices + scatter plots DS vs CI
+2025-07-12 15:41:37,052 - INFO - Le nombre d'ailes mesurées (0) est trop faible (il en faut au moins 15)

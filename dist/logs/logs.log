@@ -1,6 +1,6 @@
-2025-06-14 22:21:10,825 - INFO - Démarrage du programme
-2025-06-14 22:21:10,825 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
-2025-06-14 22:21:10,825 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
-2025-06-14 22:21:10,825 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
-2025-06-14 22:21:10,826 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
-2025-06-14 22:21:10,826 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-07-08 18:33:01,593 - INFO - Démarrage du programme
+2025-07-08 18:33:01,593 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out
+2025-07-08 18:33:01,600 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt
+2025-07-08 18:33:01,600 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\in
+2025-07-08 18:33:01,600 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\tmp
+2025-07-08 18:33:01,600 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\dist\out\results.txt

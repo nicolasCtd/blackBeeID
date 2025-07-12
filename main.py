@@ -61,6 +61,7 @@ with open(config_path, 'r') as file:
     config = yaml.safe_load(file)
 
 classif = config['visu']
+seuil_min_abeilles = config['seuil_min_abeilles']
 
 connections_edit = {1:editFile1, 2:editFile2, 3:editFile3, 4:editFile4, 5:editFile5,
                     6:editFile6, 7:editFile7, 8:editFile8, 9:editFile9, 10:editFile10,
@@ -243,57 +244,6 @@ class Tab(QWidget):
 
         self.RES = {}
         self.analyse_name = str(date.today())
-
-        self.fileName1 = "im1.png"
-        self.fileName2 = "im2.png"
-        self.fileName3 = "im3.png"
-        self.fileName4 = "im4.png"
-        self.fileName5 = "im5.png"
-        self.fileName6 = "im6.png"
-        self.fileName7 = "im7.png"
-        self.fileName8 = "im8.png"
-        self.fileName9 = "im9.png"
-        self.fileName10 = "im10.png"
-        self.fileName11 = "im11.png"
-        self.fileName12 = "im12.png"
-        self.fileName13 = "im13.png"
-        self.fileName14 = "im14.png"
-        self.fileName15 = "im15.png"
-        self.fileName16 = "im16.png"
-        self.fileName17 = "im17.png"
-        self.fileName18 = "im18.png"
-        self.fileName19 = "im19.png"
-        self.fileName20 = "im20.png"
-        self.fileName21 = "im21.png"
-        self.fileName22 = "im22.png"
-        self.fileName23 = "im23.png"
-        self.fileName24 = "im24.png"
-        self.fileName25 = "im25.png"
-        self.fileName26 = "im26.png"
-        self.fileName27 = "im27.png"
-        self.fileName28 = "im28.png"
-        self.fileName29 = "im29.png"
-        self.fileName30 = "im30.png"
-        self.fileName31 = "im31.png"
-        self.fileName32 = "im32.png"
-        self.fileName33 = "im33.png"
-        self.fileName34 = "im34.png"
-        self.fileName35 = "im35.png"
-        self.fileName36 = "im36.png"
-        self.fileName37 = "im37.png"
-        self.fileName38 = "im38.png"
-        self.fileName39 = "im39.png"
-        self.fileName40 = "im40.png"
-        self.fileName41 = "im41.png"
-        self.fileName42 = "im42.png"
-        self.fileName43 = "im43.png"
-        self.fileName44 = "im44.png"
-        self.fileName45 = "im45.png"
-        self.fileName46 = "im46.png"
-        self.fileName47 = "im47.png"
-        self.fileName48 = "im48.png"
-        self.fileName49 = "im49.png"
-        self.fileName50 = "im50.png"
 
         self.layout = QVBoxLayout(self)
   
@@ -652,11 +602,10 @@ class Tab(QWidget):
     
     def lancer_analyse(self):
         logging.info(f"Lancement de l'analyse : calcul de l'histogramme des indices + scatter plots DS vs CI")
-        if len(self.RES) <= 3:
+        if len(self.RES) <= seuil_min_abeilles:
             self.dialog = MESSAGE()
-            msg = f"Le nombre d'ailes analysées ({len(self.RES)}) est trop faible"
+            msg = f"Le nombre d'ailes mesurées ({len(self.RES)}) est trop faible (il en faut au moins {seuil_min_abeilles})"
             self.dialog.message(msg)
-            self.dialog.show()
             logging.info(msg)
         else:
             print("calcul de l'histogramme de l'indice cubital")
@@ -666,7 +615,7 @@ class Tab(QWidget):
             for abeille in self.RES.keys():
                 indices.append(float(self.RES[abeille][0]))
                 shifts.append(float(self.RES[abeille][1]))
-            ci_images, ds_image = analyse(indices, shifts, path_out=self.out)
+            ci_images, ds_image = analyse(indices, shifts, path_out=self.out, visu=classif)
             pixmap = QPixmap(ci_images[0])
             self.label_analyses[0].setPixmap(pixmap)
             pixmap = QPixmap(ds_image)

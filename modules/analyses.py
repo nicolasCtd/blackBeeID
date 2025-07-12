@@ -356,6 +356,11 @@ def write_results(path, a, b, indices, classes, discoidal_shift, ID, fail, rejec
 
 
 def analyse(indices, shifts, visu="RUTTNER", path_out=""):
+    """
+    indices :
+    shifts :
+    visu : (str) : 
+    """
 
     H = HISTOGRAM(indices=indices, visu=visu, path=path_out)
 

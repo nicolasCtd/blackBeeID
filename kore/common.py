@@ -73,7 +73,8 @@ class MESSAGE(QMainWindow):
         self.move(100, 200)
         self.setWindowTitle(' ')
         layout = QHBoxLayout()
-        aspicot = resource_path(f"images" + os.sep + "aspicot.png")
+        #aspicot = resource_path(f"images" + os.sep + "aspicot.png")
+        aspicot = "images" + os.sep + "aspicot.png"
         pixmap = QPixmap(aspicot)
         label = QLabel()
         label.setPixmap(pixmap)
