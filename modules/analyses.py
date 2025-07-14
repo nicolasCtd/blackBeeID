@@ -35,7 +35,7 @@ class HISTOGRAM():
     
     def save_abacus(self):
         classes, indices = self.compute_abacus()
-        with open(os.sep.join([self.path, "abacus.txt"]), "w") as f:
+        with open(os.sep.join([self.path, f"abacus_{self.visu}.txt"]), "w") as f:
             for classe, indice in zip(classes, indices):
                 f.write(str(indice) + " " + str(classe) + "\n")
         return 0
@@ -186,9 +186,7 @@ class HISTOGRAM():
     def plot_histogram(self, show=True, save=True):
 
         x, y = self.histogram()
-
         self.MCLC()
-
         mean_of_classes = np.sum((np.array(x)+0.5) * np.array(y)) / np.sum(np.array(y))
 
         print(f"indice cubital moyen : {int(np.mean(self.indices) * 100)/100}")
@@ -247,41 +245,6 @@ class HISTOGRAM():
             plt.close()
         return figures_out
 
-    
-    def add_plot(self, x, y, indices, mclc, show=True, save=True):
-
-        mean_of_classes = np.sum((np.array(x)+0.5) * np.array(y)) / np.sum(np.array(y)) 
-
-        print(f"indice cubital moyen : {int(np.mean(indices) * 100)/100}")
-        print(f"moyenne des classes : {int(mean_of_classes * 100)/100}")
-
-        for espece, m in zip(self.limits.keys(), range(4)):
-        
-            plt.figure(m)
-
-            fig = plt.gcf()
-            ax = plt.gca()
-
-            ax.plot(np.array(x)+0.5, y, label=f"Deepwings {len(self.indices)} abeilles", color='red', linewidth=3.5, zorder=3)
-
-            tck_label, positions = self.reset_ticks(ax)
-            plt.ylim(0, max(max(positions), max(y)))
-
-            plt.vlines(mean_of_classes+0.5, 0, max(positions), color='red', linewidth=1.5, linestyle="--", zorder=5.5)
-
-            cmin = int(self.get_classes([self.limits[espece][0]])[0])
-            cmax = int(self.get_classes([self.limits[espece][1]])[0])
-
-            plt.text(cmin + (cmax - cmin)/3, max(positions)-2, f"\n     {mclc[espece]}%", fontsize=12, style='italic', color='red', zorder=10)
-            plt.text(mean_of_classes-0.5, 1.2, f'Moyenne indices : {int(np.mean(indices) * 100)/100}', 
-                        fontstyle='italic', fontweight='bold', fontsize=8, color='red', zorder=20)
-            plt.legend(loc='upper left', fontsize=14)
-        
-            if save:
-                fig.savefig(f"{self.path}{3-m}_histogramme_{self.visu}_{espece}.png")
-            if show:
-                fig.show()
-
 def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title=""):
     
     fig, ax = plt.subplots(figsize=(HEIGHT/dpi, WIDTH/dpi), dpi=dpi)
@@ -321,45 +284,8 @@ def scatter_plot(path, indices=list(), shifts=list(), name_fig="", title=""):
     # plt.show()
     return ds_image
 
-def write_results(path, a, b, indices, classes, discoidal_shift, ID, fail, reject):
-    
-    order = np.argsort(np.array(ID))
-    ID = np.array(ID)[order]
-    indices = np.array(indices)[order]
-    discoidal_shift = np.array(discoidal_shift)[order]
-    classes = np.array(classes)[order]
-    a = np.array(a)[order]
-    b = np.array(b)[order]
-
-    with open(f"{path}results.csv", 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(["num", "a", "b", "indice_cubital", "classe", "discoidal_shift"])
-        
-        min_ID = np.min(np.concatenate([ID, fail, reject]))
-        max_ID = np.max(np.concatenate([ID, fail, reject]))
-        
-        for num in np.arange(min_ID, max_ID+1):
-            if num in ID:
-                idx = int(np.where(num == ID)[0])
-                line = [ID[idx], int(a[idx]*100)/100, int(b[idx]*100)/100, int(indices[idx]*100)/100, classes[idx], int(discoidal_shift[idx]*100)/100]
-            elif num in fail:
-                idx = int(np.where(num == fail)[0])
-                line = [fail[idx], "FAIL", "FAIL", "FAIL", "FAIL", "FAIL"]
-            elif num in reject:
-                idx = int(np.where(num == reject)[0])
-                line = [reject[idx], "REJECTED", "REJECTED", "REJECTED", "REJECTED", "REJECTED"]
-            else:
-                continue
-            writer.writerow(line)
-        f.close()
-        return 0
-
-
 def analyse(indices, shifts, visu="RUTTNER", path_out=""):
     """
-    indices :
-    shifts :
-    visu : (str) : 
     """
 
     H = HISTOGRAM(indices=indices, visu=visu, path=path_out)
@@ -367,8 +293,6 @@ def analyse(indices, shifts, visu="RUTTNER", path_out=""):
     list_of_ci_images = H.plot_histogram(show=False, save=True)
 
     ds_image = scatter_plot(path=path_out, indices=[indices], shifts=[shifts])
-
-    # write_results(path=path_out, a=a, b=b, indices=indices, classes=H.classes, discoidal_shift=discoidal_shift, ID=ID, fail=fail, reject=reject)
 
     return list_of_ci_images, ds_image
 
