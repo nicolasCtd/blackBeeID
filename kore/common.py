@@ -41,8 +41,8 @@ class MESSAGE(QMainWindow):
     def message_erreur1(self):
         self.setWindowTitle(' ')
         layout = QVBoxLayout()
-        coconfort = resource_path(f"images" + os.sep + "coconfort.png")
-        pixmap = QPixmap(coconfort)
+        # coconfort = resource_path()
+        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
