@@ -1,12 +1,18 @@
-2025-07-15 11:14:40,375 - INFO - Démarrage du programme
-2025-07-15 11:14:40,375 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
-2025-07-15 11:14:40,375 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-15 11:14:40,376 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
-2025-07-15 11:14:40,376 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
-2025-07-15 11:14:40,376 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-15 11:14:54,564 - ERROR - Exception non gérée :
+2025-07-15 23:52:13,583 - INFO - Démarrage du programme
+2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-07-15 23:52:13,583 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-07-15 23:52:13,583 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-15 23:52:13,645 - ERROR - Exception non gérée :
 Traceback (most recent call last):
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\modules\buttons_edit.py", line 109, in editFile7
-    if TAB.fileName7 == "im7.png":
-       ^^^^^^^^^^^^^
-AttributeError: 'Tab' object has no attribute 'fileName7'
+  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 633, in <module>
+    window = MainWindow()
+             ^^^^^^^^^^^^
+  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 207, in __init__
+    self.tab_widget = Tab(self, self.path)
+                      ^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 461, in __init__
+    btn1.clicked.connect(partial(connections_load[num_image], TAB=self))
+                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^
+KeyError: 41

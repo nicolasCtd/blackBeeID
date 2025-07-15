@@ -282,9 +282,11 @@ class Tab(QWidget):
         self.width = 413
         self.height = 307
 
-        nb_tabs = 8
+        nb_tabs = 9
 
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -300,16 +302,20 @@ class Tab(QWidget):
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
         
         self.label_results = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
-                           QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
+                             QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self)]
         
         self.label_analyses = [QLabel(self), QLabel(self)]
         self.label_analyses[0].setFixedWidth(900)
@@ -400,22 +406,6 @@ class Tab(QWidget):
         layout_main.addWidget(deco0, 0, 4, 2, 2)
         layout_main.addWidget(deco1, 0, 8, 2, 2)
         layout_main.addWidget(deco2, 0, 10, 2, 2)
-
-        # width = deco0.geometry().width()
-        # height = deco0.geometry().height()
-        # print(width, height)
-
-        # width = image_empty2.geometry().width()
-        # height = image_empty2.geometry().height()
-        # print(width, height)
-
-        # width = label1.geometry().width()
-        # height = label1.geometry().height()
-        # print(width, height)
-
-        # width = image_empty2.sizeHint().width()
-        # height = image_empty2.sizeHint().height()
-        # print(width, height)
 
         btn1.clicked.connect(self.load_project)
         self.btn2.clicked.connect(self.save_project)
@@ -516,6 +506,15 @@ class Tab(QWidget):
         # Create eighth tab 
         self.tab8.layout = self.grids[7]
         self.tab8.setLayout(self.tab8.layout)
+
+        # Create ninth tab 
+        self.tab9.layout = self.grids[8]
+        self.tab9.setLayout(self.tab9.layout)
+        
+
+        # # Create tenth tab 
+        # self.tab10.layout = self.grids[9]
+        # self.tab10.setLayout(self.tab10.layout)
 
         # Final step
         # #######
