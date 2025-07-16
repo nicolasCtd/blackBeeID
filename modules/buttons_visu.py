@@ -561,3 +561,143 @@ def visu40(TAB):
     else:
         TAB.dialog = MESSAGE()
         TAB.dialog.message_erreur2()
+
+def visu41(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "41_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu42(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "42_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu43(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "43_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+    
+def visu44(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "44_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu45(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "45_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu46(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "46_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu47(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "47_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu48(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "48_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu49(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "49_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()
+
+def visu50(TAB):
+    file_exists = 0
+    name = ""
+    for file in os.listdir(TAB.out):
+        if "50_out" in file:
+            file_exists = True
+            name = file
+    if file_exists:
+        TAB.dialog = VISU()
+        TAB.dialog.display(TAB.out + os.sep + name)
+    else:
+        TAB.dialog = MESSAGE()
+        TAB.dialog.message_erreur2()

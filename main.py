@@ -81,7 +81,9 @@ connections_visu = {1:visu1, 2:visu2, 3:visu3, 4:visu4, 5:visu5,
                        21:visu21, 22:visu22, 23:visu23, 24:visu24, 25:visu25,
                        26:visu26, 27:visu27, 28:visu28, 29:visu29, 30:visu30,
                        31:visu31, 32:visu32, 33:visu33, 34:visu34, 35:visu35,
-                       36:visu36, 37:visu37, 38:visu38, 39:visu39, 40:visu40}
+                       36:visu36, 37:visu37, 38:visu38, 39:visu39, 40:visu40,
+                       41:visu41, 42:visu42, 43:visu43, 44:visu44, 45:visu45,
+                       46:visu46, 47:visu47, 48:visu48, 49:visu49, 50:visu50}
 
 connections_load = {1:browseFile1, 2:browseFile2, 3:browseFile3, 4:browseFile4, 5:browseFile5,
                        6:browseFile6, 7:browseFile7, 8:browseFile8, 9:browseFile9, 10:browseFile10,
@@ -90,7 +92,9 @@ connections_load = {1:browseFile1, 2:browseFile2, 3:browseFile3, 4:browseFile4, 
                        21:browseFile21, 22:browseFile22, 23:browseFile23, 24:browseFile24, 25:browseFile25,
                        26:browseFile26, 27:browseFile27, 28:browseFile28, 29:browseFile29, 30:browseFile30,
                        31:browseFile31, 32:browseFile32, 33:browseFile33, 34:browseFile34, 35:browseFile35,
-                       36:browseFile36, 37:browseFile37, 38:browseFile38, 39:browseFile39, 40:browseFile40}
+                       36:browseFile36, 37:browseFile37, 38:browseFile38, 39:browseFile39, 40:browseFile40,
+                       41:browseFile41, 42:browseFile42, 43:browseFile43, 44:browseFile44, 45:browseFile45,
+                       46:browseFile46, 47:browseFile47, 48:browseFile48, 49:browseFile49, 50:browseFile50}
 
 class FolderSelector(QWidget):
     def __init__(self):
@@ -282,7 +286,7 @@ class Tab(QWidget):
         self.width = 413
         self.height = 307
 
-        nb_tabs = 9
+        nb_tabs = 10
 
         self.label_left = [QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
                            QLabel(self), QLabel(self), QLabel(self), QLabel(self), QLabel(self),
@@ -513,8 +517,8 @@ class Tab(QWidget):
         
 
         # # Create tenth tab 
-        # self.tab10.layout = self.grids[9]
-        # self.tab10.setLayout(self.tab10.layout)
+        self.tab10.layout = self.grids[9]
+        self.tab10.setLayout(self.tab10.layout)
 
         # Final step
         # #######

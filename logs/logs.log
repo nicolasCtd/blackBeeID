@@ -1,18 +1,7 @@
-2025-07-15 23:52:13,583 - INFO - Démarrage du programme
-2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
-2025-07-15 23:52:13,583 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
-2025-07-15 23:52:13,583 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
-2025-07-15 23:52:13,583 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-15 23:52:13,645 - ERROR - Exception non gérée :
-Traceback (most recent call last):
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 633, in <module>
-    window = MainWindow()
-             ^^^^^^^^^^^^
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 207, in __init__
-    self.tab_widget = Tab(self, self.path)
-                      ^^^^^^^^^^^^^^^^^^^^
-  File "c:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\main.py", line 461, in __init__
-    btn1.clicked.connect(partial(connections_load[num_image], TAB=self))
-                                 ~~~~~~~~~~~~~~~~^^^^^^^^^^^
-KeyError: 41
+2025-07-16 21:51:59,052 - INFO - Démarrage du programme
+2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-07-16 21:51:59,052 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-07-16 21:51:59,052 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-16 21:52:03,870 - INFO - bb

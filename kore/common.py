@@ -27,9 +27,11 @@ def resource_path(relative_path):
     """Retourne le chemin absolu, même si l'app est empaquetée avec PyInstaller"""
     if getattr(sys, 'frozen', False):
         # PyInstaller utilise ce répertoire temporaire
-        return os.path.join(sys._MEIPASS, relative_path)
+        logging.info("aa")
+        return os.path.join(sys._MEIPASS, relative_path.replace(f"..{os.sep}", ""))
     else:
         # Script normal
+        logging.info("bb")
         return os.path.join(os.path.dirname(__file__), relative_path)
 
 class MESSAGE(QMainWindow):
@@ -41,8 +43,8 @@ class MESSAGE(QMainWindow):
     def message_erreur1(self):
         self.setWindowTitle(' ')
         layout = QVBoxLayout()
-        # coconfort = resource_path()
-        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
+        coconfort = resource_path(f"..{os.sep}images{os.sep}coconfort.png")
+        pixmap = QPixmap(coconfort)
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
@@ -57,7 +59,8 @@ class MESSAGE(QMainWindow):
     def message_erreur2(self):
         self.setWindowTitle(' ')
         layout = QVBoxLayout()
-        pixmap = QPixmap(f"images" + os.sep + "coconfort.png")
+        coconfort = resource_path(f"..{os.sep}images{os.sep}coconfort.png")
+        pixmap = QPixmap(coconfort)
         label = QLabel()
         label.setPixmap(pixmap)
         layout.addWidget(label)
@@ -73,7 +76,7 @@ class MESSAGE(QMainWindow):
         self.move(100, 200)
         self.setWindowTitle(' ')
         layout = QHBoxLayout()
-        aspicot = "images" + os.sep + "aspicot.png"
+        aspicot = resource_path(f"..{os.sep}images{os.sep}aspicot.png")
         pixmap = QPixmap(aspicot)
         label = QLabel()
         label.setPixmap(pixmap)

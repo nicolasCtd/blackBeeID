@@ -576,8 +576,8 @@ def browseFile36(TAB):
     if TAB.fileName36 != "":
         pixmap = QPixmap(TAB.fileName36)
         pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        TAB.label_left[34].setPixmap(pixmap)
-        TAB.grids[7].addWidget(TAB.label_left[34], 4, 2, 1, 1)
+        TAB.label_left[35].setPixmap(pixmap)
+        TAB.grids[7].addWidget(TAB.label_left[35], 4, 2, 1, 1)
     else:
         pass
 
@@ -592,8 +592,8 @@ def browseFile37(TAB):
     if TAB.fileName37 != "":
         pixmap = QPixmap(TAB.fileName37)
         pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        TAB.label_left[34].setPixmap(pixmap)
-        TAB.grids[7].addWidget(TAB.label_left[34], 4, 2, 1, 1)
+        TAB.label_left[36].setPixmap(pixmap)
+        TAB.grids[7].addWidget(TAB.label_left[36], 4, 2, 1, 1)
     else:
         pass
 
@@ -608,8 +608,8 @@ def browseFile38(TAB):
     if TAB.fileName38 != "":
         pixmap = QPixmap(TAB.fileName38)
         pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        TAB.label_left[34].setPixmap(pixmap)
-        TAB.grids[7].addWidget(TAB.label_left[34], 4, 2, 1, 1)
+        TAB.label_left[37].setPixmap(pixmap)
+        TAB.grids[7].addWidget(TAB.label_left[37], 4, 2, 1, 1)
     else:
         pass
 
@@ -624,8 +624,8 @@ def browseFile39(TAB):
     if TAB.fileName39 != "":
         pixmap = QPixmap(TAB.fileName39)
         pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        TAB.label_left[34].setPixmap(pixmap)
-        TAB.grids[7].addWidget(TAB.label_left[34], 4, 2, 1, 1)
+        TAB.label_left[38].setPixmap(pixmap)
+        TAB.grids[7].addWidget(TAB.label_left[38], 4, 2, 1, 1)
     else:
         pass
 
@@ -640,7 +640,168 @@ def browseFile40(TAB):
     if TAB.fileName40 != "":
         pixmap = QPixmap(TAB.fileName40)
         pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
-        TAB.label_left[34].setPixmap(pixmap)
-        TAB.grids[7].addWidget(TAB.label_left[34], 4, 2, 1, 1)
+        TAB.label_left[39].setPixmap(pixmap)
+        TAB.grids[7].addWidget(TAB.label_left[39], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile41(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName41, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName41, TAB.in_ + os.sep + "41_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName41 != "":
+        pixmap = QPixmap(TAB.fileName41)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[40].setPixmap(pixmap)
+        TAB.grids[8].addWidget(TAB.label_left[40], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile42(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName42, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName42, TAB.in_ + os.sep + "42_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName42 != "":
+        pixmap = QPixmap(TAB.fileName42)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[41].setPixmap(pixmap)
+        TAB.grids[8].addWidget(TAB.label_left[41], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile43(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName43, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName43, TAB.in_ + os.sep + "43_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName43 != "":
+        pixmap = QPixmap(TAB.fileName43)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[42].setPixmap(pixmap)
+        TAB.grids[8].addWidget(TAB.label_left[42], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile44(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName44, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName44, TAB.in_ + os.sep + "44_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName44!= "":
+        pixmap = QPixmap(TAB.fileName44)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[43].setPixmap(pixmap)
+        TAB.grids[8].addWidget(TAB.label_left[43], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile45(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName45, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName45, TAB.in_ + os.sep + "45_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName45 != "":
+        pixmap = QPixmap(TAB.fileName45)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[44].setPixmap(pixmap)
+        TAB.grids[8].addWidget(TAB.label_left[44], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile46(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName46, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName46, TAB.in_ + os.sep + "46_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName46 != "":
+        pixmap = QPixmap(TAB.fileName46)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[45].setPixmap(pixmap)
+        TAB.grids[9].addWidget(TAB.label_left[45], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile47(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName47, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName47, TAB.in_ + os.sep + "47_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName47 != "":
+        pixmap = QPixmap(TAB.fileName47)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[46].setPixmap(pixmap)
+        TAB.grids[9].addWidget(TAB.label_left[46], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile48(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName48, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName48, TAB.in_ + os.sep + "48_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName48 != "":
+        pixmap = QPixmap(TAB.fileName48)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[47].setPixmap(pixmap)
+        TAB.grids[9].addWidget(TAB.label_left[47], 4, 2, 1, 1)
+    else:
+        pass
+
+def browseFile49(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName49, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName49, TAB.in_ + os.sep + "49_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName49 != "":
+        pixmap = QPixmap(TAB.fileName49)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[48].setPixmap(pixmap)
+        TAB.grids[9].addWidget(TAB.label_left[48], 4, 2, 1, 1)
+    else:
+        pass
+
+
+def browseFile50(TAB):
+    options = QFileDialog.Options()
+    options |= QFileDialog.DontUseNativeDialog
+    TAB.fileName50, _ = QFileDialog.getOpenFileName(TAB, "Select File", "", "All Files (*)", options=options)
+    try:
+        shutil.copyfile(TAB.fileName50, TAB.in_ + os.sep + "50_in.png")
+    except Exception as e:
+        logging.error(e) 
+    if TAB.fileName50 != "":
+        pixmap = QPixmap(TAB.fileName50)
+        pixmap = pixmap.scaled(TAB.width, TAB.height, Qt.KeepAspectRatio, Qt.FastTransformation)
+        TAB.label_left[49].setPixmap(pixmap)
+        TAB.grids[9].addWidget(TAB.label_left[49], 4, 2, 1, 1)
     else:
         pass
