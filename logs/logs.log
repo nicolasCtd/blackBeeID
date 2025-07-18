@@ -1,7 +1,29 @@
-2025-07-16 21:51:59,052 - INFO - Démarrage du programme
-2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
-2025-07-16 21:51:59,052 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
-2025-07-16 21:51:59,052 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
-2025-07-16 21:51:59,052 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
-2025-07-16 21:52:03,870 - INFO - bb
+2025-07-18 22:19:37,084 - INFO - Démarrage du programme
+2025-07-18 22:19:37,084 - INFO - nettoyage du dossier 'out' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out
+2025-07-18 22:19:37,084 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-18 22:19:37,084 - INFO - nettoyage du dossier 'in' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in
+2025-07-18 22:19:37,084 - INFO - suppression du fichier C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\47_in.png
+2025-07-18 22:19:37,084 - INFO - nettoyage du dossier 'tmp' : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\tmp
+2025-07-18 22:19:37,084 - INFO - Génération du fichier de résultats C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\out\results.txt
+2025-07-18 22:19:44,236 - INFO - Image n°42 : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\in\42_in.jpg
+2025-07-18 22:21:00,842 - INFO - Edition de l'image : 42_in.jpg
+2025-07-18 22:21:00,843 - INFO - Création du répertoire : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\42\
+2025-07-18 22:21:00,844 - INFO - Copie du fichier : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\in\42_in.jpg >> C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\tmp\42\42___18_07_2025___22_21_00.jpg
+2025-07-18 22:21:00,902 - INFO - Edition de l'image n°42
+2025-07-18 22:21:00,903 - INFO - ----------------------
+2025-07-18 22:21:07,860 - INFO - Position du point CI (1/3): (x, y)=(1597, 395)
+2025-07-18 22:21:17,986 - INFO - Position du point CI (1/3): (x, y)=(292, 98)
+2025-07-18 22:21:22,046 - INFO - Position du point CI (2/3): (x, y)=(411, 132)
+2025-07-18 22:21:27,383 - INFO - Position du point CI (3/3): (x, y)=(469, 115)
+2025-07-18 22:21:51,152 - INFO - Point Ci n°1 : (i,j)=(396, 1602)
+2025-07-18 22:21:51,152 - INFO - Point Ci n°2 : (i,j)=(430, 1721)
+2025-07-18 22:21:51,152 - INFO - Point Ci n°3 : (i,j)=(413, 1779)
+2025-07-18 22:21:51,152 - INFO - ----------------------
+2025-07-18 22:21:51,152 - INFO - Point Ds n°1 : (i,j)=(246, 1272)
+2025-07-18 22:21:51,152 - INFO - Point Ds n°2 : (i,j)=(259, 1604)
+2025-07-18 22:21:51,152 - INFO - Point Ds n°3 : (i,j)=(182, 2010)
+2025-07-18 22:21:51,152 - INFO - Point Ds n°4 : (i,j)=(595, 1615)
+2025-07-18 22:21:51,201 - INFO - Indice cubital Abeille #42) : 2.0476796774201436
+2025-07-18 22:21:51,201 - INFO - Shift discoidal Abeille #42) : -3.09887487°
+2025-07-18 22:21:51,227 - INFO - Image sauvegardée : C:\Users\nicol\Documents\ABEILLES\logiciel\blackBeeID\\out\42_out.jpg
+2025-07-18 22:21:51,248 - INFO - Les infos ont été ajoutées sur l'image.

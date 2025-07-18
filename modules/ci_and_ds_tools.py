@@ -81,13 +81,15 @@ class IMAGE():
     def load(self, file):
         self.name = file
         self.data = np.copy(plt.imread(file))
+        # self.data = np.copy((plt.imread(file)*255).astype(np.uint8))
+        #self.data = (self.data * 255).astype(np.uint8)
         self.data_copy = np.copy(self.data)
         self.nb_lignes = self.data.shape[0]
         self.nb_col = self.data.shape[1]
         self.c1 = self.data[:, :, 0]
         self.c2 = self.data[:, :, 1]
         self.c3 = self.data[:, :, 2]
-
+        
     def highlight(self, node, color, rayon=5):
         y, x = np.meshgrid(np.arange(self.nb_col), np.arange(self.nb_lignes))
         for i in range(3):

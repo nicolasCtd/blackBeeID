@@ -27,11 +27,9 @@ def resource_path(relative_path):
     """Retourne le chemin absolu, même si l'app est empaquetée avec PyInstaller"""
     if getattr(sys, 'frozen', False):
         # PyInstaller utilise ce répertoire temporaire
-        logging.info("aa")
         return os.path.join(sys._MEIPASS, relative_path.replace(f"..{os.sep}", ""))
     else:
         # Script normal
-        logging.info("bb")
         return os.path.join(os.path.dirname(__file__), relative_path)
 
 class MESSAGE(QMainWindow):
@@ -130,7 +128,6 @@ class EDIT(QMainWindow):
 
         self.path = tab.path + os.sep
 
-
     def display(self, fileName):
         logging.info(f"Edition de l'image : {fileName}")
         self.name = get_file_name(fileName).replace(".jpg", "").replace("png", "")
@@ -138,6 +135,7 @@ class EDIT(QMainWindow):
 
         self.TMP = self.path + os.sep + "tmp" + os.sep + self.num + os.sep
         self.OUT = self.path + os.sep + "out" + os.sep
+        self.IN_ = self.path + os.sep + "in" + os.sep
 
         self.last_name[self.ZOOM] = insertnow(self.name + self.extension)
 
@@ -148,14 +146,14 @@ class EDIT(QMainWindow):
             pass
 
         try:
-            shutil.copyfile(fileName, self.TMP + self.last_name[self.ZOOM])
-            logging.info(f"Copie du fichier : {fileName} >> {self.TMP}{self.last_name[self.ZOOM]}")
+            shutil.copyfile(self.IN_ + fileName, self.TMP + self.last_name[self.ZOOM])
+            logging.info(f"Copie du fichier : {self.IN_}{fileName} >> {self.TMP}{self.last_name[self.ZOOM]}")
             
         except:
             pass
 
         self.label = QLabel(self)
-        pixmap = QPixmap(fileName)
+        pixmap = QPixmap(self.TMP + self.last_name[self.ZOOM])
 
         self.label.setPixmap(pixmap)
         self.setCentralWidget(self.label)
@@ -322,6 +320,7 @@ class EDIT(QMainWindow):
         self.count_ci_points += 1
         if  self.count_ci_points <= 3:
             x, y = self.get_pos_in_widget(event)
+            logging.info(f"Position du point CI ({self.count_ci_points}/3): (x, y)=({x}, {y})")
             file = self.last_name[self.ZOOM]
             if self.ZOOM:
                 xmin, xmax, ymin, ymax = get_zoom_center(file)
@@ -341,6 +340,7 @@ class EDIT(QMainWindow):
                 A.highlight(node_zoom, self.color_ci)
             else:
                 A.highlight(node, self.color_ci)
+
             plt.imsave(fname=f"{self.TMP}{self.last_name[self.ZOOM]}", arr=A.data)
             pixmap = QPixmap(f"{self.TMP}{os.sep}{self.last_name[self.ZOOM]}")
             self.label.setPixmap(pixmap)
@@ -489,14 +489,14 @@ class EDIT(QMainWindow):
         return 0
 
     def zoom_in(self, ZOOM=True):
-        file_wo_zoom, file_w_zoom = self.get_last_file(self.TMP)
+        #file_wo_zoom, file_w_zoom = self.get_last_file(self.TMP)
         self.ZOOM = ZOOM
         zm = resource_path(f"search.png")
         pixmap = QPixmap(zm)
         pixmap = pixmap.scaled(32, 32)
         cursor = QCursor(pixmap, 32, 32)
         self.setCursor(cursor)
-        pixmap = QPixmap(file_wo_zoom)
+        #pixmap = QPixmap(self.TMP + file_wo_zoom)
         self.label.mousePressEvent = self.getPos_and_zoom
         return 0
 
@@ -575,7 +575,7 @@ class EDIT(QMainWindow):
 
             A = IMAGE()
             A.load(self.TMP + file_wo_zoom)
-            
+
             j_min = max(x-zoom_x//2, 0)
             j_max = min(x+zoom_x//2, A.data.shape[1])
 

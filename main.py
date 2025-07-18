@@ -334,8 +334,8 @@ class Tab(QWidget):
         self.btn3 = QPushButton(f"Lancer\nl'analyse\n{self.analyse_name}")
         label0 = QLabel("Nom de l'analyse : ")
         self.label00 = QLabel(self.analyse_name)
-        label1 = QLabel(f">>  <u> Histogramme de l'Indice Cubital (classification {classif.upper()})<u>")
-        label2 = QLabel(">>  <u> Indice Cubital vs Discoidal shift<u>")
+        label1 = QLabel("<u>\nHistogramme de l'Indice Cubital<u>")
+        label2 = QLabel("<u>\nIndice Cubital vs Discoidal shift<u>")
         # self.edit_analyse_name = QLineEdit()
 
         self.pb = QPushButton("Editer")
@@ -370,13 +370,11 @@ class Tab(QWidget):
 
         empty1 = resource_path(f"images{os.sep}empty1.png")
         pixmap = QPixmap(empty1)
-        # pixmap = QPixmap(f"images{os.sep}carte_dardagnan.png")
         image_empty1 = self.label_analyses[0]
         image_empty1.setPixmap(pixmap)
 
         empty2 = resource_path(f"images{os.sep}empty2.png")
         pixmap = QPixmap(empty2)
-        # pixmap = QPixmap(f"images{os.sep}dardagnan2.png")
         image_empty2 = self.label_analyses[1]
         image_empty2.setPixmap(pixmap)
 
